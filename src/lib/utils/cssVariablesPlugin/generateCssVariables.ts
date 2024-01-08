@@ -51,16 +51,18 @@ const generateCssVariables = (variables: CssVariables) => {
 };
 
 /**
- * Create the appropriate styling given the variables, replacing any missing values
+ * Add the css variables to the :root selector, replacing any missing values
  * with the default or the relevant keyed value
  */
 const applyCssVariables = (rawVariables: CssVariables) => {
 	const variables = generateCssVariables(rawVariables);
-	let style = '';
+	let style = ':root{';
 
 	Object.entries({ ...variables, ...derivedVariables }).forEach(([key, value]) => {
 		style += `--${key}:${value};`;
 	});
+
+	style += '}';
 
 	return style;
 };

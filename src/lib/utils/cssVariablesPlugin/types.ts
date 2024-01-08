@@ -1,3 +1,5 @@
+import type { PluginOption } from 'vite';
+
 export type CssVariablesDefined = {
 	backgroundColour: string;
 	foregroundColour: string;
@@ -25,3 +27,8 @@ export type CssVariables = Partial<CssVariablesDefined>;
 export type DerivedCssVariables = {
 	calculatedPadding: string;
 };
+
+export type CssVariablesPluginGenerator = (
+	styleLocation: RegExp,
+	variables: CssVariables
+) => PluginOption;

@@ -1,4 +1,4 @@
-import type { PluginOption } from 'vite';
+import type { Plugin } from 'vite';
 
 export type CssVariablesDefined = {
 	backgroundColour: string;
@@ -31,4 +31,4 @@ export type DerivedCssVariables = {
 export type CssVariablesPluginGenerator = (
 	styleLocation: RegExp,
 	variables: CssVariables
-) => PluginOption;
+) => Plugin;

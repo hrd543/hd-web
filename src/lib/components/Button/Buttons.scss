@@ -1,0 +1,30 @@
+@use '../shared/pageWidths';
+
+.Button {
+	padding: 8px 8px;
+	border-radius: 8px;
+	border: 3px solid var(--highlightColour);
+	font-weight: 600;
+	background-color: transparent;
+	font-size: inherit;
+
+	&--outline {
+		color: var(--highlightColour);
+	}
+
+	&--filled {
+		background-color: var(--highlightColour);
+		color: var(--backgroundColour);
+	}
+}
+
+.LinkButton {
+	appearance: button;
+	text-decoration: none;
+}
+
+@media (max-width: pageWidths.$mobile) {
+	.LinkButton {
+		border-width: 2px;
+	}
+}

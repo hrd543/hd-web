@@ -30,10 +30,14 @@
 		"!dist/**/*.spec.*"
 	],
 	"peerDependencies": {
-		"svelte": "^4.0.0"
+		"svelte": "^4.0.0",
+		"@sveltejs/kit": "^2.0.0"
 	},
 	"peerDependenciesMeta": {
 		"svelte": {
+			"optional": true
+		},
+		"@sveltejs/kit": {
 			"optional": true
 		}
 	},

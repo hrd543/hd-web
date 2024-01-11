@@ -4,3 +4,5 @@ export { default as Header } from './Header/index.js';
 export type { HeaderProps } from './Header/index.js';
 export { Button, LinkButton } from './Button/index.js';
 export type { ButtonProps, LinkButtonProps } from './Button/index.js';
+export { default as Form } from './Form/index.js';
+export type { FormProps } from './Form/index.js';

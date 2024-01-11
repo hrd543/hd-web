@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './Buttons.scss';
-	import { LinkButtonProps } from './types.js';
+	import type { LinkButtonProps } from './types.js';
 	export let title: LinkButtonProps['title'];
 	export let type: LinkButtonProps['type'] = 'outline';
 	export let link: LinkButtonProps['link'];

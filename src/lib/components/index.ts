@@ -7,3 +7,5 @@ export type { ButtonProps, LinkButtonProps } from './Button/index.js';
 export { default as Form } from './Form/index.js';
 export type { FormProps } from './Form/index.js';
 export { default as FormExamples } from './FormExamples/index.js';
+export { default as Toast } from './Toast/index.js';
+export type { ToastParams } from './Toast/types.js';

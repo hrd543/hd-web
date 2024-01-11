@@ -1,0 +1,37 @@
+.Toast {
+	flex: 0 0 auto;
+	margin-bottom: 10px;
+	background-color: var(--foregroundColour);
+	color: var(--fontColourMain);
+	border: 2px solid var(--neutral);
+	border-radius: 4px;
+	padding: 20px;
+	font-size: 1.5rem;
+	max-width: min(450px, 60vw);
+	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+	text-align: center;
+
+	&_Container {
+		position: fixed;
+		top: 50px;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		padding: 0;
+		z-index: 9999;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		pointer-events: none;
+		gap: 20px;
+	}
+
+	&--failure {
+		border-color: var(--failure);
+	}
+
+	&--success {
+		border-color: var(--success);
+	}
+}

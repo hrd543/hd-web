@@ -1,0 +1,27 @@
+.NameEmailQuery {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 30px;
+	font-size: 1rem;
+
+	> * {
+		flex: 1 1 35%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	& input,
+	textarea {
+		font-size: inherit;
+	}
+
+	.Button {
+		flex: 0 1 0;
+	}
+
+	&_Query {
+		flex-basis: 100%;
+	}
+}

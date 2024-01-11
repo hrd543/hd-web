@@ -15,7 +15,7 @@ const defaultVariables: CssVariablesDefined = {
 	neutral: '#574c41',
 	headerHeight: '64px',
 	headerColour: 'backgroundColour',
-	headerPopoverColour: 'headerColour',
+	headerPopoverColour: 'backgroundColour',
 	pagePadding: '32px',
 	pageMaxWidth: '1200px',
 	fontSize: '24px'
@@ -55,8 +55,9 @@ const generateCssVariables = (variables: CssVariables) => {
  * with the default or the relevant keyed value
  */
 const applyCssVariables = (rawVariables: CssVariables) => {
-	const variables = generateCssVariables(rawVariables);
-	let style = ':root{';
+	// we can just use rem units by setting the font size on the html
+	const { fontSize, ...variables } = generateCssVariables(rawVariables);
+	let style = `:root{font-size:${fontSize};`;
 
 	Object.entries({ ...variables, ...derivedVariables }).forEach(([key, value]) => {
 		style += `--${key}:${value};`;

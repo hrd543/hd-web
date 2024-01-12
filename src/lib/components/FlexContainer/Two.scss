@@ -1,0 +1,15 @@
+.Two {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 60px;
+	align-items: center;
+
+	&-reverse {
+		flex-flow: row-reverse wrap-reverse;
+	}
+
+	& > * {
+		flex: 1;
+		min-width: 300px;
+	}
+}

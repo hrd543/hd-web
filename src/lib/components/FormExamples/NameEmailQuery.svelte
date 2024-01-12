@@ -1,10 +1,12 @@
 <script lang="ts">
 	import './NameEmailQuery.scss';
-	import Form from '../Form/index.js';
+	import Form, {type FormProps} from '../Form/index.js';
 	import { Button } from '../Button/index.js';
 
 	export let action: string;
 	export let titles = { query: 'Your Query', name: 'Name', email: 'Email' };
+  export let onBeforeSubmit: FormProps['onBeforeSubmit'] = undefined;
+	export let onAfterSubmit: FormProps['onAfterSubmit'] = undefined;
 	let className = '';
 	export { className as class };
 </script>
@@ -14,6 +16,8 @@
 	minTimeToFillInForm={1000}
 	hiddenTermsName="terms"
 	class={`NameEmailQuery ${className}`}
+  {onBeforeSubmit}
+  {onAfterSubmit}
 >
 	<div class="NameEmailQuery_Name">
 		<label for="name">{titles.name}</label>

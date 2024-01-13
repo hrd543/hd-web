@@ -25,6 +25,11 @@ const derivedVariables: DerivedCssVariables = {
 	calculatedPadding: 'max(calc(50vw - var(--pageMaxWidth) / 2), var(--pagePadding))'
 };
 
+const defaultProperties: Record<string, any> = {
+	// make sure clicking on anchor elements scrolls smoothly
+	'scroll-behavior': 'smooth'
+};
+
 const valueIsCssKey = (value: string): value is keyof CssVariables => value in defaultVariables;
 
 const getVariable = (variables: CssVariables, name: keyof CssVariables) => {
@@ -59,6 +64,12 @@ const applyCssVariables = (rawVariables: CssVariables) => {
 	const { fontSize, ...variables } = generateCssVariables(rawVariables);
 	let style = `:root{font-size:${fontSize};`;
 
+	// add the default properties
+	Object.entries(defaultProperties).forEach(([key, value]) => {
+		style += `${key}: ${value};`;
+	});
+
+	// add each of the variables
 	Object.entries({ ...variables, ...derivedVariables }).forEach(([key, value]) => {
 		style += `--${key}:${value};`;
 	});

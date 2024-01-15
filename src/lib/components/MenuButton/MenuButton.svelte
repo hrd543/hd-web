@@ -18,7 +18,12 @@
 		xmlns="http://www.w3.org/2000/svg"
 		class="MenuButton_svg"
 	>
-		<g fill="none" stroke="#000" stroke-width="6.0008" class={visible ? 'MenuButton_svg-open' : ''}>
+		<g
+			fill="none"
+			stroke="#000"
+			stroke-width="6.0008"
+			class={visible ? 'MenuButton_svg-open' : ''}
+		>
 			<path
 				class="topLine line"
 				d="m11.734 23.67h60.008c11.988 0 18.297 30.476 14.506 49.793-0.73988 3.7698-2.739 8.7469-6.5668 9.4714-4.0138 0.75961-7.9004-3.618-7.9004-3.618l-60.046-58.65"

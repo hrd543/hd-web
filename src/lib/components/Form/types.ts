@@ -4,6 +4,9 @@ export type FormProps = {
 	action: string;
 	minTimeToFillInForm?: number;
 	hiddenTermsName?: string;
-	onBeforeSubmit?: (formData: FormData) => { cancelSubmit?: boolean; resetForm?: boolean };
+	onBeforeSubmit?: (formData: FormData) => {
+		cancelSubmit?: boolean;
+		resetForm?: boolean;
+	};
 	onAfterSubmit?: (result: ActionResult) => void;
 };

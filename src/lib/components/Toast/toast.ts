@@ -5,7 +5,11 @@ import { generateId } from './helpers.js';
 const createToasts = () => {
 	const { subscribe, update } = writable<Record<string, ToastParams>>({});
 
-	const add = (message: string, type: ToastParams['type'] = 'default', duration = 5000) => {
+	const add = (
+		message: string,
+		type: ToastParams['type'] = 'default',
+		duration = 5000
+	) => {
 		const newId = generateId();
 		const timoutId = setTimeout(() => {
 			remove(newId);

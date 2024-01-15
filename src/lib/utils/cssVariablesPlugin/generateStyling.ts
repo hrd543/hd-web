@@ -57,7 +57,10 @@ const getVariable = (
  * Transform the given variables into a style, replacing any
  * missing values with the default or the relevant keyed value
  */
-const transformVariables = (variables: CssVariables, widthIndex: number) => {
+const transformVariables = (
+	variables: CssVariables = {},
+	widthIndex: number
+) => {
 	const defaults = defaultCssVariables[widthIndex];
 	if (!defaults) {
 		throw 'Default variables not defined. Did you specify the right number of page widths?';
@@ -91,19 +94,19 @@ const generateStyling = ([variables, ...mediaQueries]: [
 	});
 
 	// Then, add all the variables to the root selector
-	style = transformVariables(variables, 0);
+	style += transformVariables(variables, 0);
 	style += '}';
 
 	// Finally, add the media queries and relevant variables
-	mediaQueries.forEach((mediaQuery, i) => {
-		const width = defaultPageWidths[i]?.value;
-		if (width) {
-			style += `@media (max-width: ${width}){${transformVariables(
-				mediaQuery,
-				i + 1
-			)}}`;
+	defaultPageWidths.forEach(({ value: width }, i) => {
+		const mediaQuery = mediaQueries[i];
+		const mediaStyle = transformVariables(mediaQuery, i + 1);
+		if (mediaStyle) {
+			style += `@media (max-width: ${width}){:root{${mediaStyle}}}`;
 		}
 	});
+
+	return style;
 };
 
 export default generateStyling;

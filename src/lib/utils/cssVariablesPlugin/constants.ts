@@ -30,9 +30,9 @@ export const defaultCssVariables = [
 // make sure to update _pageWidths.scss if changing these
 /** The page widths used throughout for media queries */
 export const defaultPageWidths = [
-	{ name: 'desktop', value: 1200 },
-	{ name: 'tablet', value: 820 },
-	{ name: 'mobile', value: 500 }
+	{ name: 'desktop', value: '1200px' },
+	{ name: 'tablet', value: '820px' },
+	{ name: 'mobile', value: '500px' }
 ];
 
 export const defaultStyling = [

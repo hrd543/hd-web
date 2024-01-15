@@ -1,28 +1,9 @@
 import type { Plugin } from 'vite';
+import type { defaultCssVariables } from './constants.js';
 
-export type CssVariablesDefined = {
-	backgroundColour: string;
-	foregroundColour: string;
-	highlightColour: string;
-	fontColourMain: string;
-	fontColourSecondary: string;
-	success: string;
-	failure: string;
-	neutral: string;
-	headerHeight: string;
-	headerColour: string;
-	headerPopoverColour: string;
-	pagePadding: string;
-	pageMaxWidth: string;
-	fontSize: string;
-};
+export type CssVariableKey = keyof (typeof defaultCssVariables)[0];
 
-/**
- * Css variables used throughout the project.
- * Leave blank to use the default.
- * Use another key to reference that value.
- */
-export type CssVariables = Partial<CssVariablesDefined>;
+export type CssVariables = Partial<Record<CssVariableKey, string | null>>;
 
 export type DerivedCssVariables = {
 	calculatedPadding: string;
@@ -30,5 +11,5 @@ export type DerivedCssVariables = {
 
 export type CssVariablesPluginGenerator = (
 	styleLocation: RegExp,
-	variables: CssVariables
+	variables: [CssVariables, ...CssVariables[]]
 ) => Plugin;

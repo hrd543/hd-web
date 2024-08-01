@@ -1,3 +1,11 @@
-import { jsx } from '@hd-web/jsx'
+import { JSX } from '@hd-web/jsx'
 
-const a = <div>saaa</div>
+const Hello = ({ kind, children }: { kind: string; children: JSX.Element }) => (
+  <div>{children}</div>
+)
+
+const Bye = () => (
+  <Hello kind="string">
+    <div>jij</div>
+  </Hello>
+)

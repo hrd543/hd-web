@@ -2,6 +2,9 @@
   "name": "web-components",
   "version": "0.0.1",
   "description": "Testing web components",
+  "scripts": {
+    "build": "npm run build --workspaces"
+  },
   "workspaces": [
     "packages/*"
   ],

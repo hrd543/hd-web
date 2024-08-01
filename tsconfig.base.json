@@ -9,9 +9,7 @@
     "sourceMap": true,
     "target": "es6",
     "declaration": true,
-    "outDir": "./dist",
     "jsx": "react-jsx",
-    "jsxImportSource": "jsx"
-  },
-  "include": ["src/**/*"]
+    "jsxImportSource": "@hd-web/jsx"
+  }
 }

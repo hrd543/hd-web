@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head>
+  <!-- 
+  The defer option means this js isn't loaded until the whole dom is parsed.
+  In particular, this means that getting the children within the connected callback
+  will not return null.
+    -->
+  <script type="text/javascript" defer src="./index.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <test-component>
+    <nav class="Header">
+      <div class="Header_container">
+        <div class="Header_logo">JD Logs</div>
+        <ul class="Header_links">
+          <li class="Header_item">
+            <a href="#about">About</a>
+          </li>
+        </ul>
+        <div class="Header_menuButton">Menu</div>
+      </div>
+    </nav>
+  </test-component>
+</body>

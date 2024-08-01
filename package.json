@@ -1,0 +1,11 @@
+{
+  "name": "web-components",
+  "version": "0.0.1",
+  "description": "Testing web components",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

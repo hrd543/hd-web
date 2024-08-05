@@ -15,6 +15,10 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "devDependencies": {
+    "@michijs/htmltype": "^0.2.16",
+    "csstype": "^3.1.3"
+  },
   "files": [
     "/dist"
   ],

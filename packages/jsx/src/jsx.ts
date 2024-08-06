@@ -1,31 +1,36 @@
-import * as Html from '@michijs/htmltype'
-import * as Css from 'csstype'
+import * as JSX from './types.js'
+import { stringifyAttributes } from './stringify.js'
+import { voidElements } from './constants.js'
 
-export type Primitive = string | number | boolean | null | undefined
-export type Element = string | null
-export type Children = Element | Element[] | undefined
+export const jsx = (
+  type: string | JSX.Component,
+  props: JSX.Props | JSX.WithChildren<JSX.HtmlAttributes> | null
+): string => {
+  if (typeof type === 'function') {
+    return type((props ?? {}) as JSX.Props) ?? ''
+  }
 
-export type WithChildren<T> = T & { children?: Children }
-export type HtmlAttributes = Html.AllAttributes
-export type CssProperties = Css.PropertiesHyphen
+  const { children, ...rest } = (props ??
+    {}) as JSX.WithChildren<JSX.HtmlAttributes>
+  const stringified = `<${type}${stringifyAttributes(rest)}`
 
-export interface IntrinsicElements extends IntrinsicElementsMap {}
+  if (voidElements.has(type)) {
+    return stringified + ' />'
+  }
 
-type IntrinsicElementsMap = {
-  [K in keyof Html.HTMLElements]: WithChildren<
-    Omit<Html.HTMLElements[K], 'style'> & {
-      style?: Css.PropertiesHyphen
-    }
-  >
+  return `${stringified}>${Fragment({ children })}</${type}>`
 }
 
-export interface ElementChildrenAttribute {
-  children: {}
+export const Fragment = ({ children }: JSX.WithChildren): string => {
+  if (!children) {
+    return ''
+  }
+
+  if (Array.isArray(children)) {
+    return children.reduce<string>((all, child) => all + (child ?? ''), '')
+  }
+
+  return children
 }
 
-type BaseProps = Record<string, unknown>
-
-export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
-export type Component<T extends BaseProps = BaseProps> = (
-  props: Props<T>
-) => Element
+export const jsxs = jsx

@@ -1,2 +1,2 @@
-export * as JSX from './jsx.js'
-export * from './jsx-runtime.js'
+export * as JSX from './types.js'
+export * from './jsx.js'

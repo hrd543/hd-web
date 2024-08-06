@@ -10,8 +10,8 @@ const Hello = ({
 
 const Bye = () => (
   <Hello kind="string">
-    <div tabindex>jij</div>
-    <canvas width={2} />
-    <button style={{ 'background-color': 'coral' }}></button>
+    <div style={{}} tabindex>
+      <div>hi</div>
+    </div>
   </Hello>
 )

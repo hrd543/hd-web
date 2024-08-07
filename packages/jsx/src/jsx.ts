@@ -1,4 +1,4 @@
-import * as JSX from './types.js'
+import type * as JSX from './types.js'
 import { stringifyAttributes } from './stringify.js'
 import { voidElements } from './constants.js'
 

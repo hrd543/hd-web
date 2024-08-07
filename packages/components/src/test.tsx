@@ -1,4 +1,4 @@
-import { JSX } from '@hd-web/jsx'
+import type { JSX } from '@hd-web/jsx'
 
 const Hello = ({
   kind,
@@ -8,7 +8,7 @@ const Hello = ({
   children: JSX.Children
 }) => <div>{children}</div>
 
-const Bye = () => (
+export const Bye = () => (
   <Hello kind="string">
     <div style={{}} tabindex>
       <div>hi</div>

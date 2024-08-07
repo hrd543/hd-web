@@ -1,5 +1,5 @@
-import * as Html from '@michijs/htmltype'
-import * as Css from 'csstype'
+import type * as Html from '@michijs/htmltype'
+import type * as Css from 'csstype'
 
 export type Primitive = string | number | boolean | null | undefined
 export type Element = string | null

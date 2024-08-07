@@ -1,2 +1,2 @@
-export * as JSX from './types.js'
+export type * as JSX from './types.js'
 export * from './jsx.js'

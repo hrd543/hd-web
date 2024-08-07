@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Testing web components",
   "scripts": {
-    "build": "tsc"
+    "build": "tsx build.ts"
   },
   "exports": {
     ".": {

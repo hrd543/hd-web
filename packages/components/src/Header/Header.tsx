@@ -1,3 +1,4 @@
+import './Header.css'
 import { JSX } from '@hd-web/jsx'
 import type { HeaderProps } from './types.js'
 import { InteractiveHeader } from './InteractiveHeader.js'

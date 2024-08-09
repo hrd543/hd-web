@@ -1,0 +1,21 @@
+:root {
+  --backgroundColour: #20180e;
+  --foregroundColour: #382a1c;
+  --highlightColour: #ac7d20;
+  --fontColourMain: #e4e2e1;
+  --fontColourSecondary: #b19a81;
+  --success: #44632c;
+  --failure: #772e1a;
+  --neutral: #574c41;
+  --headerHeight: 64px;
+  --pagePadding: 32px;
+  --pageMaxWidth: 1200px;
+  /* width + 2 * (x + padding) = 100vw */
+  --calculatedPadding: max(
+    calc(50vw - var(--pageMaxWidth) / 2),
+    var(--pagePadding)
+  );
+  --fontSizeTitle: 58px;
+  --fontSizeSubTitle: 32px;
+  --fontSizeText: 24px;
+}

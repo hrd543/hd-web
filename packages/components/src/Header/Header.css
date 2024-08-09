@@ -1,0 +1,41 @@
+.Header {
+  height: var(--headerHeight);
+  background-color: var(--headerColour);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  font-size: 1.33rem;
+
+  .Header_container {
+    width: 100%;
+    padding: 0 var(--calculatedPadding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .Header_logo {
+    font-weight: bold;
+  }
+
+  .Header_links {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    font-size: 0.75em;
+
+    a {
+      text-decoration: inherit;
+      color: inherit;
+    }
+  }
+
+  .Header_menuButton {
+    display: none;
+    background-color: transparent;
+    border: none;
+    color: inherit;
+  }
+}

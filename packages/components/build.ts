@@ -6,7 +6,7 @@ const dependencies = Object.keys(packageJson.devDependencies)
 
 await esbuild.build(
   generateBuildConfig(dependencies, {
-    entryPoints: ['src/test.tsx'],
+    entryPoints: ['src/index.ts'],
     outfile: 'dist/index.js'
   })
 )

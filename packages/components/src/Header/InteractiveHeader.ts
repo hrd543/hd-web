@@ -1,5 +1,7 @@
-export class InteractiveHeader extends HTMLElement {
-  static key = 'interactive-header' as const
+import { WebComponent } from '../shared/index.js'
+
+export class InteractiveHeader extends WebComponent {
+  protected static _key = 'interactive-header' as const
   menu: HTMLElement | null
 
   constructor() {
@@ -40,8 +42,6 @@ export class InteractiveHeader extends HTMLElement {
     this.removeEventListener('click', this.onClick.bind(this))
   }
 }
-
-customElements.define(InteractiveHeader.key, InteractiveHeader)
 
 declare module '@hd-web/jsx' {
   namespace JSX {

@@ -3,16 +3,18 @@ import { initialiseGlobals } from './globals.js'
 import * as fs from 'fs'
 
 const defaultConfig: esbuild.BuildOptions = {
-  bundle: true,
-  format: 'esm',
-  minify: true
+  bundle: true
 }
 
 // First bundle all the js into one file
 await esbuild.build({
   ...defaultConfig,
   entryPoints: ['src/index.tsx'],
-  outfile: 'main.js'
+  outfile: 'main.js',
+  // don't minify on the first pass to save time
+  minify: false,
+  // Use esm to preserve imports
+  format: 'esm'
 })
 
 // Create the html string from the index.tsx file
@@ -34,12 +36,16 @@ for (const element in customEls) {
 
 fs.writeFileSync('./main.js', newFileData)
 
-// Now rebuild to remove unused code.
+// Now rebuild to remove unused code. Is there a better way to do this?
 await esbuild.build({
   ...defaultConfig,
   entryPoints: ['main.js'],
   outfile: 'main.js',
-  allowOverwrite: true
+  allowOverwrite: true,
+  // Minify since we will use this code in the browser
+  minify: true,
+  // Don't use esm now since this is used on the browser
+  format: 'iife'
 })
 
 // And write the html to the file

@@ -1,17 +1,18 @@
 import * as esbuild from 'esbuild'
-import { generateBuildConfig } from '../../build.js'
 import { initialiseGlobals } from './globals.js'
 import * as fs from 'fs'
 
-const result = await esbuild.build(
-  generateBuildConfig([], {
-    entryPoints: ['src/index.tsx'],
-    outfile: 'main.js',
-    external: [],
+const defaultConfig: esbuild.BuildOptions = {
+  bundle: true,
+  format: 'esm',
+  minify: true
+}
 
-    minify: false
-  })
-)
+const result = await esbuild.build({
+  ...defaultConfig,
+  entryPoints: ['src/index.tsx'],
+  outfile: 'main.js'
+})
 
 if (result.errors.length === 0) {
   const getAllElements = initialiseGlobals()
@@ -33,16 +34,12 @@ if (result.errors.length === 0) {
   fs.writeFileSync('./main.js', newFileData)
 
   // Now rebuild to remove unused code.
-  await esbuild.build(
-    generateBuildConfig([], {
-      entryPoints: ['main.js'],
-      outfile: 'main.js',
-      external: [],
-
-      minify: false,
-      allowOverwrite: true
-    })
-  )
+  await esbuild.build({
+    ...defaultConfig,
+    entryPoints: ['main.js'],
+    outfile: 'main.js',
+    allowOverwrite: true
+  })
 
   // And write the html to the file
   const htmlFile = fs.readFileSync('./index.html', 'utf-8')
@@ -52,22 +49,3 @@ if (result.errors.length === 0) {
   )
   fs.writeFileSync('./index.html', newHtmlFile)
 }
-
-/*
-
-You write an create.js file which contains the jsx as html, in a function
-with no args and the default export.
-
-Then, we build this file, and run the exported function which creates the html
-string.
-
-Take this html and insert it into index.html inside the body.
-Remove the default export function from the built file and check for unused code.
-In most cases, this can be removed, however we need to be careful to not
-remove class declarations since these will end up being unused.
-This can be remedied by making the key getter keep track of all the
-elements which were registered.
-Then once we have created the html string, we get that list and inject
-into the js file a list of customElements.define(...)
-
-*/

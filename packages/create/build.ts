@@ -14,7 +14,7 @@ const result = await esbuild.build(
 )
 
 if (result.errors.length === 0) {
-  initialiseGlobals()
+  const getAllElements = initialiseGlobals()
   const func = (await import('./main.js')).default
   const html = func()
 
@@ -22,7 +22,7 @@ if (result.errors.length === 0) {
   const fileData = fs.readFileSync('./main.js', 'utf-8')
   let newFileData = fileData.replace(/export[\s\S]*};(\s)*$/, '')
   // And add all the custom element definitions
-  const customEls = globalThis.customElements.getAll()
+  const customEls = getAllElements()
   for (const element in customEls) {
     newFileData = newFileData.concat(
       `customElements.define("${element}", ${customEls[element]});`

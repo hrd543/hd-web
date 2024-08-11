@@ -1,16 +1,31 @@
+/**
+ * When building the html from the jsx, we need a few globals which aren't
+ * defined when running in nodejs vs the browser.
+ * In particular, we need some way of tracking which elements have been
+ * registered so that we can add the define statements back in.
+ * So we return a function which retrieves just that - the name of each
+ * element and the name of it class
+ */
 export const initialiseGlobals = () => {
   const elements: Record<string, string> = {}
-  // @ts-ignore
   globalThis.HTMLElement = class {}
-  // @ts-ignore
   globalThis.customElements = {
-    get: (key: string) => elements[key],
+    get: (key) => elements[key],
     define: (name, constructor) => {
       elements[name] = constructor.name
-    },
-    // below only used internally. Use element.name to get the name of the variable
-    // for use in customElements.define later on
-    // @ts-ignore
-    getAll: () => elements
+    }
   }
+
+  return () => elements
+}
+
+declare module globalThis {
+  class HTMLElement {}
+
+  interface CustomElementRegistry {
+    get: (name: string) => string | undefined
+    define: (name: string, constructor: () => void) => void
+  }
+
+  var customElements: CustomElementRegistry
 }

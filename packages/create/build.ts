@@ -15,8 +15,9 @@ const result = await esbuild.build(
 
 if (result.errors.length === 0) {
   const getAllElements = initialiseGlobals()
-  const func = (await import('./src/index.tsx')).default
-  const html = func({})
+  // Need to import after we've defined the global types
+  const App = (await import('./src/index.tsx')).default
+  const html = App({})
 
   // Now remove all exports from main. This can defo be improved
   const fileData = fs.readFileSync('./main.js', 'utf-8')

@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild'
 import { initialiseGlobals } from './globals.js'
-import * as fs from 'fs'
+import { removeExports } from './removeExports.js'
+import * as fs from 'fs/promises'
 
 const defaultConfig: esbuild.BuildOptions = {
   bundle: true
@@ -24,17 +25,24 @@ const App = (await import('./src/index.tsx')).default
 const html = App({})
 
 // Remove all exports from main. This can defo be improved
-const fileData = fs.readFileSync('./main.js', 'utf-8')
-let newFileData = fileData.replace(/export[\s\S]*};(\s)*$/, '')
-// And add all the custom element definitions
-const customEls = getAllElements()
-for (const element in customEls) {
-  newFileData = newFileData.concat(
-    `customElements.define("${element}", ${customEls[element]});`
-  )
-}
+let file: fs.FileHandle | null = null
+try {
+  file = await fs.open('./main.js', 'r+')
+  await removeExports(file)
 
-fs.writeFileSync('./main.js', newFileData)
+  const customEls = getAllElements()
+  const fileSize = (await file.stat()).size
+  for (const element in customEls) {
+    file.write(
+      `customElements.define("${element}", ${customEls[element]});`,
+      fileSize
+    )
+  }
+} catch (e) {
+  throw e
+} finally {
+  await file?.close()
+}
 
 // Now rebuild to remove unused code. Is there a better way to do this?
 await esbuild.build({
@@ -49,9 +57,9 @@ await esbuild.build({
 })
 
 // And write the html to the file
-const htmlFile = fs.readFileSync('./index.html', 'utf-8')
+const htmlFile = await fs.readFile('./index.html', 'utf-8')
 const newHtmlFile = htmlFile.replace(
   /<body>[\s\S]*<\/body>/,
   `<body>${html}</body>`
 )
-fs.writeFileSync('./index.html', newHtmlFile)
+await fs.writeFile('./index.html', newHtmlFile)

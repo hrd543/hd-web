@@ -11,7 +11,8 @@
     "/dist"
   ],
   "devDependencies": {
-    "@hd-web/jsx": "0.0.1"
+    "@hd-web/jsx": "0.0.1",
+    "@hd-web/build": "0.0.1"
   },
   "sideEffects": false,
   "type": "module"

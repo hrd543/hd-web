@@ -12,6 +12,7 @@
     "target": "es6",
     "declaration": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "@hd-web/jsx"
+    "jsxImportSource": "@hd-web/jsx",
+    "skipLibCheck": true
   }
 }

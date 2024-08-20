@@ -1,19 +1,20 @@
-import { ToastParams } from './types.js'
+import { ToastId, ToastParams } from './types.js'
 
-type Add = {
-  type: 'add'
-  params: ToastParams
+export type AddToastEventDetail = ToastParams & {
+  eventType: 'add'
+  duration: number
 }
 
-type Remove = {
-  type: 'remove'
-  id: string
+export type RemoveToastEventDetail = ToastId & {
+  eventType: 'remove'
 }
 
-export class ToastEvent extends CustomEvent<Add | Remove> {
+export class ToastEvent extends CustomEvent<
+  AddToastEventDetail | RemoveToastEventDetail
+> {
   static key = 'ToastEvent' as const
 
-  constructor(event: Add | Remove) {
-    super(ToastEvent.key, { detail: event })
+  constructor(detail: AddToastEventDetail | RemoveToastEventDetail) {
+    super(ToastEvent.key, { detail })
   }
 }

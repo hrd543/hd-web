@@ -1,6 +1,8 @@
 import { WebComponent } from '../shared/index.js'
 import { ToastEvent } from './toastEvents.js'
-import { ToastInfo } from './types.js'
+import { ToastId, ToastParams } from './types.js'
+
+type ToastDescription = ToastParams & ToastId
 
 export class Toast extends WebComponent {
   protected static _key = 'toast-item' as const
@@ -9,15 +11,15 @@ export class Toast extends WebComponent {
     super()
   }
 
-  private _info: ToastInfo | undefined
+  private _info: ToastDescription | undefined
 
   private handleClick() {
     document.dispatchEvent(
-      new ToastEvent({ type: 'remove', id: this._info!.id })
+      new ToastEvent({ eventType: 'remove', id: this._info!.id })
     )
   }
 
-  init(info: ToastInfo) {
+  init(info: ToastDescription) {
     if (this._info) {
       throw new Error('Tried to reinitialise a toast')
     }
@@ -30,25 +32,15 @@ export class Toast extends WebComponent {
       throw new Error('Tried to add a toast without initialising it')
     }
 
+    this.innerText = this._info.message
+    this.className = `Toast Toast-${this._info.type}`
     this.addEventListener('click', this.handleClick.bind(this))
   }
 
   disconnectedCallback() {
-    this._info = undefined
     this.removeEventListener('click', this.handleClick.bind(this))
   }
 }
 
-declare module '@hd-web/jsx' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'toast-item': {}
-    }
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'toast-item': Toast
-  }
-}
+// Not declaring toast-item as an element in the jsx since this component
+// shouldn't be used on its own.

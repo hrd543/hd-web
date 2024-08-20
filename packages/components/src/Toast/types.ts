@@ -1,11 +1,15 @@
+type ToastType = 'failure' | 'success' | 'default'
+
 export type ToastParams = {
+  type: ToastType
   message: string
-  type: 'failure' | 'success' | 'default'
-  duration: number
 }
 
-export type ToastInfo = {
-  timeoutId: NodeJS.Timeout
+export type ToastId = {
   id: string
+}
+
+export type ToastInfo = ToastId & {
+  timeoutId: NodeJS.Timeout
   element: HTMLElement
 }

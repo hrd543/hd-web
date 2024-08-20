@@ -1,7 +1,8 @@
 import { WebComponent } from '../shared/index.js'
 import { generateId } from './generateId.js'
-import { ToastEvent } from './toastEvents.js'
-import { ToastInfo, ToastParams } from './types.js'
+import { Toast } from './Toast.js'
+import { AddToastEventDetail, ToastEvent } from './toastEvents.js'
+import { ToastInfo } from './types.js'
 
 export class ToastProvider extends WebComponent {
   protected static _key = 'toast-provider' as const
@@ -12,8 +13,8 @@ export class ToastProvider extends WebComponent {
   }
 
   private handleEvent(e: ToastEvent) {
-    if (e.detail.type === 'add') {
-      this.handleAdd(e.detail.params)
+    if (e.detail.eventType === 'add') {
+      this.handleAdd(e.detail)
     } else {
       this.handleRemove(e.detail.id)
     }
@@ -30,12 +31,12 @@ export class ToastProvider extends WebComponent {
     delete this.toasts![id]
   }
 
-  private handleAdd(params: ToastParams) {
+  private handleAdd(params: AddToastEventDetail) {
     if (!this.toasts) {
-      return
+      this.toasts = {}
     }
 
-    const element = document.createElement('toast-item')
+    const element = Toast.create()
     const toastId = generateId()
     const timeoutId = setTimeout(() => {
       this.handleRemove(toastId)
@@ -43,15 +44,20 @@ export class ToastProvider extends WebComponent {
 
     element.init({
       id: toastId,
+      message: params.message,
+      type: params.type
+    })
+
+    this.toasts[toastId] = {
+      id: toastId,
       timeoutId,
       element
-    })
+    }
 
     this.append(element)
   }
 
   connectedCallback() {
-    this.toasts = {}
     this.addEventListener(
       ToastEvent.key,
       this.handleEvent.bind(this) as EventListener
@@ -68,8 +74,6 @@ export class ToastProvider extends WebComponent {
       ToastEvent.key,
       this.handleEvent.bind(this) as EventListener
     )
-
-    this.toasts = undefined
   }
 }
 

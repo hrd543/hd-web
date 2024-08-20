@@ -45,7 +45,7 @@ export const buildSite = async (
   // elements which have been used.
   let file: fs.FileHandle | null = null
   try {
-    file = await fs.open(getFilePath('./main.js', false), 'r+')
+    file = await fs.open(getFilePath(out, false), 'r+')
     await removeExports(file)
 
     const customEls = getAllElements()

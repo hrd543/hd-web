@@ -2,6 +2,7 @@ import * as esbuild from 'esbuild'
 import { initialiseGlobals } from './globals.js'
 import { removeExports } from './removeExports.js'
 import * as fs from 'fs/promises'
+import { getFilePath } from './getFilePath.js'
 
 const defaultConfig: esbuild.BuildOptions = {
   bundle: true
@@ -33,7 +34,7 @@ export const buildSite = async (
   // The default export from entry should be a component
   // Need to define the global types BEFORE importing the component
   const getAllElements = initialiseGlobals()
-  const App = (await import(`./${entry}`)).default
+  const App = (await import(getFilePath(`./${entry}`, true))).default
   const html = App?.({})
 
   if (typeof html !== 'string') {
@@ -44,7 +45,7 @@ export const buildSite = async (
   // elements which have been used.
   let file: fs.FileHandle | null = null
   try {
-    file = await fs.open('./main.js', 'r+')
+    file = await fs.open(getFilePath('./main.js', false), 'r+')
     await removeExports(file)
 
     const customEls = getAllElements()
@@ -74,10 +75,10 @@ export const buildSite = async (
   })
 
   // And write the html to the file
-  const htmlFile = await fs.readFile(htmlPath, 'utf-8')
+  const htmlFile = await fs.readFile(getFilePath(htmlPath, false), 'utf-8')
   const newHtmlFile = htmlFile.replace(
     /<body>[\s\S]*<\/body>/,
     `<body>${html}</body>`
   )
-  await fs.writeFile(htmlPath, newHtmlFile)
+  await fs.writeFile(getFilePath(htmlPath, false), newHtmlFile)
 }

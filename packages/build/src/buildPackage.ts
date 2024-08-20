@@ -1,6 +1,5 @@
 import * as esbuild from 'esbuild'
-import * as path from 'path'
-import * as url from 'url'
+import { getFilePath } from './getFilePath.js'
 
 const packageDefaults: esbuild.BuildOptions = {
   bundle: true,
@@ -14,10 +13,7 @@ const packageDefaults: esbuild.BuildOptions = {
 const getDependencies = async (dependencyPaths: string[]) => {
   const dependencyJsons = await Promise.all(
     dependencyPaths.map((p) => {
-      // Transform relative paths into absolute based on cwd
-      const filePathUrl = url.pathToFileURL(path.resolve(process.cwd(), p))
-
-      return import(filePathUrl.href, { with: { type: 'json' } })
+      return import(getFilePath(p, true), { with: { type: 'json' } })
     })
   )
 

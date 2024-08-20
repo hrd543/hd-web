@@ -58,7 +58,7 @@ export class ToastProvider extends WebComponent {
   }
 
   connectedCallback() {
-    this.addEventListener(
+    document.addEventListener(
       ToastEvent.key,
       this.handleEvent.bind(this) as EventListener
     )
@@ -70,7 +70,7 @@ export class ToastProvider extends WebComponent {
       clearTimeout(toast?.timeoutId)
     }
 
-    this.removeEventListener(
+    document.removeEventListener(
       ToastEvent.key,
       this.handleEvent.bind(this) as EventListener
     )

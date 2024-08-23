@@ -7,7 +7,7 @@ type ToastDescription = ToastParams & ToastId
 
 export class Toast extends WebComponent {
   protected static get _key() {
-    return 'toast-item' as const
+    return 'hd-toast' as const
   }
 
   constructor() {
@@ -45,5 +45,5 @@ export class Toast extends WebComponent {
   }
 }
 
-// Not declaring toast-item as an element in the jsx since this component
+// Not declaring hd-toast as an element in the jsx since this component
 // shouldn't be used on its own.

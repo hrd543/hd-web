@@ -2,7 +2,7 @@ import { WebComponent } from '../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
   protected static get _key() {
-    return 'interactive-header' as const
+    return 'hd-header' as const
   }
   menu: HTMLElement | null
 
@@ -48,7 +48,7 @@ export class InteractiveHeader extends WebComponent {
 declare module '@hd-web/jsx' {
   namespace JSX {
     interface IntrinsicElements {
-      'interactive-header': {}
+      'hd-header': {}
     }
   }
 }

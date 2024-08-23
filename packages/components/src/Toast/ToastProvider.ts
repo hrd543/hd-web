@@ -7,7 +7,7 @@ import { ToastInfo } from './types.js'
 
 export class ToastProvider extends WebComponent {
   protected static get _key() {
-    return 'toast-provider' as const
+    return 'hd-toast-provider' as const
   }
   toasts: Record<string, ToastInfo> | undefined
 
@@ -83,7 +83,7 @@ export class ToastProvider extends WebComponent {
 declare module '@hd-web/jsx' {
   namespace JSX {
     interface IntrinsicElements {
-      'toast-provider': {}
+      'hd-toast-provider': {}
     }
   }
 }

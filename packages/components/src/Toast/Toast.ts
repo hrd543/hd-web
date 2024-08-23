@@ -35,6 +35,7 @@ export class Toast extends WebComponent {
       throw new Error('Tried to add a toast without initialising it')
     }
 
+    this.role = 'status'
     this.innerText = this._info.message
     this.className = `Toast Toast--${this._info.type}`
     this.addEventListener('click', this.handleClick.bind(this))

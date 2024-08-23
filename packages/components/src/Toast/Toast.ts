@@ -1,3 +1,4 @@
+import './Toast.css'
 import { WebComponent } from '../shared/index.js'
 import { ToastEvent } from './toastEvents.js'
 import { ToastId, ToastParams } from './types.js'
@@ -5,7 +6,9 @@ import { ToastId, ToastParams } from './types.js'
 type ToastDescription = ToastParams & ToastId
 
 export class Toast extends WebComponent {
-  protected static _key = 'toast-item' as const
+  protected static get _key() {
+    return 'toast-item' as const
+  }
 
   constructor() {
     super()
@@ -33,7 +36,7 @@ export class Toast extends WebComponent {
     }
 
     this.innerText = this._info.message
-    this.className = `Toast Toast-${this._info.type}`
+    this.className = `Toast Toast--${this._info.type}`
     this.addEventListener('click', this.handleClick.bind(this))
   }
 

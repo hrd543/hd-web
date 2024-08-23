@@ -1,3 +1,4 @@
+import './ToastProvider.css'
 import { WebComponent } from '../shared/index.js'
 import { generateId } from './generateId.js'
 import { Toast } from './Toast.js'
@@ -5,7 +6,9 @@ import { AddToastEventDetail, ToastEvent } from './toastEvents.js'
 import { ToastInfo } from './types.js'
 
 export class ToastProvider extends WebComponent {
-  protected static _key = 'toast-provider' as const
+  protected static get _key() {
+    return 'toast-provider' as const
+  }
   toasts: Record<string, ToastInfo> | undefined
 
   constructor() {

@@ -1,7 +1,9 @@
 import { WebComponent } from '../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
-  protected static _key = 'interactive-header' as const
+  protected static get _key() {
+    return 'interactive-header' as const
+  }
   menu: HTMLElement | null
 
   constructor() {

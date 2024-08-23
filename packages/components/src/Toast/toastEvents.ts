@@ -12,7 +12,9 @@ export type RemoveToastEventDetail = ToastId & {
 export class ToastEvent extends CustomEvent<
   AddToastEventDetail | RemoveToastEventDetail
 > {
-  static key = 'ToastEvent' as const
+  static get key() {
+    return 'ToastEvent' as const
+  }
 
   constructor(detail: AddToastEventDetail | RemoveToastEventDetail) {
     super(ToastEvent.key, { detail })

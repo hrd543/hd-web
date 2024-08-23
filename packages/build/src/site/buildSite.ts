@@ -2,10 +2,13 @@ import * as esbuild from 'esbuild'
 import { initialiseGlobals } from './globals.js'
 import { removeExports } from './removeExports.js'
 import * as fs from 'fs/promises'
-import { getFilePath } from './getFilePath.js'
+import { getFilePath } from '../getFilePath.js'
+import { removeUnusedCode } from './removeUnusedCode.js'
+import { writeToHtml } from './writeToHtml.js'
 
 const defaultConfig: esbuild.BuildOptions = {
-  bundle: true
+  bundle: true,
+  target: 'es6'
 }
 
 /**
@@ -31,10 +34,12 @@ export const buildSite = async (
   })
 
   // Create the html string from the index.tsx file.
-  // The default export from entry should be a component
+
   // Need to define the global types BEFORE importing the component
   const getAllElements = initialiseGlobals()
-  const App = (await import(getFilePath(`./${entry}`, true))).default
+  // We need to use the file we just built so that names line up
+  const App = (await import(getFilePath(`./${out}`, true))).default
+  // The default export from entry should be a component
   const html = App?.({})
 
   if (typeof html !== 'string') {
@@ -49,11 +54,11 @@ export const buildSite = async (
     await removeExports(file)
 
     const customEls = getAllElements()
-    const fileSize = (await file.stat()).size
+
     for (const element in customEls) {
       file.write(
         `customElements.define("${element}", ${customEls[element]});`,
-        fileSize
+        (await file.stat()).size
       )
     }
   } catch (e) {
@@ -62,23 +67,10 @@ export const buildSite = async (
     await file?.close()
   }
 
-  // Now rebuild to remove unused code.
-  await esbuild.build({
-    ...defaultConfig,
-    entryPoints: [out],
-    outfile: out,
-    allowOverwrite: true,
-    // Minify since we will use this code in the browser
-    minify: true,
-    // Don't use esm now since this is used on the browser
-    format: 'iife'
-  })
-
-  // And write the html to the file
-  const htmlFile = await fs.readFile(getFilePath(htmlPath, false), 'utf-8')
-  const newHtmlFile = htmlFile.replace(
-    /<body>[\s\S]*<\/body>/,
-    `<body>${html}</body>`
-  )
-  await fs.writeFile(getFilePath(htmlPath, false), newHtmlFile)
+  await Promise.all([
+    // Now rebuild to remove unused code.
+    await removeUnusedCode(out, defaultConfig),
+    // And write the html to the file
+    await writeToHtml(html, htmlPath)
+  ])
 }

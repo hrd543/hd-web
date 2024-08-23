@@ -1,2 +1,2 @@
-export { buildPackage } from './buildPackage.js'
-export { buildSite } from './buildSite.js'
+export { buildPackage } from './package/buildPackage.js'
+export { buildSite } from './site/buildSite.js'

@@ -1,5 +1,5 @@
 import * as esbuild from 'esbuild'
-import { getFilePath } from './getFilePath.js'
+import { getFilePath } from '../getFilePath.js'
 
 const packageDefaults: esbuild.BuildOptions = {
   bundle: true,

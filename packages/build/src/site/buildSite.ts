@@ -54,13 +54,13 @@ export const buildSite = async (
     await removeExports(file)
 
     const customEls = getAllElements()
+    let customElsDefinition = ''
 
     for (const element in customEls) {
-      file.write(
-        `customElements.define("${element}", ${customEls[element]});`,
-        (await file.stat()).size
-      )
+      customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
     }
+
+    file.write(customElsDefinition, (await file.stat()).size)
   } catch (e) {
     throw e
   } finally {

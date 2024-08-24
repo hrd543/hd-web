@@ -83,7 +83,7 @@ export class ToastProvider extends WebComponent {
 declare module '@hd-web/jsx' {
   namespace JSX {
     interface IntrinsicElements {
-      'hd-toast-provider': {}
+      'hd-toast-provider': object
     }
   }
 }

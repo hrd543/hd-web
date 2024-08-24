@@ -48,7 +48,7 @@ export class InteractiveHeader extends WebComponent {
 declare module '@hd-web/jsx' {
   namespace JSX {
     interface IntrinsicElements {
-      'hd-header': {}
+      'hd-header': object
     }
   }
 }

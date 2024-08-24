@@ -5,10 +5,11 @@ export type Primitive = string | number | boolean | null | undefined
 export type Element = string | null
 export type Children = Element | Element[] | undefined
 
-export type WithChildren<T = {}> = T & { children?: Children }
+export type WithChildren<T = object> = T & { children?: Children }
 export type HtmlAttributes = Html.AllAttributes
 export type CssProperties = Css.PropertiesHyphen
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IntrinsicElements extends IntrinsicElementsMap {}
 
 type IntrinsicElementsMap = {
@@ -20,7 +21,7 @@ type IntrinsicElementsMap = {
 }
 
 export interface ElementChildrenAttribute {
-  children: {}
+  children: object
 }
 
 type BaseProps = Record<string, unknown>

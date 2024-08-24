@@ -19,7 +19,7 @@ export const initialiseGlobals = () => {
   return () => elements
 }
 
-declare module globalThis {
+declare namespace globalThis {
   class HTMLElement {}
 
   interface CustomElementRegistry {
@@ -27,5 +27,5 @@ declare module globalThis {
     define: (name: string, constructor: () => void) => void
   }
 
-  var customElements: CustomElementRegistry
+  let customElements: CustomElementRegistry
 }

@@ -61,8 +61,6 @@ export const buildSite = async (
     }
 
     file.write(customElsDefinition, (await file.stat()).size)
-  } catch (e) {
-    throw e
   } finally {
     await file?.close()
   }

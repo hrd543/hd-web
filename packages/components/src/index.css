@@ -1,5 +1,6 @@
 :root {
   --backgroundColour: #000;
+  --headerColour: var(--backgroundColour);
   --foregroundColour: #000000;
   --highlightColour: #0400f5;
   --fontColourMain: #ffffff;

@@ -5,14 +5,22 @@ export class InteractiveHeader extends WebComponent {
     return 'hd-header' as const
   }
   menu: HTMLElement | null
+  buttonContainer: HTMLButtonElement | null
 
   constructor() {
     super()
     this.menu = null
+    this.buttonContainer = null
+  }
+
+  showHideMenu(show: boolean) {
+    const type = show ? 'add' : 'remove'
+    this.menu?.classList[type]('Header_links-show')
+    this.buttonContainer?.classList[type]('MenuButton-open')
   }
 
   onClick(e: MouseEvent) {
-    if (!this.menu || !e.target) {
+    if (!this.menu || !this.buttonContainer || !e.target) {
       return
     }
 
@@ -21,27 +29,29 @@ export class InteractiveHeader extends WebComponent {
     // Need to check what we clicked on. If it was a link,
     // then hide the menu
     if (target.tagName === 'A' || target.tagName === 'LI') {
-      this.menu.classList.remove('Header_links-show')
+      this.showHideMenu(false)
     }
 
     // If the menu button, then show/hide
-    if (target.classList.contains('Header_menuButton')) {
+    if (this.buttonContainer.contains(target)) {
       if (this.menu.classList.contains('Header_links-show')) {
-        this.menu.classList.remove('Header_links-show')
+        this.showHideMenu(false)
       } else {
-        this.menu.classList.add('Header_links-show')
+        this.showHideMenu(true)
       }
     }
   }
 
   connectedCallback() {
     this.menu = this.querySelector('.Header_links')
+    this.buttonContainer = this.querySelector('.MenuButton')
     this.addEventListener('click', this.onClick.bind(this))
   }
 
   disconnectedCallback() {
     this.menu = null
-    this.removeEventListener('click', this.onClick.bind(this))
+    this.buttonContainer = null
+    this.removeEventListener('click', this.onClick)
   }
 }
 

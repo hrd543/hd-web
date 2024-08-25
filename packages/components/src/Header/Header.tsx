@@ -2,6 +2,7 @@ import './Header.css'
 import { JSX } from '@hd-web/jsx'
 import type { HeaderProps } from './types.js'
 import { InteractiveHeader } from './InteractiveHeader.js'
+import { MenuButton } from './MenuButton.js'
 
 export const Header: JSX.Component<HeaderProps> = ({
   items,
@@ -19,7 +20,7 @@ export const Header: JSX.Component<HeaderProps> = ({
             </li>
           ))}
         </ul>
-        <div class="Header_menuButton">Menu</div>
+        <MenuButton height={30} className="Header_menuButton" />
       </div>
     </nav>
   </InteractiveHeader.key>

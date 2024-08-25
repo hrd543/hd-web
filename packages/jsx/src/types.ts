@@ -12,9 +12,19 @@ export type CssProperties = Css.PropertiesHyphen
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IntrinsicElements extends IntrinsicElementsMap {}
 
-type IntrinsicElementsMap = {
+type IntrinsicElementsMap = HtmlIntrinsicElementsMap & SvgIntrinsicElementsMap
+
+type HtmlIntrinsicElementsMap = {
   [K in keyof Html.HTMLElements]: WithChildren<
     Omit<Html.HTMLElements[K], 'style'> & {
+      style?: Css.PropertiesHyphen
+    }
+  >
+}
+
+type SvgIntrinsicElementsMap = {
+  [K in keyof Html.SVGElements]: WithChildren<
+    Omit<Html.SVGElements[K], 'style'> & {
       style?: Css.PropertiesHyphen
     }
   >

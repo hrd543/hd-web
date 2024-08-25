@@ -1,5 +1,10 @@
 import { JSX } from '@hd-web/jsx'
-import { ToastEvent, ToastProvider, WebComponent } from '../dist/index.js'
+import {
+  Header,
+  ToastEvent,
+  ToastProvider,
+  WebComponent
+} from '../dist/index.js'
 
 class Button extends WebComponent {
   static get _key() {
@@ -29,8 +34,9 @@ class Button extends WebComponent {
 
 const App: JSX.Component = () => (
   <>
-    <ToastProvider.key />
-    <Button.key>click me</Button.key>
+    <Header logo="Henry" items={[{ link: '#key', title: 'Key' }]} />
+    {/* <ToastProvider.key />
+    <Button.key>click me</Button.key> */}
   </>
 )
 

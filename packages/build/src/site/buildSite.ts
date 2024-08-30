@@ -5,6 +5,7 @@ import * as fs from 'fs/promises'
 import { getFilePath } from '../getFilePath.js'
 import { removeUnusedCode } from './removeUnusedCode.js'
 import { writeToHtml } from './writeToHtml.js'
+import type { BuildFilePaths } from './types.js'
 
 const defaultConfig: esbuild.BuildOptions = {
   bundle: true,
@@ -17,16 +18,21 @@ const defaultConfig: esbuild.BuildOptions = {
  * now unneeded function.
  * Also registers all used custom web components.
  */
-export const buildSite = async (
-  entry: string,
-  out = 'main.js',
-  htmlPath = 'index.html'
-) => {
+export const buildSite = async (js: BuildFilePaths, html: BuildFilePaths) => {
+  if (js.entry === js.output) {
+    throw new Error("Can't have js input the same as js output")
+  }
+  if (html.entry === html.output) {
+    console.warn(
+      'Using the same html input and output might cause problems when rebuilding.'
+    )
+  }
+
   // First bundle all the js into one file
   await esbuild.build({
     ...defaultConfig,
-    entryPoints: [entry],
-    outfile: out,
+    entryPoints: [js.entry],
+    outfile: js.output,
     // don't minify on the first pass to save time
     minify: false,
     // Use esm to preserve imports
@@ -38,19 +44,19 @@ export const buildSite = async (
   // Need to define the global types BEFORE importing the component
   const getAllElements = initialiseGlobals()
   // We need to use the file we just built so that names line up
-  const App = (await import(getFilePath(`./${out}`, true))).default
+  const App = (await import(getFilePath(`./${js.output}`, true))).default
   // The default export from entry should be a component
-  const html = App?.({})
+  const htmlBody = App?.({})
 
-  if (typeof html !== 'string') {
-    throw new Error(`Default export from ./${entry} didn't return a string`)
+  if (typeof htmlBody !== 'string') {
+    throw new Error(`Default export from ${js.entry} didn't return a string`)
   }
 
   // Remove all exports from the out file and define all the custom
   // elements which have been used.
   let file: fs.FileHandle | null = null
   try {
-    file = await fs.open(getFilePath(out, false), 'r+')
+    file = await fs.open(getFilePath(js.output, false), 'r+')
     await removeExports(file)
 
     const customEls = getAllElements()
@@ -67,8 +73,8 @@ export const buildSite = async (
 
   await Promise.all([
     // Now rebuild to remove unused code.
-    await removeUnusedCode(out, defaultConfig),
+    await removeUnusedCode(js.output, defaultConfig),
     // And write the html to the file
-    await writeToHtml(html, htmlPath, out)
+    await writeToHtml(htmlBody, html, js)
   ])
 }

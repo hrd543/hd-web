@@ -1,18 +1,69 @@
 import * as fs from 'fs/promises'
 import { getFilePath } from '../getFilePath.js'
+import { BuildFilePaths } from './types.js'
+
+const getCssPathFromJs = (jsPath: string) => {
+  return jsPath.replace(/\.js$/, '.css')
+}
 
 /**
- * Write the html string to the file located at htmlPath, replacing its body
- * and the script with jsPath
+ * Go through str and replace all instances of %hd-web-x% with the corresponding
+ * replacement.
+ * If there are 0 or multiple counts for any, throw an error.
+ */
+const replaceHtml = (str: string, replacements: Record<string, string>) => {
+  const keys = Object.keys(replacements)
+  const counts = keys.reduce<Record<string, number>>((all, key) => {
+    all[key] = 0
+
+    return all
+  }, {})
+
+  const replaced = str.replace(
+    new RegExp(`%hd-web-(${keys.join('|')})%`, 'g'),
+    (match, type) => {
+      counts[type]!++
+
+      return replacements[type]!
+    }
+  )
+
+  const errors = keys.reduce<string[]>((all, key) => {
+    if (counts[key]! !== 1) {
+      all.push(key)
+    }
+
+    return all
+  }, [])
+
+  if (errors.length) {
+    throw new Error(
+      `Found 0 or multiple %hd-web% tags for ${errors.join(', ')}`
+    )
+  }
+
+  return replaced
+}
+
+/**
+ * Using the template at html.entry, replace its body with htmlBody
+ * and link the style and script tags appropriately.
  */
 export const writeToHtml = async (
-  html: string,
-  htmlPath: string,
-  jsPath: string
+  htmlBody: string,
+  html: BuildFilePaths,
+  js: BuildFilePaths
 ) => {
-  const htmlFile = await fs.readFile(getFilePath(htmlPath, false), 'utf-8')
-  const newHtmlFile = htmlFile
-    .replace(/<body>[\s\S]*<\/body>/, `<body>${html}</body>`)
-    .replace(/%hd-web-script%/, jsPath)
-  await fs.writeFile(getFilePath(htmlPath, false), newHtmlFile)
+  const htmlTemplate = await fs.readFile(
+    getFilePath(html.entry, false),
+    'utf-8'
+  )
+
+  const newHtmlFile = replaceHtml(htmlTemplate, {
+    script: js.output,
+    css: getCssPathFromJs(js.output),
+    body: htmlBody
+  })
+
+  await fs.writeFile(getFilePath(html.output, false), newHtmlFile)
 }

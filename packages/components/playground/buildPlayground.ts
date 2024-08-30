@@ -1,3 +1,12 @@
 import { buildSite } from '@hd-web/build'
 
-buildSite('playground.tsx', 'playgroundBuilt.js', 'playground.html')
+buildSite(
+  {
+    entry: 'playground.tsx',
+    output: 'playgroundBuilt.js'
+  },
+  {
+    entry: 'playground.html',
+    output: 'playgroundBuilt.html'
+  }
+)

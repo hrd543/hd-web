@@ -1,0 +1,26 @@
+/* 
+  Change these css variables to customise your site!
+  Or add your own.
+*/
+:root {
+  --backgroundColour: #000;
+  --headerColour: var(--backgroundColour);
+  --foregroundColour: #000000;
+  --highlightColour: #0400f5;
+  --fontColourMain: #ffffff;
+  --fontColourSecondary: #ffffff;
+  --success: #44632c;
+  --failure: #772e1a;
+  --neutral: #574c41;
+  --headerHeight: 64px;
+  --pagePadding: 32px;
+  --pageMaxWidth: 1200px;
+  /* width + 2 * (x + padding) = 100vw */
+  --calculatedPadding: max(
+    calc(50vw - var(--pageMaxWidth) / 2),
+    var(--pagePadding)
+  );
+  --fontSizeTitle: 58px;
+  --fontSizeSubTitle: 32px;
+  --fontSizeText: 24px;
+}

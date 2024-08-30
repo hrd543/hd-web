@@ -1,0 +1,19 @@
+{
+  "name": "@hd-web/create",
+  "version": "0.0.1",
+  "description": "Testing web components",
+  "bin": {
+    "@hd-web/create": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && tsx build.ts"
+  },
+  "devDependencies": {
+    "@hd-web/build": "0.0.1"
+  },
+  "files": [
+    "/dist"
+  ],
+  "sideEffects": false,
+  "type": "module"
+}

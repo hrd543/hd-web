@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true,
+    "isolatedModules": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["dom", "esnext"],
+    "strict": true,
+    "sourceMap": true,
+    "target": "es6",
+    "declaration": false,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@hd-web/jsx",
+    "skipLibCheck": true
+  }
+}

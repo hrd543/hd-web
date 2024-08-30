@@ -69,6 +69,6 @@ export const buildSite = async (
     // Now rebuild to remove unused code.
     await removeUnusedCode(out, defaultConfig),
     // And write the html to the file
-    await writeToHtml(html, htmlPath)
+    await writeToHtml(html, htmlPath, out)
   ])
 }

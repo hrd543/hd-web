@@ -6,7 +6,8 @@
     "@hd-web/create": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc && tsx build.ts"
+    "build": "tsc && tsx build.ts",
+    "test": "echo \"testing\""
   },
   "devDependencies": {
     "@hd-web/build": "0.0.1"

@@ -4,7 +4,9 @@ export const stringifyStyle = (style: JSX.CssProperties): string => {
   let styleString = ' style="'
   for (const key in style) {
     const v = style[key as keyof JSX.CssProperties]
-    styleString += `${key}:${v};`
+    if (v !== undefined) {
+      styleString += `${key}:${v};`
+    }
   }
 
   return styleString + '"'

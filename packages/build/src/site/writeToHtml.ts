@@ -6,12 +6,16 @@ const getCssPathFromJs = (jsPath: string) => {
   return jsPath.replace(/\.js$/, '.css')
 }
 
+// exported for testing
 /**
  * Go through str and replace all instances of %hd-web-x% with the corresponding
  * replacement.
  * If there are 0 or multiple counts for any, throw an error.
  */
-const replaceHtml = (str: string, replacements: Record<string, string>) => {
+export const replaceHtml = (
+  str: string,
+  replacements: Record<string, string>
+) => {
   const keys = Object.keys(replacements)
   const counts = keys.reduce<Record<string, number>>((all, key) => {
     all[key] = 0

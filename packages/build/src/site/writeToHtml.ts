@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises'
 import { getFilePath } from '../getFilePath.js'
 import { BuildFilePaths } from './types.js'
+import path from 'path'
 
 const getCssPathFromJs = (jsPath: string) => {
   return jsPath.replace(/\.js$/, '.css')
@@ -54,20 +55,26 @@ export const replaceHtml = (
  * and link the style and script tags appropriately.
  */
 export const writeToHtml = async (
-  htmlBody: string,
-  html: BuildFilePaths,
-  js: BuildFilePaths
+  pages: string[],
+  htmlContents: string[],
+  entryDir: string,
+  outDir: string
 ) => {
   const htmlTemplate = await fs.readFile(
-    getFilePath(html.entry, false),
+    getFilePath(path.join(entryDir, 'index.html'), false),
     'utf-8'
   )
 
-  const newHtmlFile = replaceHtml(htmlTemplate, {
-    script: js.output,
-    css: getCssPathFromJs(js.output),
-    body: htmlBody
-  })
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i]!
+    const content = htmlContents[i]!
 
-  await fs.writeFile(getFilePath(html.output, false), newHtmlFile)
+    const newHtmlFile = replaceHtml(htmlTemplate, {
+      script: js.output,
+      css: getCssPathFromJs(js.output),
+      body: htmlBody
+    })
+
+    await fs.writeFile(getFilePath(html.output, false), newHtmlFile)
+  }
 }

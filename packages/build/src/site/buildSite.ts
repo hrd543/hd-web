@@ -5,43 +5,45 @@ import * as fs from 'fs/promises'
 import { getFilePath } from '../getFilePath.js'
 import { removeUnusedCode } from './removeUnusedCode.js'
 import { writeToHtml } from './writeToHtml.js'
-import type { BuildFilePaths } from './types.js'
 import { buildExports, findAllPages } from './findAllPages.js'
-import path from 'path'
 
 const defaultConfig: esbuild.BuildOptions = {
   bundle: true,
   target: 'es6'
 }
 
-/**
- * Takes an entry point which default exports the main app jsx,
- * creates the html file from it, and builds the js excluding that
- * now unneeded function.
- * Also registers all used custom web components.
- */
+// entry / out dir are relative to cwd()
+
+const entryPoint = '_main.js'
+
 export const buildSite = async (entryDir: string, outDir: string) => {
   console.log(process.cwd())
   if (entryDir === outDir) {
     throw new Error("Can't have input the same as output")
   }
 
-  const outFile = path.join(outDir, 'main.js')
+  const outFile = getFilePath('main.js', false, outDir)
+  const outFileImport = getFilePath('main.js', true, outDir)
 
-  // First create the export file
+  // Get a list of all files and folders contained in entryDir.
+  // If src, this gives me all paths including src at the root.
+  // e.g. entryDir/...
   const files = await fs.readdir(entryDir, {
     recursive: true,
     withFileTypes: true
   })
 
+  // This returns the parentPath for every index file.
+  // i.e. src, src/about, src/contact
   const indexPages = findAllPages(files)
+  // This contains all the imports in entryDir as absoulte paths
   const entryContent = buildExports(entryDir, indexPages)
-  await fs.writeFile('_main.js', entryContent)
+  await fs.writeFile(entryPoint, entryContent)
 
   // First bundle all the js into one file
   await esbuild.build({
     ...defaultConfig,
-    entryPoints: ['_main.js'],
+    entryPoints: [entryPoint],
     outfile: outFile,
     // don't minify on the first pass to save time
     minify: false,
@@ -54,7 +56,7 @@ export const buildSite = async (entryDir: string, outDir: string) => {
   // Need to define the global types BEFORE importing the component
   const getAllElements = initialiseGlobals()
   // We need to use the file we just built so that names line up
-  const pages = (await import(getFilePath(`./${outFile}`, true))).default
+  const pages = (await import(outFileImport)).default
   if (!Array.isArray(pages)) {
     throw new Error(
       "Pages wasn't an array - did you forget to add any index files?"
@@ -81,7 +83,7 @@ export const buildSite = async (entryDir: string, outDir: string) => {
   // elements which have been used.
   let file: fs.FileHandle | null = null
   try {
-    file = await fs.open(getFilePath(outFile, false), 'r+')
+    file = await fs.open(outFile, 'r+')
     await removeExports(file)
 
     const customEls = getAllElements()
@@ -100,7 +102,7 @@ export const buildSite = async (entryDir: string, outDir: string) => {
     // Now rebuild to remove unused code.
     await removeUnusedCode(outFile, defaultConfig),
     // And write the html to the file
-    await writeToHtml(htmlBody, html, js)
+    await writeToHtml(indexPages, htmlContents, entryDir, outDir)
   ])
 }
 

@@ -1,6 +1,5 @@
 import * as fs from 'fs/promises'
 import { getFilePath } from '../getFilePath.js'
-import { BuildFilePaths } from './types.js'
 import path from 'path'
 
 const getCssPathFromJs = (jsPath: string) => {
@@ -61,7 +60,7 @@ export const writeToHtml = async (
   outDir: string
 ) => {
   const htmlTemplate = await fs.readFile(
-    getFilePath(path.join(entryDir, 'index.html'), false),
+    getFilePath('index.html', false, entryDir),
     'utf-8'
   )
 
@@ -69,12 +68,20 @@ export const writeToHtml = async (
     const page = pages[i]!
     const content = htmlContents[i]!
 
+    // Remove entryDir from the start so that it may be replaced with outDir
+    console.log(page)
+    const relative = page.replace(new RegExp(`^${entryDir}`), '')
+    console.log(relative)
+
     const newHtmlFile = replaceHtml(htmlTemplate, {
-      script: js.output,
-      css: getCssPathFromJs(js.output),
-      body: htmlBody
+      script: '/main.js',
+      css: getCssPathFromJs('/main.js'),
+      body: content
     })
 
-    await fs.writeFile(getFilePath(html.output, false), newHtmlFile)
+    await fs.mkdir(path.join(outDir, relative), { recursive: true })
+    await fs.writeFile(path.join(outDir, relative, 'index.html'), newHtmlFile, {
+      flag: ''
+    })
   }
 }

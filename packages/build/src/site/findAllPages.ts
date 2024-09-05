@@ -1,5 +1,4 @@
 import { Dirent } from 'fs'
-import { default as hello } from 'fs/promises'
 import * as path from 'path'
 import { getFilePath } from '../getFilePath.js'
 
@@ -12,7 +11,6 @@ const indexFile = 'index.tsx'
 
 // Variables must start with a non-number
 const encodeExport = (index: number) => `a${index}`
-const decodeExport = (exp: string) => Number(exp.slice(1))
 
 /**
  * Given an array of paths, return a unique list of
@@ -33,13 +31,16 @@ export const findAllPages = (paths: Dirent[]) => {
  * export statements for each path, assuming a default export.
  * Objects are exported as a{index}
  */
+// baseDir = "src", files = "src/about", "src", "src/contact"
 export const buildExports = (baseDir: string, files: string[]) => {
   if (files.length === 0) {
     return ''
   }
 
   const imports = files.reduce((content, file, i) => {
-    const importPath = path.relative(baseDir, file)
+    const importPath = path
+      .join(file, indexFile)
+      .replaceAll(path.sep, path.posix.sep)
 
     return `${content}import {default as ${encodeExport(i)}} from "./${importPath}";\n`
   }, '')
@@ -51,7 +52,13 @@ export const buildExports = (baseDir: string, files: string[]) => {
   `
 }
 
-console.log(import.meta.url)
+const page = 'src/about/hello'
+const entryDir = 'src'
+const outDir = 'henry/build'
+
+const relative = page.replace(new RegExp(`^${entryDir}/`), '')
+
+console.log(getFilePath('index.html', false, path.join(outDir, relative)))
 
 /*
 

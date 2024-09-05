@@ -36,3 +36,27 @@ export const removeExports = async (file: fs.FileHandle, chunkSize = 40) => {
     throw new Error("Couldn't find export statement")
   }
 }
+
+export const formatJs = async (
+  outFile: string,
+  getCustomElements: () => Record<string, string>
+) => {
+  // Remove all exports from the out file and define all the custom
+  // elements which have been used.
+  let file: fs.FileHandle | null = null
+  try {
+    file = await fs.open(outFile, 'r+')
+    await removeExports(file)
+
+    const customEls = getCustomElements()
+    let customElsDefinition = ''
+
+    for (const element in customEls) {
+      customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
+    }
+
+    file.write(customElsDefinition, (await file.stat()).size)
+  } finally {
+    await file?.close()
+  }
+}

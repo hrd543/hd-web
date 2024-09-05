@@ -1,11 +1,6 @@
 import path from 'path'
-import * as url from 'url'
 import { Dirent } from 'fs'
 import { pageFile } from './constants.js'
-
-/** Get the file url for the filepath so that it may be import()ed */
-export const getImportPath = (filepath: string) =>
-  url.pathToFileURL(filepath).href
 
 /**
  * Given a list of dirents, find all folders which contain a page file,
@@ -29,7 +24,3 @@ export const getActivePages = (entries: Dirent[], baseDir: string) => {
     )
   )
 }
-
-/** Replace all \ with / if importing on Windows */
-export const formatPathForImport = (p: string) =>
-  p.replaceAll(path.sep, path.posix.sep)

@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild'
-import { getFilePath } from '../getFilePath.js'
+import * as path from 'path'
+import { getImportPath } from '../getFilePath.js'
 
 const packageDefaults: esbuild.BuildOptions = {
   bundle: true,
@@ -13,7 +14,9 @@ const packageDefaults: esbuild.BuildOptions = {
 const getDependencies = async (dependencyPaths: string[]) => {
   const dependencyJsons = await Promise.all(
     dependencyPaths.map((p) => {
-      return import(getFilePath(p, true), { with: { type: 'json' } })
+      return import(getImportPath(path.resolve(process.cwd(), p)), {
+        with: { type: 'json' }
+      })
     })
   )
 

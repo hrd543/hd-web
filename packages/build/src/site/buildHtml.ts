@@ -1,4 +1,4 @@
-import { getImportPath } from './files.js'
+import { getImportPath } from '../getFilePath.js'
 
 export const buildHtml = async (pages: string[], outFile: string) => {
   // We need to use the file we just built so that names line up

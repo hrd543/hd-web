@@ -1,8 +1,9 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
-import { formatPathForImport, getActivePages } from './files.js'
+import { getActivePages } from './getActivePages.js'
 import { defaultConfig, pageFile, tempBuildFile } from './constants.js'
 import * as esbuild from 'esbuild'
+import { formatPathForImport } from '../getFilePath.js'
 
 // Variables must start with a non-number
 const encodeExport = (index: number) => `a${index}`

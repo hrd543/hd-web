@@ -1,13 +1,16 @@
 import path from 'path'
 import { Dirent } from 'fs'
 import * as fs from 'fs/promises'
-import { pageFile } from './constants.js'
 
-const getActivePagesFromDirents = (entries: Dirent[], baseDir: string) => {
+const getActivePagesFromDirents = (
+  entries: Dirent[],
+  baseDir: string,
+  pageFilename: string
+) => {
   return Array.from(
     new Set(
       entries
-        .filter((p) => p.isFile() && p.name === pageFile)
+        .filter((p) => p.isFile() && p.name === pageFilename)
         .map((dirent) => path.relative(baseDir, dirent.parentPath))
     )
   )
@@ -28,11 +31,14 @@ const getActivePagesFromDirents = (entries: Dirent[], baseDir: string) => {
  * ```
  * would return "" and "about"
  */
-export const getActivePages = async (entryDir: string) => {
+export const getActivePages = async (
+  entryDir: string,
+  pageFilename: string
+) => {
   const entryDirContent = await fs.readdir(entryDir, {
     recursive: true,
     withFileTypes: true
   })
 
-  return getActivePagesFromDirents(entryDirContent, entryDir)
+  return getActivePagesFromDirents(entryDirContent, entryDir, pageFilename)
 }

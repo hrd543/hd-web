@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
-import { defaultConfig, pageFile, tempBuildFile } from './constants.js'
+import { defaultConfig, tempBuildFile } from './constants.js'
 import * as esbuild from 'esbuild'
 import { formatPathForImport, getImportPath } from '../getFilePath.js'
 
@@ -12,14 +12,13 @@ const encodeExport = (index: number) => `a${index}`
  * export statements for each path, assuming a default export.
  * Objects are exported as a{index}
  */
-// baseDir = "src", files = "about", "", "contact"
 export const buildExports = (files: string[]) => {
   if (files.length === 0) {
     return ''
   }
 
   const imports = files.reduce((content, file, i) => {
-    const importPath = formatPathForImport(path.join(file, pageFile))
+    const importPath = formatPathForImport(file)
 
     return `${content}import {default as ${encodeExport(i)}} from "./${importPath}";\n`
   }, '')
@@ -43,12 +42,15 @@ export const buildExports = (files: string[]) => {
 export const getPageBuilders = async (
   entryDir: string,
   out: string,
-  activePages: string[]
+  activePages: string[],
+  pageFilename: string
 ) => {
   const entry = path.join(entryDir, tempBuildFile)
   try {
     // Create a new temp file to store all the page exports
-    const entryContent = buildExports(activePages)
+    const entryContent = buildExports(
+      activePages.map((page) => path.join(page, pageFilename))
+    )
     await fs.writeFile(entry, entryContent)
 
     // Bundle all the js together. This needs to be done so that the

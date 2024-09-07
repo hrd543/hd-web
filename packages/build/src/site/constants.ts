@@ -10,5 +10,3 @@ export const defaultConfig: BuildOptions = {
   bundle: true,
   target: 'es6'
 }
-
-export const pageFile = 'index.tsx'

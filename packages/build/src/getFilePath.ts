@@ -1,12 +1,10 @@
 import * as url from 'url'
 import * as path from 'path'
 
-export const getFilePath = (filepath: string, isImport: boolean) => {
-  const pathToFile = path.resolve(process.cwd(), filepath)
+/** Replace all \ with / if importing on Windows */
+export const formatPathForImport = (p: string) =>
+  p.replaceAll(path.sep, path.posix.sep)
 
-  if (isImport) {
-    return url.pathToFileURL(pathToFile).href
-  }
-
-  return pathToFile
-}
+/** Get the file url for the filepath so that it may be import()ed */
+export const getImportPath = (filepath: string) =>
+  url.pathToFileURL(filepath).href

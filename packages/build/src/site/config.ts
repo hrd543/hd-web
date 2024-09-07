@@ -1,6 +1,9 @@
 export type BuildSiteConfig = {
+  /** The directory, relative to cwd, containing the pages */
   entryDir: string
+  /** The directory, relative to cwd, in which the site will be built */
   outDir: string
+  /** The filename of each page in entryDir, where the html generator is exported */
   pageFilename: string
 }
 

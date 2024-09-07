@@ -1,18 +1,17 @@
 import path from 'path'
 import { Dirent } from 'fs'
-import * as fs from 'fs/promises'
+import fs from 'fs/promises'
 
 const getActivePagesFromDirents = (
   entries: Dirent[],
   baseDir: string,
   pageFilename: string
 ) => {
-  return Array.from(
-    new Set(
-      entries
-        .filter((p) => p.isFile() && p.name === pageFilename)
-        .map((dirent) => path.relative(baseDir, dirent.parentPath))
-    )
+  return (
+    entries
+      .filter((p) => p.isFile() && p.name === pageFilename)
+      // Replace path with parentPath once memfs has it
+      .map((dirent) => path.relative(baseDir, dirent.path))
   )
 }
 

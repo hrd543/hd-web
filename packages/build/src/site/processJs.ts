@@ -41,6 +41,9 @@ export const removeExports = async (file: fs.FileHandle, chunkSize = 40) => {
   }
 }
 
+// Below can't be tested yet since memfs expects a buffer instead of a
+// string to write
+
 /**
  * Add definitions for the customElements to the end of file
  */

@@ -75,8 +75,6 @@ export const writeToHtml = async (
     })
 
     await fs.mkdir(path.join(outDir, page), { recursive: true })
-    await fs.writeFile(path.join(outDir, page, 'index.html'), newHtmlFile, {
-      flag: ''
-    })
+    await fs.writeFile(path.join(outDir, page, 'index.html'), newHtmlFile)
   }
 }

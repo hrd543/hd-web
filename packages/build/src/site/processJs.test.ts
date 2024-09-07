@@ -1,7 +1,7 @@
 import assert from 'assert/strict'
 import { describe, it, beforeEach } from 'node:test'
 import { vol } from 'memfs'
-import { removeExports } from './formatJs.js'
+import { removeExports } from './processJs.js'
 
 const fs = vol.promises
 const filename = `/test.js`

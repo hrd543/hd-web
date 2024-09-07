@@ -1,4 +1,4 @@
-/**
+/*
  * When building the html from the jsx, we need a few globals which aren't
  * defined when running in nodejs vs the browser.
  * In particular, we need some way of tracking which elements have been

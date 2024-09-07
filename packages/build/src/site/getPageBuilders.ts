@@ -1,9 +1,8 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
-import { getActivePages } from './getActivePages.js'
 import { defaultConfig, pageFile, tempBuildFile } from './constants.js'
 import * as esbuild from 'esbuild'
-import { formatPathForImport } from '../getFilePath.js'
+import { formatPathForImport, getImportPath } from '../getFilePath.js'
 
 // Variables must start with a non-number
 const encodeExport = (index: number) => `a${index}`
@@ -32,39 +31,42 @@ export const buildExports = (files: string[]) => {
   `
 }
 
-export const buildJs = async (entryDir: string, outFile: string) => {
-  const tempBuildFileLocation = path.join(entryDir, tempBuildFile)
-
+/**
+ * Create a js file at out containing all code within activePages, relative
+ * to the file at entry and default exporting each page's default export
+ * as an array.
+ *
+ * Return the
+ *
+ * (Assumes activePages are already relative to entry)
+ */
+export const getPageBuilders = async (
+  entryDir: string,
+  out: string,
+  activePages: string[]
+) => {
+  const entry = path.join(entryDir, tempBuildFile)
   try {
-    // Get a list of all files and folders contained in entryDir.
-    // If src, this gives me all paths including src at the root.
-    // e.g. entryDir/...
-    const entryDirContent = await fs.readdir(entryDir, {
-      recursive: true,
-      withFileTypes: true
-    })
-
-    // This returns the parentPath for every index file.
-    // i.e. src, src/about, src/contact
-    const activePages = getActivePages(entryDirContent, entryDir)
-    // This contains all the imports in entryDir as absoulte paths
+    // Create a new temp file to store all the page exports
     const entryContent = buildExports(activePages)
-    await fs.writeFile(tempBuildFileLocation, entryContent)
+    await fs.writeFile(entry, entryContent)
 
-    // First bundle all the js into one file
+    // Bundle all the js together. This needs to be done so that the
+    // custom element names line up in the bundled code
     await esbuild.build({
       ...defaultConfig,
-      entryPoints: [tempBuildFileLocation],
-      outfile: outFile,
+      entryPoints: [entry],
+      outfile: out,
       // don't minify on the first pass to save time
       minify: false,
       // Use esm to preserve imports
       format: 'esm'
     })
 
-    return activePages
+    // Now import it and return the default export.
+    return (await import(getImportPath(out))).default
   } finally {
     // Now delete the file since it's no longer needed.
-    await fs.unlink(tempBuildFileLocation)
+    await fs.unlink(entry)
   }
 }

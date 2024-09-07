@@ -2,6 +2,10 @@ import * as fs from 'fs/promises'
 
 const semiColonSize = Buffer.byteLength(';\n\r', 'utf-8')
 
+/**
+ * Remove the export statement at the end of the file, checking from the
+ * end, in chunks of size chunkSize
+ */
 export const removeExports = async (file: fs.FileHandle, chunkSize = 40) => {
   const fileSize = (await file.stat()).size
   let bytesToRemove = 0
@@ -37,26 +41,36 @@ export const removeExports = async (file: fs.FileHandle, chunkSize = 40) => {
   }
 }
 
-export const formatJs = async (
-  outFile: string,
+/**
+ * Add definitions for the customElements to the end of file
+ */
+export const defineCustomElements = async (
+  file: fs.FileHandle,
   getCustomElements: () => Record<string, string>
 ) => {
-  // Remove all exports from the out file and define all the custom
-  // elements which have been used.
-  let file: fs.FileHandle | null = null
+  const customEls = getCustomElements()
+  let customElsDefinition = ''
+
+  for (const element in customEls) {
+    customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
+  }
+
+  file.write(customElsDefinition, (await file.stat()).size)
+}
+
+/**
+ * Remove any exports from file, and append any custom element definitions
+ * found in getCustomElements.
+ */
+export const processJs = async (
+  file: string,
+  getCustomElements: () => Record<string, string>
+) => {
+  const outFileHandle = await fs.open(file, 'r+')
   try {
-    file = await fs.open(outFile, 'r+')
-    await removeExports(file)
-
-    const customEls = getCustomElements()
-    let customElsDefinition = ''
-
-    for (const element in customEls) {
-      customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
-    }
-
-    file.write(customElsDefinition, (await file.stat()).size)
+    await removeExports(outFileHandle)
+    await defineCustomElements(outFileHandle, getCustomElements)
   } finally {
-    await file?.close()
+    await outFileHandle.close()
   }
 }

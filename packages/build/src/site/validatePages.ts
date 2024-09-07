@@ -1,8 +1,12 @@
-import { getImportPath } from '../getFilePath.js'
-
-export const buildHtml = async (pages: string[], outFile: string) => {
-  // We need to use the file we just built so that names line up
-  const pageBuilders = (await import(getImportPath(outFile))).default
+/**
+ * Take the default export from the built js, which is expected to be
+ * an array of functions, and run those functions to return a list
+ * of html contents as strings.
+ *
+ * Throws an error if pageBuilders isn't an array of functions returning
+ * strings
+ */
+export const validatePages = async (pageBuilders: unknown, pages: string[]) => {
   if (!Array.isArray(pageBuilders) || pageBuilders.length === 0) {
     throw new Error(
       "Pages wasn't an array - did you forget to add any index files?"

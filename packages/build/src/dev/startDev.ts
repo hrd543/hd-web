@@ -2,8 +2,8 @@ import { BuildSiteConfig, validateConfig } from '../site/config.js'
 import fs from 'fs/promises'
 import { debounce } from './debounce.js'
 
-const handleChange = debounce((file) => {
-  console.log(file)
+const handleChange = debounce((files) => {
+  console.log(files)
 }, 100)
 
 export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {

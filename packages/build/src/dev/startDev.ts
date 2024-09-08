@@ -1,9 +1,10 @@
 import { BuildSiteConfig, validateConfig } from '../site/config.js'
 import fs from 'fs/promises'
 import { debounce } from './debounce.js'
+import { buildSite } from '../site/buildSite.js'
 
-const handleChange = debounce((files) => {
-  console.log(files)
+const handleChange = debounce(async (files, config: BuildSiteConfig) => {
+  await buildSite(config)
 }, 100)
 
 export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
@@ -11,7 +12,7 @@ export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const watcher = fs.watch(config.entryDir, { recursive: true })
 
   for await (const event of watcher) {
-    handleChange(event.filename)
+    handleChange(event.filename, config)
   }
 }
 

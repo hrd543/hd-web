@@ -5,7 +5,7 @@
  * that time.
  */
 export const debounce = <T extends unknown[]>(
-  callback: (changes: string[], ...args: T) => void,
+  callback: (changes: string[], ...args: T) => Promise<void> | void,
   timer: number
 ) => {
   let files = new Set<string>()
@@ -18,9 +18,10 @@ export const debounce = <T extends unknown[]>(
 
     files.add(file)
     clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      callback(Array.from(files), ...args)
+    timeout = setTimeout(async () => {
+      const fileArray = Array.from(files)
       files = new Set()
+      await callback(fileArray, ...args)
     }, timer)
   }
 }

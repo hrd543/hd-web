@@ -12,7 +12,7 @@ export const debounce = <T extends unknown[]>(
   let timeout: NodeJS.Timeout | undefined = undefined
 
   return (file: string | null, ...args: T) => {
-    if (!file) {
+    if (!file || file === '_main.js') {
       return
     }
 

@@ -2,7 +2,7 @@ import * as fs from 'fs/promises'
 import path from 'path'
 import { buildFile } from './constants.js'
 
-const getCssPathFromJs = (jsPath: string) => {
+export const getCssPathFromJs = (jsPath: string) => {
   return jsPath.replace(/\.js$/, '.css')
 }
 

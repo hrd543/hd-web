@@ -41,14 +41,10 @@ export const removeExports = async (file: fs.FileHandle, chunkSize = 40) => {
   }
 }
 
-// Below can't be tested yet since memfs expects a buffer instead of a
-// string to write
-
 /**
- * Add definitions for the customElements to the end of file
+ * Create definitions for every custom element used
  */
-export const defineCustomElements = async (
-  file: fs.FileHandle,
+export const defineCustomElements = (
   getCustomElements: () => Record<string, string>
 ) => {
   const customEls = getCustomElements()
@@ -58,7 +54,7 @@ export const defineCustomElements = async (
     customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
   }
 
-  file.write(customElsDefinition, (await file.stat()).size)
+  return customElsDefinition
 }
 
 /**
@@ -72,7 +68,10 @@ export const processJs = async (
   const outFileHandle = await fs.open(file, 'r+')
   try {
     await removeExports(outFileHandle)
-    await defineCustomElements(outFileHandle, getCustomElements)
+    outFileHandle.write(
+      defineCustomElements(getCustomElements),
+      (await outFileHandle.stat()).size
+    )
   } finally {
     await outFileHandle.close()
   }

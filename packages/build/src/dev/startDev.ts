@@ -43,9 +43,7 @@ const rebuild = async (
   const builders = req(moduleName).default
   delete req.cache[req.resolve(moduleName)]
   const contents = await validatePages(builders, activePages)
-  const file = await fs.open(outFile, 'r+')
-  await defineCustomElements(file, getCustomElements)
-  await file.close()
+  await fs.appendFile(outFile, defineCustomElements(getCustomElements))
   for (let i = 0; i < activePages.length; i++) {
     await fs.writeFile(
       path.join(outDir, activePages[i]!, 'index.html'),

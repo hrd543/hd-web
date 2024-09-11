@@ -1,17 +1,23 @@
-import { BuildSiteConfig, validateConfig } from '../site/config.js'
 import fs from 'fs/promises'
 import * as esbuild from 'esbuild'
 import { debounce } from './debounce.js'
-import { initialiseGlobals } from '../site/globals.js'
-import path from 'path'
-import { buildFile, tempBuildFile } from '../site/constants.js'
-import { getActivePages } from '../site/getActivePages.js'
-import { buildExports } from '../site/getPageBuilders.js'
-import { getCssPathFromJs, replaceHtml } from '../site/writeToHtml.js'
-import { getImportPath } from '../getFilePath.js'
-import { validatePages } from '../site/validatePages.js'
-import { defineCustomElements } from '../site/processJs.js'
-import { createRequire } from 'module'
+import { getBuildContext, getPageBuilders } from './helpers.js'
+import {
+  createPageDirectories,
+  createPages,
+  getActivePages,
+  validatePages
+} from '../shared/pages.js'
+import { initialiseGlobals } from '../shared/globals.js'
+import { createEntryFile, defineCustomElements } from '../shared/js.js'
+import {
+  getCssPathFromJs,
+  getHtmlTemplate,
+  replaceHtml
+} from '../shared/html.js'
+import { BuildSiteConfig, validateConfig } from '../shared/config.js'
+import { getBuildFile } from '../shared/files.js'
+import { buildFile } from '../shared/constants.js'
 
 const handleChange = debounce(
   async (
@@ -38,56 +44,31 @@ const rebuild = async (
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
   await ctx.rebuild()
-  const req = createRequire(import.meta.url)
-  const moduleName = getImportPath(outFile)
-  const builders = req(moduleName).default
-  delete req.cache[req.resolve(moduleName)]
+  const builders = getPageBuilders(outFile)
   const contents = await validatePages(builders, activePages)
   await fs.appendFile(outFile, defineCustomElements(getCustomElements))
-  for (let i = 0; i < activePages.length; i++) {
-    await fs.writeFile(
-      path.join(outDir, activePages[i]!, 'index.html'),
-      replaceHtml(htmlTemplate, { body: contents[i]! })
-    )
-  }
-
-  console.log('rebuilt', contents)
+  await createPages(
+    outDir,
+    activePages,
+    contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
+  )
 }
 
 export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)
-  const outFile = path.resolve(outDir, buildFile)
+  const outFile = getBuildFile(outDir)
 
   const activePages = await getActivePages(entryDir, pageFilename)
+  await createPageDirectories(outDir, activePages)
 
-  for (const page of activePages) {
-    await fs.mkdir(path.join(outDir, page), { recursive: true })
-  }
+  const entryFile = await createEntryFile(entryDir, activePages, pageFilename)
 
-  const entryContent = buildExports(
-    activePages.map((page) => path.join(page, pageFilename))
-  )
-  const pageExportsFile = path.join(entryDir, tempBuildFile)
-  await fs.writeFile(pageExportsFile, entryContent)
-
-  const htmlTemplate = replaceHtml(
-    await fs.readFile(path.resolve(entryDir, 'index.html'), 'utf-8'),
-    {
-      script: `/${buildFile}`,
-      css: getCssPathFromJs(`/${buildFile}`)
-    }
-  )
-
-  const ctx = await esbuild.context({
-    bundle: true,
-    target: 'esnext',
-    entryPoints: [pageExportsFile],
-    outfile: outFile,
-    minify: false,
-    // Using common js so that we can bust the import cache
-    format: 'cjs',
-    allowOverwrite: true
+  const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
+    script: `/${buildFile}`,
+    css: getCssPathFromJs(`/${buildFile}`)
   })
+
+  const ctx = await getBuildContext(entryFile, outFile)
 
   await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir)
 
@@ -103,6 +84,8 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
       outDir
     )
   }
+
+  // Delete the entry file when the process exits
 }
 
 /**

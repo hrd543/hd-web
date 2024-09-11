@@ -2,7 +2,7 @@ import { beforeEach, describe, it, mock } from 'node:test'
 import { vol } from 'memfs'
 import fsNode from 'fs/promises'
 import assert from 'assert/strict'
-import { getActivePages } from './getActivePages.js'
+import { getActivePages } from './pages.js'
 
 const fs = vol.promises
 const structure = () => ({

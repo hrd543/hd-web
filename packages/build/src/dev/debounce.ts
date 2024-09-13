@@ -1,3 +1,10 @@
+type InterruptFunction = (
+  task: Promise<void>,
+  queuedFiles: string[]
+) => Promise<void>
+
+const defaultInterruptor: InterruptFunction = (task) => task
+
 /**
  * Make sure that callback is run at most once every timer ms.
  *
@@ -5,23 +12,32 @@
  * that time.
  */
 export const debounce = <T extends unknown[]>(
-  callback: (changes: string[], ...args: T) => Promise<void> | void,
-  timer: number
+  callback: (changes: string[], ...args: T) => Promise<void>,
+  timer: number,
+  onInterrupt = defaultInterruptor
 ) => {
   let files = new Set<string>()
+  let task: Promise<void> | null = null
   let timeout: NodeJS.Timeout | undefined = undefined
 
-  return (file: string | null, ...args: T) => {
+  return async (file: string | null, ...args: T) => {
     if (!file || file === '_main.js') {
       return
     }
 
     files.add(file)
+
     clearTimeout(timeout)
     timeout = setTimeout(async () => {
+      // If we're currently running a task, wait for it to finish
+      // before starting a new one.
+      if (task) {
+        await onInterrupt(task, Array.from(files))
+      }
+
       const fileArray = Array.from(files)
       files = new Set()
-      await callback(fileArray, ...args)
+      task = callback(fileArray, ...args)
     }, timer)
   }
 }

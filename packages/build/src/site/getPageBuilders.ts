@@ -1,8 +1,9 @@
 import * as fs from 'fs/promises'
-import { defaultConfig } from '../shared/constants.js'
+import { defaultConfig, tempBuildFile } from '../shared/constants.js'
 import * as esbuild from 'esbuild'
 import { getImportPath } from '../getFilePath.js'
-import { createEntryFile } from '../shared/js.js'
+import path from 'path'
+import { buildExportContent } from '../shared/js.js'
 
 /**
  * Create a js file at out containing all code within activePages, relative
@@ -19,9 +20,12 @@ export const getPageBuilders = async (
   activePages: string[],
   pageFilename: string
 ) => {
-  const entry = await createEntryFile(entryDir, activePages, pageFilename)
+  const entry = path.join(entryDir, tempBuildFile)
+  const entryContent = buildExportContent(activePages, pageFilename)
 
   try {
+    await fs.writeFile(entry, entryContent)
+
     // Bundle all the js together. This needs to be done so that the
     // custom element names line up in the bundled code
     await esbuild.build({

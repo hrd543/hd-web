@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import * as esbuild from 'esbuild'
 import { debounce } from './debounce.js'
-import { getBuildContext, getPageBuilders } from './helpers.js'
+import { createEntryFile, getBuildContext, getPageBuilders } from './helpers.js'
 import {
   createPageDirectories,
   createPages,
@@ -9,7 +9,7 @@ import {
   validatePages
 } from '../shared/pages.js'
 import { initialiseGlobals } from '../shared/globals.js'
-import { createEntryFile, defineCustomElements } from '../shared/js.js'
+import { defineCustomElements } from '../shared/js.js'
 import {
   getCssPathFromJs,
   getHtmlTemplate,
@@ -54,7 +54,12 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const outFile = getBuildFile(outDir)
   const activePages = await getActivePages(entryDir, pageFilename)
   await createPageDirectories(outDir, activePages)
-  const entryFile = await createEntryFile(entryDir, activePages, pageFilename)
+  const entryFile = await createEntryFile(
+    8080,
+    entryDir,
+    activePages,
+    pageFilename
+  )
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: `/${buildFile}`,
     css: getCssPathFromJs(`/${buildFile}`)

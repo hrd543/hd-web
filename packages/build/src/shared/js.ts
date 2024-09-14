@@ -1,6 +1,4 @@
-import * as fs from 'fs/promises'
 import * as path from 'path'
-import { tempBuildFile } from './constants.js'
 import { formatPathForImport } from '../getFilePath.js'
 
 // Variables must start with a non-number
@@ -11,7 +9,9 @@ const encodeExport = (index: number) => `a${index}`
  * export statements for each path, assuming a default export.
  * Objects are exported as a{index}
  */
-export const buildExportContent = (files: string[]) => {
+export const buildExportContent = (pages: string[], pageFilename: string) => {
+  const files = pages.map((p) => path.join(p, pageFilename))
+
   if (files.length === 0) {
     return ''
   }
@@ -27,20 +27,6 @@ export const buildExportContent = (files: string[]) => {
     const pages = [${files.map((f, i) => encodeExport(i)).join(',')}];
     export default pages;  
   `
-}
-
-export const createEntryFile = async (
-  dir: string,
-  pages: string[],
-  pageFilename: string
-) => {
-  const entry = path.join(dir, tempBuildFile)
-  const entryContent = buildExportContent(
-    pages.map((page) => path.join(page, pageFilename))
-  )
-  await fs.writeFile(entry, entryContent)
-
-  return entry
 }
 
 /**

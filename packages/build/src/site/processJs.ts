@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
-import { defineCustomElements, removeExports } from '../shared/js.js'
+import { defineCustomElements } from '../shared/js.js'
+import { removeExports } from './removeExports.js'
 
 /**
  * Remove any exports from file, and append any custom element definitions

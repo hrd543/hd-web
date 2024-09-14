@@ -25,7 +25,7 @@ export const getBuildContext = (entryFile: string, outFile: string) => {
     outfile: outFile,
     minify: false,
     // Using common js so that we can bust the import cache
-    format: 'cjs',
+    format: 'esm',
     allowOverwrite: true
   })
 }

@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import * as esbuild from 'esbuild'
+import { type WebSocket } from 'ws'
 import { debounce } from './debounce.js'
 import { createEntryFile, getBuildContext, getPageBuilders } from './helpers.js'
 import {
@@ -18,6 +19,7 @@ import {
 import { BuildSiteConfig, validateConfig } from '../shared/config.js'
 import { getBuildFile } from '../shared/files.js'
 import { buildFile } from '../shared/constants.js'
+import { createDevServer } from './server.js'
 
 const rebuild = async (
   changedFiles: string[],
@@ -25,7 +27,8 @@ const rebuild = async (
   activePages: string[],
   outFile: string,
   htmlTemplate: string,
-  outDir: string
+  outDir: string,
+  ws: WebSocket | null
 ) => {
   console.log('rebuilding...')
   // Need to define the global types BEFORE importing the component
@@ -39,6 +42,18 @@ const rebuild = async (
     activePages,
     contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
   )
+
+  esbuild.build({
+    bundle: true,
+    target: 'esnext',
+    entryPoints: [outFile],
+    outfile: outFile,
+    minify: false,
+    // Using common js so that we can bust the import cache
+    format: 'iife',
+    allowOverwrite: true
+  })
+  ws?.send('refresh')
   console.log('Finished rebuild')
 }
 
@@ -66,9 +81,10 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   })
 
   const ctx = await getBuildContext(entryFile, outFile)
-  await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir)
+  await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir, null)
 
   const watcher = fs.watch(entryDir, { recursive: true })
+  const ws = createDevServer(8080, outDir)
 
   for await (const event of watcher) {
     await handleChange(
@@ -77,9 +93,13 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
       activePages,
       outFile,
       htmlTemplate,
-      outDir
+      outDir,
+      ws
     )
   }
 
   // Delete the entry file when the process exits
+  // Also call ctx.dispose()
 }
+
+buildDev({})

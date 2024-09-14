@@ -4,7 +4,13 @@
  */
 export const getRefreshClientScript = (port: number) => {
   return `
-    const ws = new WebSocket("ws:localhost:${port}");
-    ws.addEventListener("message", () => window.location.reload());
+    const ws = new WebSocket("ws://localhost:${port}");
+    ws.addEventListener("open", () => {
+
+    })
+    ws.addEventListener("message", () => {
+    
+      window.location.reload()
+    });
   `
 }

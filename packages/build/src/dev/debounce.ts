@@ -33,6 +33,7 @@ export const debounce = <T extends unknown[]>(
       // before starting a new one.
       if (task) {
         await onInterrupt(task, Array.from(files))
+        task = null
       }
 
       const fileArray = Array.from(files)

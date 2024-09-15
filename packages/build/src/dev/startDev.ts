@@ -28,7 +28,7 @@ const rebuild = async (
   outFile: string,
   htmlTemplate: string,
   outDir: string,
-  ws: WebSocket | null
+  ws: () => WebSocket | null
 ) => {
   console.log('rebuilding...')
   // Need to define the global types BEFORE importing the component
@@ -43,7 +43,7 @@ const rebuild = async (
     contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
   )
 
-  esbuild.build({
+  await esbuild.build({
     bundle: true,
     target: 'esnext',
     entryPoints: [outFile],
@@ -53,7 +53,7 @@ const rebuild = async (
     format: 'iife',
     allowOverwrite: true
   })
-  ws?.send('refresh')
+  ws()?.send('refresh')
   console.log('Finished rebuild')
 }
 
@@ -81,7 +81,7 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   })
 
   const ctx = await getBuildContext(entryFile, outFile)
-  await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir, null)
+  await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir, () => null)
 
   const watcher = fs.watch(entryDir, { recursive: true })
   const ws = createDevServer(8080, outDir)

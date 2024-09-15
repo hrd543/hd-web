@@ -6,7 +6,7 @@ import { WebSocketServer, type WebSocket } from 'ws'
 export const createDevServer = (
   port: number,
   outDir: string
-): WebSocket | null => {
+): (() => WebSocket | null) => {
   const mimeType: Record<string, string> = {
     '.ico': 'image/x-icon',
     '.html': 'text/html',
@@ -65,5 +65,5 @@ export const createDevServer = (
 
   server.listen(port)
 
-  return ws
+  return () => ws
 }

@@ -1,6 +1,6 @@
 import assert from 'assert/strict'
 import { describe, it } from 'node:test'
-import { replaceHtml } from './writeToHtml.js'
+import { replaceHtml } from './html.js'
 
 const hdWeb = (str: string) => `%hd-web-${str}%`
 

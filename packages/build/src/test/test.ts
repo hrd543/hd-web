@@ -1,6 +1,6 @@
 import { buildDev } from '../dev/startDev.js'
 
-await buildDev({
+buildDev({
   entryDir: 'src',
   outDir: 'dev'
 })

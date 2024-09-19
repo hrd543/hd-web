@@ -101,5 +101,3 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   // Delete the entry file when the process exits
   // Also call ctx.dispose()
 }
-
-buildDev({})

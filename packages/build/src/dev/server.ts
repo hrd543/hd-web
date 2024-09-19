@@ -2,31 +2,13 @@ import http from 'http'
 import path from 'path'
 import fs from 'fs/promises'
 import { WebSocketServer, type WebSocket } from 'ws'
+import { mimeTypes } from './mimeTypes.js'
 
 export const createDevServer = (
   port: number,
   outDir: string
 ): (() => WebSocket | null) => {
-  const mimeType: Record<string, string> = {
-    '.ico': 'image/x-icon',
-    '.html': 'text/html',
-    '.js': 'text/javascript',
-    '.json': 'application/json',
-    '.css': 'text/css',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.wav': 'audio/wav',
-    '.mp3': 'audio/mpeg',
-    '.svg': 'image/svg+xml',
-    '.pdf': 'application/pdf',
-    '.zip': 'application/zip',
-    '.doc': 'application/msword',
-    '.eot': 'application/vnd.ms-fontobject',
-    '.ttf': 'application/x-font-ttf'
-  }
-
   const server = http.createServer(async (req, res) => {
-    // console.log(`${req.method} ${req.url}`)
     if (!req.url) {
       return
     }
@@ -48,9 +30,9 @@ export const createDevServer = (
       const content = await fs.readFile(filename)
       const ext = path.extname(filename)
       // if the file is found, set Content-type and send data
-      res.setHeader('Content-type', mimeType[ext] || 'text/plain')
+      res.setHeader('Content-type', mimeTypes[ext] || 'text/plain')
       res.end(content)
-    } catch (e) {
+    } catch {
       res.statusCode = 404
       res.end(`File ${pathname} not found`)
     }

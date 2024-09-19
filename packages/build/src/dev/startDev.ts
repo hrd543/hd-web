@@ -2,7 +2,11 @@ import fs from 'fs/promises'
 import * as esbuild from 'esbuild'
 import { type WebSocket } from 'ws'
 import { debounce } from './debounce.js'
-import { createEntryFile, getBuildContext, getPageBuilders } from './helpers.js'
+import {
+  createEntryFile,
+  getBuildContexts,
+  getPageBuilders
+} from './helpers.js'
 import {
   createPageDirectories,
   createPages,
@@ -23,7 +27,7 @@ import { createDevServer } from './server.js'
 
 const rebuild = async (
   changedFiles: string[],
-  ctx: esbuild.BuildContext,
+  ctx: [entry: esbuild.BuildContext, out: esbuild.BuildContext],
   activePages: string[],
   outFile: string,
   htmlTemplate: string,
@@ -33,7 +37,7 @@ const rebuild = async (
   console.log('rebuilding...')
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  await ctx.rebuild()
+  await ctx[0].rebuild()
   const builders = getPageBuilders(outFile)
   const contents = await validatePages(builders, activePages)
   await fs.appendFile(outFile, defineCustomElements(getCustomElements))
@@ -43,16 +47,7 @@ const rebuild = async (
     contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
   )
 
-  await esbuild.build({
-    bundle: true,
-    target: 'esnext',
-    entryPoints: [outFile],
-    outfile: outFile,
-    minify: false,
-    // Using common js so that we can bust the import cache
-    format: 'iife',
-    allowOverwrite: true
-  })
+  await ctx[1].rebuild()
   ws()?.send('refresh')
   console.log('Finished rebuild')
 }
@@ -85,7 +80,7 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
     css: getCssPathFromJs(`/${buildFile}`)
   })
 
-  const ctx = await getBuildContext(entryFile, outFile)
+  const ctx = await getBuildContexts(entryFile, outFile)
   await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir, () => null)
 
   const watcher = fs.watch(entryDir, { recursive: true })

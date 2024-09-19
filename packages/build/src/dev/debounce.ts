@@ -14,14 +14,16 @@ const defaultInterruptor: InterruptFunction = (task) => task
 export const debounce = <T extends unknown[]>(
   callback: (changes: string[], ...args: T) => Promise<void>,
   timer: number,
+  fileDenyList?: string[],
   onInterrupt = defaultInterruptor
 ) => {
+  const fileDenySet = fileDenyList ? new Set(fileDenyList) : undefined
   let files = new Set<string>()
   let task: Promise<void> | null = null
   let timeout: NodeJS.Timeout | undefined = undefined
 
   return async (file: string | null, ...args: T) => {
-    if (!file || file === '_main.js') {
+    if (!file || fileDenySet?.has(file)) {
       return
     }
 

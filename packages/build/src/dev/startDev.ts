@@ -18,7 +18,7 @@ import {
 } from '../shared/html.js'
 import { BuildSiteConfig, validateConfig } from '../shared/config.js'
 import { getBuildFile } from '../shared/files.js'
-import { buildFile } from '../shared/constants.js'
+import { buildFile, tempBuildFile } from '../shared/constants.js'
 import { createDevServer } from './server.js'
 
 const rebuild = async (
@@ -57,12 +57,17 @@ const rebuild = async (
   console.log('Finished rebuild')
 }
 
-const handleChange = debounce(rebuild, 100, async (task, files) => {
-  console.log(
-    `Please wait until the current build has finished, queueing ${files}`
-  )
-  await task
-})
+const handleChange = debounce(
+  rebuild,
+  100,
+  [tempBuildFile],
+  async (task, files) => {
+    console.log(
+      `Please wait until the current build has finished, queueing ${files}`
+    )
+    await task
+  }
+)
 
 export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)

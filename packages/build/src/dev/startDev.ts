@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import { type WebSocket } from 'ws'
 import { debounce } from './debounce.js'
-import { build, createEntryContent, getPageBuilders } from './helpers.js'
+import { buildDev, createEntryContent, getPageBuilders } from './helpers.js'
 import {
   createPageDirectories,
   createPages,
@@ -30,18 +30,17 @@ const rebuild = async (
   ws: () => WebSocket | null
 ) => {
   console.log('rebuilding...')
-  const built = await build(entryContent, 'src')
-  // Need to define the global types BEFORE importing the component
+  const built = await buildDev(entryContent, 'src')
+  // Need to define the global types BEFORE building the contents
   const getCustomElements = initialiseGlobals()
   const builders = getPageBuilders(built)
   const contents = await validatePages(builders, activePages)
-  await fs.appendFile(outFile, defineCustomElements(getCustomElements))
+  await fs.writeFile(outFile, built + defineCustomElements(getCustomElements))
   await createPages(
     outDir,
     activePages,
     contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
   )
-  await fs.writeFile('dev/main.js', built)
 
   ws()?.send('refresh')
   console.log('Finished rebuild')
@@ -59,7 +58,7 @@ const handleChange = debounce(
   }
 )
 
-export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
+export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)
 
   const outFile = getBuildFile(outDir)

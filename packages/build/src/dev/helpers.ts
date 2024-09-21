@@ -3,8 +3,8 @@ import { buildPages } from '../shared/js.js'
 import { getRefreshClientScript } from './refreshClient.js'
 
 /**
- * Returns the default export from file and then removes it
- * from the import cache to enable re-importing on change
+ * Returns the page builders given the entry content, which should
+ * contain an array called pages.
  */
 export const getPageBuilders = (contents: string) => {
   const f = new Function(contents + 'return pages;')
@@ -12,18 +12,18 @@ export const getPageBuilders = (contents: string) => {
   return f()
 }
 
-const sharedBuildOptions: esbuild.BuildOptions = {
-  bundle: true,
-  target: 'esnext',
-  minify: false,
-  allowOverwrite: true,
-  format: 'esm',
-  write: false
-}
-
-export const build = async (contents: string, dir: string) => {
+/**
+ * Build the entry contents (as a string) containing imports
+ * relative to dir
+ */
+export const buildDev = async (contents: string, dir: string) => {
   const built = await esbuild.build({
-    ...sharedBuildOptions,
+    bundle: true,
+    target: 'esnext',
+    minify: false,
+    allowOverwrite: true,
+    format: 'esm',
+    write: false,
     stdin: {
       contents,
       resolveDir: dir
@@ -31,29 +31,6 @@ export const build = async (contents: string, dir: string) => {
   })
 
   return built.outputFiles![0]!.text
-}
-
-export const getBuildContexts = async (
-  entryFile: string,
-  outFile: string
-): Promise<[esbuild.BuildContext, esbuild.BuildContext]> => {
-  const entryCtx = await esbuild.context({
-    ...sharedBuildOptions,
-    entryPoints: [entryFile],
-    outfile: outFile,
-    // Using esm since we want to maintain the exports
-    format: 'esm'
-  })
-
-  const outCtx = await esbuild.context({
-    ...sharedBuildOptions,
-    entryPoints: [outFile],
-    outfile: outFile,
-    // Using iife since this will run in the browser
-    format: 'iife'
-  })
-
-  return [entryCtx, outCtx]
 }
 
 export const createEntryContent = (

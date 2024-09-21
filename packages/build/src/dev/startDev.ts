@@ -1,12 +1,7 @@
 import fs from 'fs/promises'
-import * as esbuild from 'esbuild'
 import { type WebSocket } from 'ws'
 import { debounce } from './debounce.js'
-import {
-  createEntryFile,
-  getBuildContexts,
-  getPageBuilders
-} from './helpers.js'
+import { build, createEntryContent, getPageBuilders } from './helpers.js'
 import {
   createPageDirectories,
   createPages,
@@ -27,7 +22,7 @@ import { createDevServer } from './server.js'
 
 const rebuild = async (
   changedFiles: string[],
-  ctx: [entry: esbuild.BuildContext, out: esbuild.BuildContext],
+  entryContent: string,
   activePages: string[],
   outFile: string,
   htmlTemplate: string,
@@ -35,10 +30,10 @@ const rebuild = async (
   ws: () => WebSocket | null
 ) => {
   console.log('rebuilding...')
+  const built = await build(entryContent, 'src')
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  await ctx[0].rebuild()
-  const builders = getPageBuilders(outFile)
+  const builders = getPageBuilders(built)
   const contents = await validatePages(builders, activePages)
   await fs.appendFile(outFile, defineCustomElements(getCustomElements))
   await createPages(
@@ -46,8 +41,8 @@ const rebuild = async (
     activePages,
     contents.map((c) => replaceHtml(htmlTemplate, { body: c }))
   )
+  await fs.writeFile('dev/main.js', built)
 
-  await ctx[1].rebuild()
   ws()?.send('refresh')
   console.log('Finished rebuild')
 }
@@ -66,22 +61,25 @@ const handleChange = debounce(
 
 export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)
+
   const outFile = getBuildFile(outDir)
   const activePages = await getActivePages(entryDir, pageFilename)
-  await createPageDirectories(outDir, activePages)
-  const entryFile = await createEntryFile(
-    8080,
-    entryDir,
-    activePages,
-    pageFilename
-  )
+  await createPageDirectories(fs.mkdir, outDir, activePages)
+  const entryContent = createEntryContent(8080, activePages, pageFilename)
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: `/${buildFile}`,
     css: getCssPathFromJs(`/${buildFile}`)
   })
 
-  const ctx = await getBuildContexts(entryFile, outFile)
-  await rebuild([], ctx, activePages, outFile, htmlTemplate, outDir, () => null)
+  await rebuild(
+    [],
+    entryContent,
+    activePages,
+    outFile,
+    htmlTemplate,
+    outDir,
+    () => null
+  )
 
   const watcher = fs.watch(entryDir, { recursive: true })
   const ws = createDevServer(8080, outDir)
@@ -89,7 +87,7 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   for await (const event of watcher) {
     await handleChange(
       event.filename,
-      ctx,
+      entryContent,
       activePages,
       outFile,
       htmlTemplate,
@@ -97,7 +95,4 @@ export const buildDev = async (rawConfig: Partial<BuildSiteConfig>) => {
       ws
     )
   }
-
-  // Delete the entry file when the process exits
-  // Also call ctx.dispose()
 }

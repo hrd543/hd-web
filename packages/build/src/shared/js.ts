@@ -9,7 +9,11 @@ const encodeExport = (index: number) => `a${index}`
  * export statements for each path, assuming a default export.
  * Objects are exported as a{index}
  */
-export const buildExportContent = (pages: string[], pageFilename: string) => {
+export const buildPages = (
+  pages: string[],
+  pageFilename: string,
+  shouldExport: boolean
+) => {
   const files = pages.map((p) => path.join(p, pageFilename))
 
   if (files.length === 0) {
@@ -22,10 +26,14 @@ export const buildExportContent = (pages: string[], pageFilename: string) => {
     return `${content}import {default as ${encodeExport(i)}} from "./${importPath}";\n`
   }, '')
 
+  // Using pages.length; so that esbuild thinks pages is being used and is thus
+  // not removed from the bundle
+  const lastLine = shouldExport ? 'export default pages;' : 'pages.length;'
+
   return `
     ${imports}
     const pages = [${files.map((f, i) => encodeExport(i)).join(',')}];
-    export default pages;  
+    ${lastLine}  
   `
 }
 

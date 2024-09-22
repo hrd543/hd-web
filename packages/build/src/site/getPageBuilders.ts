@@ -3,7 +3,7 @@ import { defaultConfig, tempBuildFile } from '../shared/constants.js'
 import * as esbuild from 'esbuild'
 import { getImportPath } from '../getFilePath.js'
 import path from 'path'
-import { buildExportContent } from '../shared/js.js'
+import { buildPages } from '../shared/js.js'
 
 /**
  * Create a js file at out containing all code within activePages, relative
@@ -21,7 +21,7 @@ export const getPageBuilders = async (
   pageFilename: string
 ) => {
   const entry = path.join(entryDir, tempBuildFile)
-  const entryContent = buildExportContent(activePages, pageFilename)
+  const entryContent = buildPages(activePages, pageFilename, true)
 
   try {
     await fs.writeFile(entry, entryContent)

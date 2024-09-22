@@ -1,12 +1,12 @@
 import http from 'http'
 import path from 'path'
-import fs from 'fs/promises'
 import { WebSocketServer, type WebSocket } from 'ws'
 import { mimeTypes } from './mimeTypes.js'
+import FileSystem from './filesystem.js'
 
 export const createDevServer = (
   port: number,
-  outDir: string
+  filesystem: FileSystem
 ): (() => WebSocket | null) => {
   const server = http.createServer(async (req, res) => {
     if (!req.url) {
@@ -20,21 +20,20 @@ export const createDevServer = (
       return
     }
 
-    const pathname = path.join(outDir, path.normalize(parsedUrl.pathname))
+    const pathname = path.normalize(parsedUrl.pathname)
 
-    try {
-      const info = await fs.stat(pathname)
-      const filename = info.isDirectory()
-        ? path.join(pathname, 'index.html')
-        : pathname
-      const content = await fs.readFile(filename)
-      const ext = path.extname(filename)
-      // if the file is found, set Content-type and send data
-      res.setHeader('Content-type', mimeTypes[ext] || 'text/plain')
-      res.end(content)
-    } catch {
+    const filename = filesystem.exists(pathname)
+      ? pathname
+      : path.join(pathname, 'index.html')
+    const content = filesystem.read(filename)
+
+    if (!content) {
       res.statusCode = 404
       res.end(`File ${pathname} not found`)
+    } else {
+      const ext = path.extname(filename)
+      res.setHeader('Content-type', mimeTypes[ext] || 'text/plain')
+      res.end(content)
     }
   })
 

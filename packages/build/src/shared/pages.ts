@@ -42,9 +42,16 @@ export const getActivePages = async (
   return getActivePagesFromDirents(entryDirContent, entryDir, pageFilename)
 }
 
-export const createPageDirectories = async (dir: string, pages: string[]) => {
+export const createPageDirectories = async (
+  mkdir: (
+    path: string,
+    options: { recursive: boolean }
+  ) => Promise<string | void>,
+  dir: string,
+  pages: string[]
+) => {
   await Promise.all(
-    pages.map((p) => fs.mkdir(path.join(dir, p), { recursive: true }))
+    pages.map((p) => mkdir(path.join(dir, p), { recursive: true }))
   )
 }
 

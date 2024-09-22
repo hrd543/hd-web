@@ -52,7 +52,6 @@ export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, pageFilename } = validateConfig(rawConfig)
 
   const activePages = await getActivePages(entryDir, pageFilename)
-  // await createPageDirectories(fs.mkdir, outDir, activePages)
   const entryContent = createEntryContent(8080, activePages, pageFilename)
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: `/${buildFile}`,

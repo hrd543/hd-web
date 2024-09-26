@@ -10,7 +10,8 @@ type FileSystem = {
 
 export const createDevServer = (
   port: number,
-  filesystem: FileSystem
+  filesystem: FileSystem,
+  page404 = '404.html'
 ): (() => WebSocket | null) => {
   const server = http.createServer(async (req, res) => {
     if (!req.url) {
@@ -30,9 +31,13 @@ export const createDevServer = (
     const content = await filesystem.read(filename)
 
     if (!content) {
-      // TODO work out 404 page
       res.statusCode = 404
-      res.end(`File ${pathname} not found`)
+      if (filesystem.exists(page404)) {
+        res.setHeader('Content-type', mimeTypes['html'] || 'text/plain')
+        res.end(await filesystem.read(page404))
+      } else {
+        res.end(`File ${pathname} not found`)
+      }
     } else {
       const ext = path.extname(filename)
       res.setHeader('Content-type', mimeTypes[ext] || 'text/plain')

@@ -1,7 +1,5 @@
-import { watch } from 'fs/promises'
 import path from 'path'
 import { type WebSocket } from 'ws'
-import { debounce } from './debounce.js'
 import { buildDev, createEntryContent, getPageBuilders } from './helpers.js'
 import { getActivePages, validatePages } from '../shared/pages.js'
 import { initialiseGlobals } from '../shared/globals.js'
@@ -13,8 +11,8 @@ import {
 } from '../shared/html.js'
 import { BuildSiteConfig, validateConfig } from '../shared/config.js'
 import { buildFile } from '../shared/constants.js'
-import { createDevServer } from './server.js'
 import FileSystem from './filesystem.js'
+import { createDevServer, watch } from '@hd-web/dev-server'
 
 const rebuild = async (
   changedFiles: string[],
@@ -40,13 +38,6 @@ const rebuild = async (
   console.log('Finished rebuild')
 }
 
-const handleChange = debounce(rebuild, 100, [], async (task, files) => {
-  console.log(
-    `Please wait until the current build has finished, queueing ${files}`
-  )
-  await task
-})
-
 export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
   const filesystem = new FileSystem()
   const { entryDir, pageFilename } = validateConfig(rawConfig)
@@ -58,19 +49,12 @@ export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
     css: getCssPathFromJs(`/${buildFile}`)
   })
 
-  await rebuild([], entryContent, activePages, htmlTemplate, filesystem)
+  const getWs = createDevServer(8080, filesystem)
 
-  const watcher = watch(entryDir, { recursive: true })
-  const ws = createDevServer(8080, filesystem)
+  const handleChange = () =>
+    rebuild([], entryContent, activePages, htmlTemplate, filesystem, getWs)
 
-  for await (const event of watcher) {
-    await handleChange(
-      event.filename,
-      entryContent,
-      activePages,
-      htmlTemplate,
-      filesystem,
-      ws
-    )
-  }
+  await handleChange()
+
+  await watch(entryDir, handleChange)
 }

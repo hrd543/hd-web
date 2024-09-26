@@ -1,8 +1,8 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
-import { getBuildFile } from '../shared/files.js'
+import path from 'path'
 import { initialiseGlobals } from '../shared/globals.js'
 import { getActivePages, validatePages } from '../shared/pages.js'
-import { defaultConfig } from '../shared/constants.js'
+import { buildFile, defaultConfig } from '../shared/constants.js'
 import { processJs } from './processJs.js'
 import { removeUnusedCode } from './removeUnusedCode.js'
 import { writeToHtml } from './writeToHtml.js'
@@ -25,7 +25,7 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  const outFile = getBuildFile(outDir)
+  const outFile = path.resolve(outDir, buildFile)
 
   const activePages = await getActivePages(entryDir, pageFilename)
   const pageBuilders = await getPageBuilders(

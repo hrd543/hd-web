@@ -1,4 +1,4 @@
-import { BuildSiteConfig, validateConfig } from '../shared/config.js'
+import { BuildSiteConfig, validateConfig } from './config.js'
 import { getBuildFile } from '../shared/files.js'
 import { initialiseGlobals } from '../shared/globals.js'
 import { getActivePages, validatePages } from '../shared/pages.js'

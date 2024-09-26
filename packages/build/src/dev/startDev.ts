@@ -9,13 +9,12 @@ import {
   getHtmlTemplate,
   replaceHtml
 } from '../shared/html.js'
-import { BuildSiteConfig, validateConfig } from '../shared/config.js'
 import { buildFile } from '../shared/constants.js'
 import FileSystem from './filesystem.js'
 import { createDevServer, watch } from '@hd-web/dev-server'
+import { BuildDevConfig, validateConfig } from './config.js'
 
 const rebuild = async (
-  changedFiles: string[],
   entryContent: string,
   activePages: string[],
   htmlTemplate: string,
@@ -38,23 +37,21 @@ const rebuild = async (
   console.log('Finished rebuild')
 }
 
-export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
-  const filesystem = new FileSystem()
-  const { entryDir, pageFilename } = validateConfig(rawConfig)
+export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
+  const { entryDir, pageFilename, port } = validateConfig(rawConfig)
 
   const activePages = await getActivePages(entryDir, pageFilename)
-  const entryContent = createEntryContent(8080, activePages, pageFilename)
+  const entryContent = createEntryContent(port, activePages, pageFilename)
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: `/${buildFile}`,
     css: getCssPathFromJs(`/${buildFile}`)
   })
 
-  const getWs = createDevServer(8080, filesystem)
+  const filesystem = new FileSystem()
+  await rebuild(entryContent, activePages, htmlTemplate, filesystem)
+  const getWs = createDevServer(port, filesystem)
 
-  const handleChange = () =>
-    rebuild([], entryContent, activePages, htmlTemplate, filesystem, getWs)
-
-  await handleChange()
-
-  await watch(entryDir, handleChange)
+  await watch(entryDir, () =>
+    rebuild(entryContent, activePages, htmlTemplate, filesystem, getWs)
+  )
 }

@@ -8,6 +8,14 @@ type FileSystem = {
   read: (file: string) => string | undefined | Promise<string | undefined>
 }
 
+/**
+ * Create a simple dev server. Don't use in production.
+ * @param port The port at which the server will be used
+ * @param filesystem Provide methods for reading and checking existence of a file.
+ * This could be the actual file system, or some sort of in memory version.
+ * @param page404 The name of the 404 page, if any
+ * @returns
+ */
 export const createDevServer = (
   port: number,
   filesystem: FileSystem,

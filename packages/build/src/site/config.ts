@@ -9,7 +9,7 @@ export type BuildSiteConfig = {
   pageFilename: string
 }
 
-export const defaultBuildSiteConfig: BuildSiteConfig = {
+const defaultBuildSiteConfig: BuildSiteConfig = {
   entryDir: 'src',
   outDir: 'build',
   pageFilename: 'index.tsx'

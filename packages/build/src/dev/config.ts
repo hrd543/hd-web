@@ -9,7 +9,7 @@ export type BuildDevConfig = {
   port: number
 }
 
-export const defaultBuildSiteConfig: BuildDevConfig = {
+const defaultBuildDevConfig: BuildDevConfig = {
   entryDir: 'src',
   pageFilename: 'index.tsx',
   port: 8080
@@ -20,7 +20,7 @@ export const defaultBuildSiteConfig: BuildDevConfig = {
  * the config for any potential issues.
  */
 export const validateConfig = (rawConfig: Partial<BuildDevConfig>) => {
-  const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
+  const config = mergeConfig(rawConfig, defaultBuildDevConfig)
 
   return config
 }

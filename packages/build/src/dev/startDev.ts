@@ -37,6 +37,10 @@ const rebuild = async (
   console.log('Finished rebuild')
 }
 
+/**
+ * Start a dev server at the given port, and watch for changes in entryDir,
+ * rebuilding and refreshing the page on each change.
+ */
 export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
   const { entryDir, pageFilename, port } = validateConfig(rawConfig)
 

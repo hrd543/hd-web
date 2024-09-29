@@ -1,8 +1,11 @@
 import * as path from 'path'
-import { formatPathForImport } from './files.js'
 
 // Variables must start with a non-number
 const encodeExport = (index: number) => `a${index}`
+
+/** Replace all \ with / if importing on Windows */
+const formatPathForImport = (p: string) =>
+  p.replaceAll(path.sep, path.posix.sep)
 
 /**
  * Given an array of file paths, build a string containing

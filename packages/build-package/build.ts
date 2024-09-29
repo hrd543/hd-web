@@ -1,4 +1,4 @@
-import { buildPackage } from '@hd-web/build-package'
+import { buildPackage } from './src/index.js'
 
 buildPackage(['./package.json', '../../package.json'], {
   platform: 'node'

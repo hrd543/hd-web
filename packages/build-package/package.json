@@ -1,10 +1,10 @@
 {
-  "name": "@hd-web/build",
+  "name": "@hd-web/build-package",
   "version": "0.0.1",
   "description": "Testing web components",
   "scripts": {
     "build": "tsc && tsx build.ts",
-    "test": "node --import tsx --test \"src/**/*.test.ts\""
+    "test": "echo \"test\""
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,13 +12,10 @@
     "/dist"
   ],
   "dependencies": {
-    "@hd-web/dev-server": "0.0.1",
     "esbuild": "^0.23.1"
   },
   "devDependencies": {
-    "@types/node": "^22.2.0",
-    "@types/ws": "^8.5.12",
-    "@hd-web/build-package": "0.0.1"
+    "@types/node": "^22.2.0"
   },
   "sideEffects": false,
   "type": "module"

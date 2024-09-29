@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises'
+import * as url from 'url'
 import { defaultConfig, tempBuildFile } from '../shared/constants.js'
 import * as esbuild from 'esbuild'
 import path from 'path'
 import { buildPages } from '../shared/js.js'
-import { getImportPath } from '../shared/files.js'
 
 /**
  * Create a js file at out containing all code within activePages, relative
@@ -39,7 +39,7 @@ export const getPageBuilders = async (
     })
 
     // Now import it and return the default export.
-    return (await import(getImportPath(out))).default
+    return (await import(url.pathToFileURL(out).href)).default
   } finally {
     await fs.unlink(entry)
   }

@@ -14,7 +14,8 @@ type FileSystem = {
  * @param filesystem Provide methods for reading and checking existence of a file.
  * This could be the actual file system, or some sort of in memory version.
  * @param page404 The name of the 404 page, if any
- * @returns
+ * @returns A getter for a simple websocket server which may be used (among other things)
+ * to refresh the page
  */
 export const createDevServer = (
   port: number,

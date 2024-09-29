@@ -1,7 +1,5 @@
-import { watch } from 'fs/promises'
 import path from 'path'
 import { type WebSocket } from 'ws'
-import { debounce } from './debounce.js'
 import { buildDev, createEntryContent, getPageBuilders } from './helpers.js'
 import { getActivePages, validatePages } from '../shared/pages.js'
 import { initialiseGlobals } from '../shared/globals.js'
@@ -11,13 +9,12 @@ import {
   getHtmlTemplate,
   replaceHtml
 } from '../shared/html.js'
-import { BuildSiteConfig, validateConfig } from '../shared/config.js'
 import { buildFile } from '../shared/constants.js'
-import { createDevServer } from './server.js'
 import FileSystem from './filesystem.js'
+import { createDevServer, watch } from '@hd-web/dev-server'
+import { BuildDevConfig, validateConfig } from './config.js'
 
 const rebuild = async (
-  changedFiles: string[],
   entryContent: string,
   activePages: string[],
   htmlTemplate: string,
@@ -40,37 +37,25 @@ const rebuild = async (
   console.log('Finished rebuild')
 }
 
-const handleChange = debounce(rebuild, 100, [], async (task, files) => {
-  console.log(
-    `Please wait until the current build has finished, queueing ${files}`
-  )
-  await task
-})
-
-export const startDev = async (rawConfig: Partial<BuildSiteConfig>) => {
-  const filesystem = new FileSystem()
-  const { entryDir, pageFilename } = validateConfig(rawConfig)
+/**
+ * Start a dev server at the given port, and watch for changes in entryDir,
+ * rebuilding and refreshing the page on each change.
+ */
+export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
+  const { entryDir, pageFilename, port } = validateConfig(rawConfig)
 
   const activePages = await getActivePages(entryDir, pageFilename)
-  const entryContent = createEntryContent(8080, activePages, pageFilename)
+  const entryContent = createEntryContent(port, activePages, pageFilename)
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: `/${buildFile}`,
     css: getCssPathFromJs(`/${buildFile}`)
   })
 
-  await rebuild([], entryContent, activePages, htmlTemplate, filesystem)
+  const filesystem = new FileSystem()
+  await rebuild(entryContent, activePages, htmlTemplate, filesystem)
+  const getWs = createDevServer(port, filesystem)
 
-  const watcher = watch(entryDir, { recursive: true })
-  const ws = createDevServer(8080, filesystem)
-
-  for await (const event of watcher) {
-    await handleChange(
-      event.filename,
-      entryContent,
-      activePages,
-      htmlTemplate,
-      filesystem,
-      ws
-    )
-  }
+  await watch(entryDir, () =>
+    rebuild(entryContent, activePages, htmlTemplate, filesystem, getWs)
+  )
 }

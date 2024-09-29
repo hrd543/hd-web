@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises'
 import { defaultConfig, tempBuildFile } from '../shared/constants.js'
 import * as esbuild from 'esbuild'
-import { getImportPath } from '../getFilePath.js'
 import path from 'path'
 import { buildPages } from '../shared/js.js'
+import { getImportPath } from '../shared/files.js'
 
 /**
  * Create a js file at out containing all code within activePages, relative

@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { formatPathForImport } from '../getFilePath.js'
+import { formatPathForImport } from './files.js'
 
 // Variables must start with a non-number
 const encodeExport = (index: number) => `a${index}`

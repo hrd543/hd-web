@@ -1,4 +1,4 @@
-type InterruptFunction = (
+export type InterruptFunction = (
   task: Promise<void>,
   queuedFiles: string[]
 ) => Promise<void>

@@ -14,7 +14,7 @@
   ],
   "devDependencies": {
     "@hd-web/jsx": "0.0.1",
-    "@hd-web/build": "0.0.1"
+    "@hd-web/build-package": "0.0.1"
   },
   "sideEffects": false,
   "type": "module"

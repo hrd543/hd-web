@@ -10,7 +10,7 @@
     "test": "echo \"testing\""
   },
   "devDependencies": {
-    "@hd-web/build": "0.0.1"
+    "@hd-web/build-package": "0.0.1"
   },
   "files": [
     "/dist"

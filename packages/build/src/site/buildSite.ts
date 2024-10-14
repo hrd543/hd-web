@@ -9,15 +9,10 @@ import { initialiseGlobals } from '../shared/customElements.js'
 import { buildPages } from '../shared/pages.js'
 
 /**
- * Create the html, css and js files for a site given the entry and out
- * directories.
+ * Create the html, css and js files for a site.
  *
- * This will go through each folder in entry and look for a page file.
- * These page files should default export a function which returns a string,
- * representing the body html for that page.
- *
- * An index.html file will be created for each of these pages in the out
- * directory, matching the folder structure found in entry.
+ * This will run the default page function in entry and use that to create
+ * an index.html file for each page in the out directory.
  *
  * Only one js and css file is built at the root.
  */

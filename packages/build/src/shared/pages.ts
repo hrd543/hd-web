@@ -1,11 +1,12 @@
 import path from 'path'
 import { BuiltPage, PageReturn } from './types.js'
 
+// exported for testing
 /**
  * Run the page function (if it's a function) and make sure it matches the
  * schema for a PageReturn object
  */
-const validatePage = async (
+export const validatePage = async (
   page: unknown,
   path: string
 ): Promise<PageReturn> => {

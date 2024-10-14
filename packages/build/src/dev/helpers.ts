@@ -4,7 +4,10 @@ const pagesName = '__pages'
 
 /**
  * Returns the page builders given the entry content, which should
- * contain an array called pages.
+ * contain a variable with name pagesName and property default.
+ *
+ * This is the behaviour of using esbuild with format iife and
+ * globalName pagesName.
  */
 export const getPageBuilders = (contents: string) => {
   const f = new Function(contents + `return ${pagesName}.default;`)
@@ -13,8 +16,7 @@ export const getPageBuilders = (contents: string) => {
 }
 
 /**
- * Build the entry contents (as a string) containing imports
- * relative to dir
+ * Build the js file located at entryFile into a string
  */
 export const buildDev = async (entryFile: string) => {
   const built = await esbuild.build({

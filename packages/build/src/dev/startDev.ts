@@ -30,7 +30,7 @@ const rebuild = async (
   const getCustomElements = initialiseGlobals()
 
   const built = await buildDev(entryFile)
-  const pages = await buildPages('', await getPageBuilders(built))
+  const pages = await buildPages('', getPageBuilders(built))
 
   filesystem.write(
     buildFile,

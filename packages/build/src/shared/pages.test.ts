@@ -1,66 +1,50 @@
-import { beforeEach, describe, it, mock } from 'node:test'
-import { vol } from 'memfs'
-import fsNode from 'fs/promises'
+import { describe, it } from 'node:test'
 import assert from 'assert/strict'
-import { getActivePages } from './pages.js'
+import { validatePage } from './pages.js'
 
-const fs = vol.promises
-const structure = () => ({
-  src: {
-    contact: {
-      'index.tsx': '',
-      'index.js': '',
-      'hello.txt': ''
-    },
-    about: {
-      'hello.tsc': ''
-    },
-    'index.tsx': '',
-    'hello.tsx': ''
-  },
-  dist: {
-    hello: {
-      'hello.css': ''
-    },
-    'hi.css': ''
-  }
-})
-
-mock.method(fsNode, 'readdir', fs.readdir)
-
-describe('getActivePages', () => {
-  beforeEach(() => {
-    vol.reset()
+describe('validatePage', () => {
+  it('should throw if page is not a function', () => {
+    assert.rejects(() => validatePage('d', ''))
   })
 
-  it('should return empty if no files', async () => {
-    vol.fromNestedJSON(structure())
-    assert.deepEqual(await getActivePages('dist', 'index.tsx'), [])
+  it('should return if page returns a string', async () => {
+    assert.equal(await validatePage(() => 'hi', ''), 'hi')
   })
 
-  it("should throw if the directory doesn't exist", () => {
-    vol.fromNestedJSON(structure())
-    assert.rejects(() => getActivePages('newFolder', 'index.tsx'))
+  it('should throw if page returns a non object', () => {
+    assert.rejects(() => validatePage(() => 1, ''))
+    assert.rejects(() => validatePage(() => true, ''))
+    assert.rejects(() => validatePage(() => null, ''))
+    assert.rejects(() => validatePage(() => undefined, ''))
   })
 
-  it('should return all page files', async () => {
-    vol.fromNestedJSON(structure())
-    assert.deepEqual(await getActivePages('src', 'index.tsx'), ['contact', ''])
-    assert.deepEqual(await getActivePages('src', 'hello.tsc'), ['about'])
+  it('should throw if body is not the right type', () => {
+    assert.rejects(() => validatePage(() => ({ body: 1 }), ''))
+    assert.rejects(() => validatePage(() => ({ body: true }), ''))
+    assert.rejects(() => validatePage(() => ({ body: null }), ''))
+    assert.rejects(() => validatePage(() => ({ body: undefined }), ''))
+    assert.rejects(() => validatePage(() => ({}), ''))
   })
 
-  it('should consider file extension', async () => {
-    vol.fromNestedJSON(structure())
-    assert.deepEqual(await getActivePages('src', 'hello.tsx'), [''])
+  it('should return the result if routes is not present', async () => {
+    assert.deepEqual(await validatePage(() => ({ body: 'hi' }), ''), {
+      body: 'hi'
+    })
   })
 
-  it('should return the relative path', async () => {
-    vol.fromNestedJSON(structure())
-    assert.deepEqual(await getActivePages('src/contact', 'index.tsx'), [''])
+  it('should throw if routes is not the right type', () => {
+    assert.rejects(() => validatePage(() => ({ body: 'hi', routes: 1 }), ''))
+    assert.rejects(() => validatePage(() => ({ body: 'hi', routes: true }), ''))
+    assert.rejects(() => validatePage(() => ({ body: 'hi', routes: null }), ''))
+    assert.rejects(() =>
+      validatePage(() => ({ body: 'hi', routes: undefined }), '')
+    )
   })
 
-  it('should ignore folders', async () => {
-    vol.fromNestedJSON({ ...structure(), 'index.tsx': { 'hello.tsx': '' } })
-    assert.deepEqual(await getActivePages('src', 'index.tsx'), ['contact', ''])
+  it('should return if routes is present and correct', async () => {
+    assert.deepEqual(
+      await validatePage(() => ({ body: 'hi', routes: { a: '' } }), ''),
+      { body: 'hi', routes: { a: '' } }
+    )
   })
 })

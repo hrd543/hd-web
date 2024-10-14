@@ -19,16 +19,6 @@ export default class FileSystem {
     this.files[formatFile(filename)] = content
   }
 
-  writeMultiple(filenames: string[], contents: string[]) {
-    if (filenames.length !== contents.length) {
-      return
-    }
-
-    filenames.forEach((name, i) => {
-      this.write(name, contents[i]!)
-    })
-  }
-
   delete(filename: string) {
     delete this.files[formatFile(filename)]
   }

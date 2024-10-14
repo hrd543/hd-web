@@ -1,18 +1,15 @@
 import { mergeConfig } from '../shared/mergeConfig.js'
 
 export type BuildSiteConfig = {
-  /** The directory, relative to cwd, containing the pages */
-  entryDir: string
+  /** The file, relative to cwd, containing the pages */
+  entry: string
   /** The directory, relative to cwd, in which the site will be built */
-  outDir: string
-  /** The filename of each page in entryDir, where the html generator is exported */
-  pageFilename: string
+  out: string
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
-  entryDir: 'src',
-  outDir: 'build',
-  pageFilename: 'index.tsx'
+  entry: 'src/index.tsx',
+  out: 'build'
 }
 
 /**
@@ -21,10 +18,6 @@ const defaultBuildSiteConfig: BuildSiteConfig = {
  */
 export const validateConfig = (rawConfig: Partial<BuildSiteConfig>) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
-
-  if (config.entryDir === config.outDir) {
-    throw new Error("Can't have input the same as output")
-  }
 
   return config
 }

@@ -1,47 +1,41 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
 import path from 'path'
-import { initialiseGlobals } from '../shared/globals.js'
-import { getActivePages, validatePages } from '../shared/pages.js'
-import { buildFile, defaultConfig } from '../shared/constants.js'
+import url from 'url'
+import { buildFile } from '../shared/constants.js'
 import { processJs } from './processJs.js'
-import { removeUnusedCode } from './removeUnusedCode.js'
+import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
-import { getPageBuilders } from './getPageBuilders.js'
+import { initialiseGlobals } from '../shared/customElements.js'
+import { buildPages } from '../shared/pages.js'
 
 /**
- * Create the html, css and js files for a site given the entry and out
- * directories.
+ * Create the html, css and js files for a site.
  *
- * This will go through each folder in entry and look for a page file.
- * These page files should default export a function which returns a string,
- * representing the body html for that page.
- *
- * An index.html file will be created for each of these pages in the out
- * directory, matching the folder structure found in entry.
+ * This will run the default page function in entry and use that to create
+ * an index.html file for each page in the out directory.
  *
  * Only one js and css file is built at the root.
  */
 export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
-  const { entryDir, outDir, pageFilename } = validateConfig(rawConfig)
+  const { entry, out } = validateConfig(rawConfig)
+  const entryDir = path.dirname(entry)
+
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  const outFile = path.resolve(outDir, buildFile)
+  const outFile = path.resolve(out, buildFile)
 
-  const activePages = await getActivePages(entryDir, pageFilename)
-  const pageBuilders = await getPageBuilders(
-    entryDir,
-    outFile,
-    activePages,
-    pageFilename
+  await bundleFirstPass(entry, out)
+  const pages = await buildPages(
+    out,
+    (await import(url.pathToFileURL(outFile).href)).default
   )
 
-  const [htmlContents] = await Promise.all([
-    await validatePages(pageBuilders, activePages),
-    await processJs(outFile, getCustomElements)
-  ])
+  // This needs to be done after the pages have been built so that
+  // the custom elements contain all which are referenced.
+  await processJs(outFile, getCustomElements)
 
   await Promise.all([
-    await removeUnusedCode(outFile, defaultConfig),
-    await writeToHtml(activePages, htmlContents, entryDir, outDir)
+    await bundleFinalPass(outFile),
+    await writeToHtml(pages, entryDir)
   ])
 }

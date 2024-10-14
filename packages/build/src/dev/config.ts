@@ -1,17 +1,14 @@
 import { mergeConfig } from '../shared/mergeConfig.js'
 
 export type BuildDevConfig = {
-  /** The directory, relative to cwd, containing the pages */
-  entryDir: string
-  /** The filename of each page in entryDir, where the html generator is exported */
-  pageFilename: string
+  /** The file, relative to cwd, containing the pages */
+  entry: string
   /** The port for the dev server */
   port: number
 }
 
 const defaultBuildDevConfig: BuildDevConfig = {
-  entryDir: 'src',
-  pageFilename: 'index.tsx',
+  entry: 'src/index.tsx',
   port: 8080
 }
 

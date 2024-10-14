@@ -1,13 +1,13 @@
 import * as esbuild from 'esbuild'
-import { buildPages } from '../shared/js.js'
-import { getRefreshClientScript } from './refreshClient.js'
+
+const pagesName = '__pages'
 
 /**
  * Returns the page builders given the entry content, which should
  * contain an array called pages.
  */
 export const getPageBuilders = (contents: string) => {
-  const f = new Function(contents + 'return pages;')
+  const f = new Function(contents + `return ${pagesName}.default;`)
 
   return f()
 }
@@ -16,30 +16,19 @@ export const getPageBuilders = (contents: string) => {
  * Build the entry contents (as a string) containing imports
  * relative to dir
  */
-export const buildDev = async (contents: string, dir: string) => {
+export const buildDev = async (entryFile: string) => {
   const built = await esbuild.build({
     bundle: true,
+    entryPoints: [entryFile],
     target: 'esnext',
     minify: false,
     allowOverwrite: true,
-    format: 'esm',
-    write: false,
-    stdin: {
-      contents,
-      resolveDir: dir
-    }
+    format: 'iife',
+    // Store the exports in a variable called pagesName,
+    // so that they may be access above.
+    globalName: pagesName,
+    write: false
   })
 
   return built.outputFiles![0]!.text
-}
-
-export const createEntryContent = (
-  port: number,
-  activePages: string[],
-  pageFilename: string
-) => {
-  const exports = buildPages(activePages, pageFilename, false)
-  const refreshScript = getRefreshClientScript(port)
-
-  return exports + refreshScript
 }

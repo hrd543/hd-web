@@ -1,5 +1,5 @@
 import fs from 'fs/promises'
-import { defineCustomElements } from '../shared/js.js'
+import { defineCustomElements } from '../shared/customElements.js'
 import { removeExports } from './removeExports.js'
 
 /**

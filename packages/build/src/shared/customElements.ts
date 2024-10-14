@@ -1,3 +1,19 @@
+/**
+ * Create definitions for every custom element used
+ */
+export const defineCustomElements = (
+  getCustomElements: () => Record<string, string>
+) => {
+  const customEls = getCustomElements()
+  let customElsDefinition = ''
+
+  for (const element in customEls) {
+    customElsDefinition += `customElements.define("${element}", ${customEls[element]});`
+  }
+
+  return customElsDefinition
+}
+
 /*
  * When building the html from the jsx, we need a few globals which aren't
  * defined when running in nodejs vs the browser.

@@ -30,14 +30,20 @@ const rebuild = async (
   const getCustomElements = initialiseGlobals()
 
   const built = await buildDev(entryFile)
-  const pages = await buildPages('', getPageBuilders(built))
+  const pages = await buildPages('', getPageBuilders(built.js))
 
+  // Write the js to the filesystem, adding in what we need.
   filesystem.write(
     buildFile,
-    built +
+    built.js +
       defineCustomElements(getCustomElements) +
       getRefreshClientScript(port)
   )
+
+  // And write the css if it exists.
+  if (built.css) {
+    filesystem.write(getCssPathFromJs(buildFile), built.css)
+  }
 
   pages.forEach(([p, content]) => {
     filesystem.write(

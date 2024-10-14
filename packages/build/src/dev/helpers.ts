@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild'
+import { buildFile } from '../shared/constants.js'
 
 const pagesName = '__pages'
 
@@ -29,8 +30,18 @@ export const buildDev = async (entryFile: string) => {
     // Store the exports in a variable called pagesName,
     // so that they may be access above.
     globalName: pagesName,
-    write: false
+    write: false,
+    // This is needed just so the css is written to a "file"
+    outfile: buildFile
   })
 
-  return built.outputFiles![0]!.text
+  // Now find the js and css files (if they exist)
+  const js = built.outputFiles.find((f) => f.path.endsWith('.js'))!
+  const css = built.outputFiles.find((f) => f.path.endsWith('.css'))
+
+  // and return their content
+  return {
+    js: js.text,
+    css: css?.text
+  }
 }

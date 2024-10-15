@@ -24,7 +24,7 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   const getCustomElements = initialiseGlobals()
   const outFile = path.resolve(out, buildFile)
 
-  await bundleFirstPass(entry, out)
+  await bundleFirstPass(entry, outFile)
   const pages = await buildPages(
     out,
     (await import(url.pathToFileURL(outFile).href)).default

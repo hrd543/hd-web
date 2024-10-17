@@ -73,7 +73,7 @@ export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
   await rebuild(port, entry, htmlTemplate, filesystem)
   const getWs = createDevServer(port, filesystem)
 
-  await watch(entry, () =>
+  await watch(entryDir, () =>
     rebuild(port, entry, htmlTemplate, filesystem, getWs)
   )
 }

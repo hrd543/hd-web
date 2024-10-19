@@ -6,7 +6,7 @@
     "@hd-web/build-package": "dist/build.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsx dist/build.js && tsc",
     "test": "echo \"test\""
   },
   "main": "dist/index.js",

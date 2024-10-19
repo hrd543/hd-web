@@ -6,7 +6,7 @@
     "@hd-web/create": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc && tsx build.ts",
+    "build": "npx @hd-web/build-package && tsc",
     "test": "echo \"testing\""
   },
   "devDependencies": {

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Testing web components",
   "scripts": {
-    "build": "tsc && tsx build.ts",
+    "build": "npx @hd-web/build-package && tsc",
     "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "main": "dist/index.js",

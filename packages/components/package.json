@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Testing web components",
   "scripts": {
-    "build": "tsc && tsx build.ts",
+    "build": "npx @hd-web/build-package src dist \".+\\.css$\" && tsc",
     "play": "cd playground && tsx buildPlayground.ts",
     "test": "echo \"testing\""
   },

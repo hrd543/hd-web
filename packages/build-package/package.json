@@ -2,8 +2,11 @@
   "name": "@hd-web/build-package",
   "version": "0.0.1",
   "description": "Testing web components",
+  "bin": {
+    "@hd-web/build-package": "dist/build.js"
+  },
   "scripts": {
-    "build": "tsc && tsx build.ts",
+    "build": "tsc",
     "test": "echo \"test\""
   },
   "main": "dist/index.js",
@@ -11,9 +14,6 @@
   "files": [
     "/dist"
   ],
-  "dependencies": {
-    "esbuild": "^0.23.1"
-  },
   "devDependencies": {
     "@types/node": "^22.2.0"
   },

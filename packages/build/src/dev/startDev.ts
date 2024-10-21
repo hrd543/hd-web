@@ -1,6 +1,6 @@
 import path from 'path'
 import { type WebSocket } from 'ws'
-import { buildDev, getPageBuilders } from './helpers.js'
+import { buildDev, getPageBuilders, insertIntoIife } from './helpers.js'
 import {
   defineCustomElements,
   initialiseGlobals
@@ -35,8 +35,7 @@ const rebuild = async (
   // Write the js to the filesystem, adding in what we need.
   filesystem.write(
     buildFile,
-    built.js +
-      defineCustomElements(getCustomElements) +
+    insertIntoIife(built.js, defineCustomElements(getCustomElements)) +
       getRefreshClientScript(port)
   )
 

@@ -45,3 +45,11 @@ export const buildDev = async (entryFile: string) => {
     css: css?.text
   }
 }
+
+export const insertIntoIife = (built: string, add: string) => {
+  // Find the final return statement.
+  const index = built.lastIndexOf('return ')
+
+  // And insert the content at this position
+  return built.slice(0, index) + add + built.slice(index)
+}

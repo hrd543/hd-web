@@ -13,7 +13,8 @@ import { buildPages } from '../shared/pages.js'
  * This will run the default page function in entry and use that to create
  * an index.html file for each page in the out directory.
  *
- * Only one js and css file is built at the root.
+ * Only one js and css file is built at the root, but async imports will
+ * be split into their own module
  */
 export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entry, out } = validateConfig(rawConfig)

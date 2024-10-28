@@ -1,16 +1,13 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { getHtmlTemplate, replaceHtml } from '../shared/html.js'
+import {
+  buildScriptElements,
+  buildStyleElements,
+  getHtmlTemplate,
+  replaceHtml
+} from '../shared/html.js'
 import { BuiltPage } from '../shared/types.js'
 import { BuiltFile } from './bundleJs.js'
-
-const buildScripts = (scripts: string[]) =>
-  scripts
-    .map((script) => `<script type="module" src="/${script}"></script>`)
-    .join('\n')
-
-const buildStyles = (styles: string[]) =>
-  styles.map((style) => `<link rel="stylesheet" href="/${style}" />`).join('\n')
 
 /**
  * Using the template at html.entry, replace its body with htmlBody
@@ -33,12 +30,12 @@ export const writeToHtml = async (
       fs.writeFile(
         path.join(p, 'index.html'),
         replaceHtml(htmlTemplate, {
-          script: buildScripts(
+          script: buildScriptElements(
             built
               .filter((file) => file.type === 'js')
               .map((file) => file.relativePath)
           ),
-          css: buildStyles(
+          css: buildStyleElements(
             built
               .filter((file) => file.type === 'css')
               .map((file) => file.relativePath)

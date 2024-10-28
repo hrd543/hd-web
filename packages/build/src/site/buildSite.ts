@@ -1,7 +1,6 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
-import { buildFile } from '../shared/constants.js'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
@@ -22,9 +21,9 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
 
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  const outFile = path.resolve(out, buildFile)
 
-  await bundleFirstPass(entry, outFile)
+  const builtFiles = await bundleFirstPass(entry, out)
+  const outFile = builtFiles.find((file) => file.isEntry)!.path
   const pages = await buildPages(
     out,
     (await import(url.pathToFileURL(outFile).href)).default
@@ -35,7 +34,7 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   await processJs(outFile, getCustomElements)
 
   await Promise.all([
-    await bundleFinalPass(outFile),
-    await writeToHtml(pages, entryDir)
+    writeToHtml(pages, entryDir, builtFiles),
+    bundleFinalPass(outFile)
   ])
 }

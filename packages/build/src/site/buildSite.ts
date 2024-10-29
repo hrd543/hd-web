@@ -1,6 +1,7 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
+import fs from 'fs/promises'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
@@ -14,10 +15,16 @@ import { buildPages } from '../shared/pages.js'
  * an index.html file for each page in the out directory.
  *
  * Only one js and css file is built at the root, but async imports will
- * be split into their own module
+ * be split into their own module.
+ *
+ * Will delete the contents of out before building!
  */
 export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entry, out } = validateConfig(rawConfig)
+
+  // Delete the build folder
+  await fs.rm(out, { recursive: true, force: true })
+
   const entryDir = path.dirname(entry)
 
   // Need to define the global types BEFORE importing the component

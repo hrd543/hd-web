@@ -16,8 +16,7 @@ export const bundleFirstPass = async (entry: string, out: string) => {
     outdir: out,
     // Split so that async imports are separated
     splitting: true,
-    // Don't minify to save time initially.
-    minify: false,
+    minify: true,
     // Use esm to preserve imports and enable splitting
     format: 'esm',
     // Needed to get the names of the files with any hashes.
@@ -42,9 +41,15 @@ export const bundleFirstPass = async (entry: string, out: string) => {
   }, [] as BuiltFile[])
 }
 
+/**
+ * Remove the unused code in the outFile by rebuilding
+ */
 export const bundleFinalPass = (outFile: string) =>
   esbuild.build({
     ...defaultConfig,
+    // Don't bundle in this pass since we've already built,
+    // We just want to remove the unused code for the entry point
+    bundle: false,
     entryPoints: [outFile],
     outfile: outFile,
     format: 'esm',

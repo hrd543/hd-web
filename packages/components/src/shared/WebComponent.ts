@@ -1,9 +1,10 @@
 type Listener<
+  // Use string to represent a this.querySelector(T)
   T extends EventTarget = EventTarget,
   K extends
     keyof GlobalEventHandlersEventMap = keyof GlobalEventHandlersEventMap
 > = {
-  element: () => T | null
+  element: (() => T | null) | string
   event: K
   listener: (e: GlobalEventHandlersEventMap[K]) => void
 }
@@ -66,6 +67,7 @@ export class WebComponent extends HdComponent {
     T extends EventTarget,
     K extends keyof GlobalEventHandlersEventMap
   >(
+    /** Use a string as shorthand for this.querySelector(element) */
     element: Listener<T, K>['element'],
     event: K,
     listener: Listener<T, K>['listener']
@@ -83,13 +85,22 @@ export class WebComponent extends HdComponent {
   /** Will be run inside disconnectedCallback */
   disconnect() {}
 
+  /** Get the element used in the event listener init */
+  private _getElement(element: Listener['element']) {
+    if (typeof element === 'string') {
+      return this.querySelector(element)
+    }
+
+    return element()
+  }
+
   /** Don't run this directly, prefer the connect callback */
   connectedCallback() {
     this.hasConnected = true
 
     // Register any listeners
     this._listeners?.forEach(({ element, event, listener }) => {
-      element()?.addEventListener(event, listener)
+      this._getElement(element)?.addEventListener(event, listener)
     })
 
     this.connect()
@@ -99,7 +110,7 @@ export class WebComponent extends HdComponent {
   disconnectedCallback() {
     // De-register any listeners
     this._listeners?.forEach(({ element, event, listener }) => {
-      element()?.removeEventListener(event, listener)
+      this._getElement(element)?.removeEventListener(event, listener)
     })
 
     this.disconnect()

@@ -12,6 +12,7 @@
     "declaration": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@hd-web/jsx",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitOverride": true
   }
 }

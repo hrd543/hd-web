@@ -1,7 +1,7 @@
 import { WebComponent } from '../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
-  protected static get _key() {
+  protected static override get _key() {
     return 'hd-header' as const
   }
   menu: HTMLElement | null
@@ -11,6 +11,7 @@ export class InteractiveHeader extends WebComponent {
     super()
     this.menu = null
     this.buttonContainer = null
+    this.initListener(() => this, 'click', this.onClick.bind(this))
   }
 
   showHideMenu(show: boolean) {
@@ -42,16 +43,9 @@ export class InteractiveHeader extends WebComponent {
     }
   }
 
-  connectedCallback() {
+  override connect() {
     this.menu = this.querySelector('.Header_links')
     this.buttonContainer = this.querySelector('.MenuButton')
-    this.addEventListener('click', this.onClick.bind(this))
-  }
-
-  disconnectedCallback() {
-    this.menu = null
-    this.buttonContainer = null
-    this.removeEventListener('click', this.onClick)
   }
 }
 

@@ -6,13 +6,19 @@ import { AddToastEventDetail, ToastEvent } from './toastEvents.js'
 import { ToastInfo } from './types.js'
 
 export class ToastProvider extends WebComponent {
-  protected static get _key() {
+  protected static override get _key() {
     return 'hd-toast-provider' as const
   }
   toasts: Record<string, ToastInfo> | undefined
 
   constructor() {
     super()
+
+    this.initListener(
+      () => document,
+      ToastEvent.key,
+      this.handleEvent.bind(this) as EventListener
+    )
   }
 
   private handleEvent(e: ToastEvent) {
@@ -60,23 +66,10 @@ export class ToastProvider extends WebComponent {
     this.append(element)
   }
 
-  connectedCallback() {
-    document.addEventListener(
-      ToastEvent.key,
-      this.handleEvent.bind(this) as EventListener
-    )
-  }
-
-  disconnectedCallback() {
+  override disconnect() {
     for (const toastId in this.toasts) {
-      const toast = this.toasts?.[toastId]
-      clearTimeout(toast?.timeoutId)
+      clearTimeout(this.toasts?.[toastId]?.timeoutId)
     }
-
-    document.removeEventListener(
-      ToastEvent.key,
-      this.handleEvent.bind(this) as EventListener
-    )
   }
 }
 
@@ -85,5 +78,11 @@ declare module '@hd-web/jsx' {
     interface IntrinsicElements {
       'hd-toast-provider': object
     }
+  }
+}
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    [ToastEvent.key]: ToastEvent
   }
 }

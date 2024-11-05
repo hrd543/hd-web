@@ -6,12 +6,13 @@ import { ToastId, ToastParams } from './types.js'
 type ToastDescription = ToastParams & ToastId
 
 export class Toast extends WebComponent {
-  protected static get _key() {
+  protected static override get _key() {
     return 'hd-toast' as const
   }
 
   constructor() {
     super()
+    this.initListener(() => this, 'click', this.handleClick.bind(this))
   }
 
   private _info: ToastDescription | undefined
@@ -30,7 +31,7 @@ export class Toast extends WebComponent {
     this._info = info
   }
 
-  connectedCallback() {
+  override connect() {
     if (!this._info) {
       throw new Error('Tried to add a toast without initialising it')
     }
@@ -38,11 +39,6 @@ export class Toast extends WebComponent {
     this.role = 'status'
     this.innerText = this._info.message
     this.className = `Toast Toast--${this._info.type}`
-    this.addEventListener('click', this.handleClick.bind(this))
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener('click', this.handleClick.bind(this))
   }
 }
 

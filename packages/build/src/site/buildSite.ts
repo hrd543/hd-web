@@ -1,7 +1,7 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
-import { buildFile } from '../shared/constants.js'
+import fs from 'fs/promises'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
@@ -14,17 +14,24 @@ import { buildPages } from '../shared/pages.js'
  * This will run the default page function in entry and use that to create
  * an index.html file for each page in the out directory.
  *
- * Only one js and css file is built at the root.
+ * Only one js and css file is built at the root, but async imports will
+ * be split into their own module.
+ *
+ * Will delete the contents of out before building!
  */
 export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   const { entry, out } = validateConfig(rawConfig)
+
+  // Delete the build folder
+  await fs.rm(out, { recursive: true, force: true })
+
   const entryDir = path.dirname(entry)
 
   // Need to define the global types BEFORE importing the component
   const getCustomElements = initialiseGlobals()
-  const outFile = path.resolve(out, buildFile)
 
-  await bundleFirstPass(entry, outFile)
+  const builtFiles = await bundleFirstPass(entry, out)
+  const outFile = builtFiles.find((file) => file.isEntry)!.path
   const pages = await buildPages(
     out,
     (await import(url.pathToFileURL(outFile).href)).default
@@ -35,7 +42,7 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   await processJs(outFile, getCustomElements)
 
   await Promise.all([
-    await bundleFinalPass(outFile),
-    await writeToHtml(pages, entryDir)
+    writeToHtml(pages, entryDir, builtFiles),
+    bundleFinalPass(outFile)
   ])
 }

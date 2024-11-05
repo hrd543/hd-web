@@ -6,6 +6,8 @@ import {
   initialiseGlobals
 } from '../shared/customElements.js'
 import {
+  buildScriptElements,
+  buildStyleElements,
   getCssPathFromJs,
   getHtmlTemplate,
   replaceHtml
@@ -64,8 +66,8 @@ export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
   const entryDir = path.dirname(entry)
 
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
-    script: `/${buildFile}`,
-    css: getCssPathFromJs(`/${buildFile}`)
+    script: buildScriptElements([buildFile]),
+    css: buildStyleElements([getCssPathFromJs(buildFile)])
   })
 
   const filesystem = new FileSystem()

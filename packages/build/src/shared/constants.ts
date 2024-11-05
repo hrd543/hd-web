@@ -8,5 +8,6 @@ export const buildFile = 'main.js'
 
 export const defaultConfig: BuildOptions = {
   bundle: true,
-  target: 'es6'
+  target: 'es6',
+  treeShaking: true
 }

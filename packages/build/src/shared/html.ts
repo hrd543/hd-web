@@ -5,6 +5,14 @@ export const getCssPathFromJs = (jsPath: string) => {
   return jsPath.replace(/\.js$/, '.css')
 }
 
+export const buildScriptElements = (scripts: string[]) =>
+  scripts
+    .map((script) => `<script type="module" src="/${script}"></script>`)
+    .join('\n')
+
+export const buildStyleElements = (styles: string[]) =>
+  styles.map((style) => `<link rel="stylesheet" href="/${style}" />`).join('\n')
+
 /**
  * Go through str and replace all instances of %hd-web-x% with the corresponding
  * replacement.

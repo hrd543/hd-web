@@ -24,7 +24,7 @@ export const stringifyAttribute = (
       if (value) {
         return ` ${key}`
       } else {
-        return ` ${key}="false"`
+        return ''
       }
   }
 

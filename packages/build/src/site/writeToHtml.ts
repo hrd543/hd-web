@@ -3,6 +3,7 @@ import path from 'path'
 import {
   buildScriptElements,
   buildStyleElements,
+  getHtmlFile,
   getHtmlTemplate,
   replaceHtml
 } from '../shared/html.js'
@@ -26,9 +27,9 @@ export const writeToHtml = async (
   // Create the index.html files by replacing the template with the necessary
   // content and script locations
   await Promise.all(
-    pages.map(([p, content]) =>
+    pages.map(([p, content, is404]) =>
       fs.writeFile(
-        path.join(p, 'index.html'),
+        path.join(p, getHtmlFile(is404)),
         replaceHtml(htmlTemplate, {
           script: buildScriptElements(
             built

@@ -61,7 +61,10 @@ export const buildPages = async (
       continue
     }
 
-    contents.push([p, result.body])
+    contents.push([p, result.body ?? ''])
+    if (result.content404) {
+      contents.push([p, result.content404, true])
+    }
 
     if (result.routes) {
       stack.push(

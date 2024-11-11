@@ -1,7 +1,8 @@
 /** The return type of the Page function */
 export type PageReturn =
   | {
-      body: string
+      body: string | null
+      content404?: string | null
       routes?: Record<string, Page>
     }
   | string
@@ -16,6 +17,7 @@ export type Page = () => PageReturn | Promise<PageReturn>
 /**
  * Only to be used internally.
  *
- * Contains the path and contents of a single page.
+ * Contains the path and contents of a single page, as well
+ * as whether it represents a 404 page.
  */
-export type BuiltPage = [path: string, content: string]
+export type BuiltPage = [path: string, content: string, is404?: boolean]

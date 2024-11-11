@@ -13,14 +13,14 @@ type FileSystem = {
  * @param port The port at which the server will be used
  * @param filesystem Provide methods for reading and checking existence of a file.
  * This could be the actual file system, or some sort of in memory version.
- * @param page404 The name of the 404 page, if any
+ * @param filename404 The name of the 404 page, if any
  * @returns A getter for a simple websocket server which may be used (among other things)
  * to refresh the page
  */
 export const createDevServer = (
   port: number,
   filesystem: FileSystem,
-  page404 = '404.html'
+  filename404 = '404.html'
 ): (() => WebSocket | null) => {
   const server = http.createServer(async (req, res) => {
     if (!req.url) {
@@ -41,8 +41,12 @@ export const createDevServer = (
 
     if (!content) {
       res.statusCode = 404
+      // Check for any 404 page in this directory, otherwise use relative to root
+      const relative404 = path.join(path.dirname(filename), filename404)
+      const page404 = filesystem.exists(relative404) ? relative404 : filename404
+
       if (filesystem.exists(page404)) {
-        res.setHeader('Content-type', mimeTypes['html'] || 'text/plain')
+        res.setHeader('Content-type', mimeTypes['.html'] || 'text/plain')
         res.end(await filesystem.read(page404))
       } else {
         res.end(`File ${pathname} not found`)

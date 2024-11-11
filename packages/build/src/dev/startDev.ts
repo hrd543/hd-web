@@ -9,6 +9,7 @@ import {
   buildScriptElements,
   buildStyleElements,
   getCssPathFromJs,
+  getHtmlFile,
   getHtmlTemplate,
   replaceHtml
 } from '../shared/html.js'
@@ -46,9 +47,9 @@ const rebuild = async (
     filesystem.write(getCssPathFromJs(buildFile), built.css)
   }
 
-  pages.forEach(([p, content]) => {
+  pages.forEach(([p, content, is404]) => {
     filesystem.write(
-      path.join(p, 'index.html'),
+      path.join(p, getHtmlFile(is404)),
       replaceHtml(htmlTemplate, { body: content })
     )
   })

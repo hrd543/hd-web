@@ -8,7 +8,7 @@
     "lib": ["dom", "esnext"],
     "strict": true,
     "sourceMap": true,
-    "target": "es6",
+    "target": "esnext",
     "declaration": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@hd-web/jsx",

@@ -58,3 +58,6 @@ export const replaceHtml = (
 export const getHtmlTemplate = async (dir: string) => {
   return await fs.readFile(path.resolve(dir, 'index.html'), 'utf-8')
 }
+
+export const getHtmlFile = (is404?: boolean) =>
+  is404 ? '404.html' : 'index.html'

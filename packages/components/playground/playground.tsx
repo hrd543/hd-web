@@ -32,7 +32,7 @@ class Button extends WebComponent {
   }
 }
 
-const App: JSX.Component = () => (
+const App: JSX.FuncComponent = () => (
   <>
     <Header logo="Henry" items={[{ link: '#key', title: 'Key' }]} />
     {/* <ToastProvider.key />

@@ -14,19 +14,11 @@ type Listener<
  * the custom element using its key
  */
 abstract class HdComponent extends HTMLElement {
+  /** Use this to define the html tag for the component */
   protected static _key: string
 
+  /** Get and register the key of the element */
   static get key() {
-    // When we transform to es6, static fields like class A {static _key = 3}
-    // will turn into separate statements like A._key = 3
-    // This means A can't be removed if unused, so instead use a getter
-    // so that it is preserved, and A can be removed.
-    if (!Object.getOwnPropertyDescriptor(this, '_key')?.get) {
-      throw new Error(
-        '_key must be a getter so that it may be removed if unused.'
-      )
-    }
-
     if (!customElements.get(this._key)) {
       // @ts-expect-error We always implement this abstract class so not an issue
       customElements.define(this._key, this)

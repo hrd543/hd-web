@@ -4,12 +4,12 @@ import type { HeaderProps } from './types.js'
 import { InteractiveHeader } from './InteractiveHeader.js'
 import { MenuButton } from './MenuButton.js'
 
-export const Header: JSX.Component<HeaderProps> = ({
+export const Header: JSX.FuncComponent<HeaderProps> = ({
   items,
   logo,
   className
 }) => (
-  <InteractiveHeader.key>
+  <InteractiveHeader>
     <nav class={`Header ${className}`}>
       <div class="Header_container">
         <div class="Header_logo">{logo}</div>
@@ -23,5 +23,5 @@ export const Header: JSX.Component<HeaderProps> = ({
         <MenuButton height={30} className="Header_menuButton" />
       </div>
     </nav>
-  </InteractiveHeader.key>
+  </InteractiveHeader>
 )

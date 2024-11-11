@@ -1,9 +1,7 @@
 import { WebComponent } from '../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
-  protected static override get _key() {
-    return 'hd-header' as const
-  }
+  static override _key = 'hd-header'
   menu: HTMLElement | null
   buttonContainer: HTMLButtonElement | null
 
@@ -46,13 +44,5 @@ export class InteractiveHeader extends WebComponent {
   override connect() {
     this.menu = this.querySelector('.Header_links')
     this.buttonContainer = this.querySelector('.MenuButton')
-  }
-}
-
-declare module '@hd-web/jsx' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'hd-header': object
-    }
   }
 }

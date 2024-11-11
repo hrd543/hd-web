@@ -6,9 +6,7 @@ import { AddToastEventDetail, ToastEvent } from './toastEvents.js'
 import { ToastInfo } from './types.js'
 
 export class ToastProvider extends WebComponent {
-  protected static override get _key() {
-    return 'hd-toast-provider' as const
-  }
+  static override _key = 'hd-toast-provider'
   toasts: Record<string, ToastInfo> | undefined
 
   constructor() {
@@ -69,14 +67,6 @@ export class ToastProvider extends WebComponent {
   override disconnect() {
     for (const toastId in this.toasts) {
       clearTimeout(this.toasts?.[toastId]?.timeoutId)
-    }
-  }
-}
-
-declare module '@hd-web/jsx' {
-  namespace JSX {
-    interface IntrinsicElements {
-      'hd-toast-provider': object
     }
   }
 }

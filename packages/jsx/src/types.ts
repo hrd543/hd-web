@@ -34,9 +34,18 @@ export interface ElementChildrenAttribute {
   children: object
 }
 
+// Used for class components to declare the props type
+export interface ElementAttributesProperty {
+  props: object
+}
+
 type BaseProps = Record<string, unknown>
 
 export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
-export type Component<T extends BaseProps = BaseProps> = (
+export type FuncComponent<T extends BaseProps = BaseProps> = (
   props: Props<T>
 ) => Element
+
+export type ClassComponent<T extends BaseProps = BaseProps> = (new () => {
+  props?: T
+}) & { key: string }

@@ -6,9 +6,7 @@ import { ToastId, ToastParams } from './types.js'
 type ToastDescription = ToastParams & ToastId
 
 export class Toast extends WebComponent {
-  protected static override get _key() {
-    return 'hd-toast' as const
-  }
+  static override _key = 'hd-toast'
 
   constructor() {
     super()
@@ -41,6 +39,3 @@ export class Toast extends WebComponent {
     this.className = `Toast Toast--${this._info.type}`
   }
 }
-
-// Not declaring hd-toast as an element in the jsx since this component
-// shouldn't be used on its own.

@@ -6,7 +6,7 @@ type MenuButtonProps = {
   className?: string
 }
 
-export const MenuButton: JSX.Component<MenuButtonProps> = ({
+export const MenuButton: JSX.FuncComponent<MenuButtonProps> = ({
   height,
   className
 }) => {

@@ -8,6 +8,13 @@ type ToastDescription = ToastParams & ToastId
 export class Toast extends WebComponent {
   static override _key = 'hd-toast'
 
+  /** Display a new toast message */
+  static show(message: string, type: ToastParams['type'], duration = 5000) {
+    document.dispatchEvent(
+      new ToastEvent({ eventType: 'add', message, type, duration })
+    )
+  }
+
   constructor() {
     super()
     this.initListener(() => this, 'click', this.handleClick.bind(this))

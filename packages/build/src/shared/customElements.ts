@@ -25,6 +25,7 @@ export const defineCustomElements = (
 export const initialiseGlobals = () => {
   const elements: Record<string, string> = {}
   globalThis.HTMLElement = class {}
+  globalThis.CustomEvent = class {}
   globalThis.customElements = {
     get: (key) => elements[key],
     define: (name, constructor) => {
@@ -37,6 +38,8 @@ export const initialiseGlobals = () => {
 
 declare namespace globalThis {
   class HTMLElement {}
+
+  class CustomEvent {}
 
   interface CustomElementRegistry {
     get: (name: string) => string | undefined

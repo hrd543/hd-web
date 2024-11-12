@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/adapters",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Testing web components",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",

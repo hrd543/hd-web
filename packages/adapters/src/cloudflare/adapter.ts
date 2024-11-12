@@ -58,7 +58,8 @@ const adapter = (apiFolder = 'src/api'): Adapter => ({
       `
       {
         "version": 1,
-        "include": ["/api/*"]
+        "include": ["/api/*"],
+        "exclude": []
       }
     `
     )

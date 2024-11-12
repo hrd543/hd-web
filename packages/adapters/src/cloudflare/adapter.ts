@@ -12,7 +12,7 @@ import { type Adapter } from '../shared/index.js'
  * folder located at root.
  */
 const adapter = (apiFolder = 'src/api'): Adapter => ({
-  after: async () => {
+  after: async (out: string) => {
     // First delete the functions folder if it exists
     await fs.rm('functions', { recursive: true, force: true })
 
@@ -54,11 +54,11 @@ const adapter = (apiFolder = 'src/api'): Adapter => ({
     // Finally we need to make a _routes.json file so that we only invoke
     // the worker for api calls.
     await fs.writeFile(
-      '_routes.json',
+      path.join(out, '_routes.json'),
       `
       {
         "version": 1,
-        "include": "/functions/*"
+        "include": ["/api/*"]
       }
     `
     )

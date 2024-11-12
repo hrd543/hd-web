@@ -8,5 +8,5 @@ export type Adapter = {
     config: Config
   ) => Promise<Config> | Config
   /** Run after build */
-  after?: () => Promise<void> | void
+  after?: (out: string) => Promise<void> | void
 }

@@ -57,5 +57,5 @@ export const buildSite = async (
     bundleFinalPass(outFile)
   ])
 
-  await adapter?.after?.()
+  await adapter?.after?.(out)
 }

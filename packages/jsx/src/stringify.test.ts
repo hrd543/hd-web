@@ -13,7 +13,7 @@ describe('stringifyAttribute', () => {
 
   it('should stringify booleans', () => {
     assert.equal(stringifyAttribute('a', true), ' a')
-    assert.equal(stringifyAttribute('a', false), ' a="false"')
+    assert.equal(stringifyAttribute('a', false), '')
   })
 
   it('should stringify undefined', () => {

@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Testing web components",
   "scripts": {
     "build": "npx @hd-web/build-package src dist \".+\\.css$\" && tsc",
@@ -13,10 +13,10 @@
     "/dist"
   ],
   "dependencies": {
-    "@hd-web/jsx": "0.0.1"
+    "@hd-web/jsx": "0.0.2"
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.0.1"
+    "@hd-web/build-package": "0.0.2"
   },
   "sideEffects": false,
   "type": "module"

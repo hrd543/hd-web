@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/create",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Testing web components",
   "bin": {
     "@hd-web/create": "dist/index.js"
@@ -10,7 +10,7 @@
     "test": "echo \"testing\""
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.0.1"
+    "@hd-web/build-package": "0.0.2"
   },
   "files": [
     "/dist"

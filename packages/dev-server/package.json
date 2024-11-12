@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/dev-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Testing web components",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
@@ -12,7 +12,7 @@
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.0.1",
+    "@hd-web/build-package": "0.0.2",
     "@types/node": "^22.2.0",
     "@types/ws": "^8.5.12"
   },

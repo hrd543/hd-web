@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/build-package",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Testing web components",
   "bin": {
     "@hd-web/build-package": "dist/build.js"

@@ -1,6 +1,6 @@
 {
   "name": "hd-web-site",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "My hd-web site",
   "scripts": {
     "build": "tsx build.ts",

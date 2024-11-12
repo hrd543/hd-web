@@ -2,6 +2,7 @@ import { BuildSiteConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
 import fs from 'fs/promises'
+import { type Adapter } from '@hd-web/adapters'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
@@ -18,9 +19,19 @@ import { buildPages } from '../shared/pages.js'
  * be split into their own module.
  *
  * Will delete the contents of out before building!
+ *
+ * Supply an adapter to modify the build for a specific hosting provider.
  */
-export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
-  const { entry, out } = validateConfig(rawConfig)
+export const buildSite = async (
+  rawConfig: Partial<BuildSiteConfig>,
+  adapter?: Adapter
+) => {
+  let config = validateConfig(rawConfig)
+  if (adapter?.before) {
+    config = await adapter.before(config)
+  }
+
+  const { entry, out } = config
 
   // Delete the build folder
   await fs.rm(out, { recursive: true, force: true })
@@ -45,4 +56,6 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
     writeToHtml(pages, entryDir, builtFiles),
     bundleFinalPass(outFile)
   ])
+
+  await adapter?.after?.()
 }

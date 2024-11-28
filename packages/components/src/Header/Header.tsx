@@ -7,21 +7,29 @@ import { MenuButton } from './MenuButton.js'
 export const Header: JSX.FuncComponent<HeaderProps> = ({
   items,
   logo,
-  className
+  className = '',
+  height = '64px',
+  bgColour,
+  fontColour
 }) => (
-  <InteractiveHeader>
-    <nav class={`Header ${className}`}>
-      <div class="Header_container">
-        <div class="Header_logo">{logo}</div>
-        <ul class="Header_links">
-          {items.map(({ link, title }) => (
-            <li class="Header_item">
-              <a href={link}>{title}</a>
-            </li>
-          ))}
-        </ul>
-        <MenuButton height={30} className="Header_menuButton" />
-      </div>
-    </nav>
-  </InteractiveHeader>
+  <nav
+    class={`hd-header ${className}`}
+    style={{
+      '--_height': height,
+      '--_bg-colour': bgColour,
+      '--_font-colour': fontColour
+    }}
+  >
+    <InteractiveHeader>
+      <div class="hd-header_logo">{logo}</div>
+      <ul class="hd-header_links">
+        {items.map(({ link, title }) => (
+          <li class="hd-header_item">
+            <a href={link}>{title}</a>
+          </li>
+        ))}
+      </ul>
+      <MenuButton height={30} className="hd-header_menuButton" />
+    </InteractiveHeader>
+  </nav>
 )

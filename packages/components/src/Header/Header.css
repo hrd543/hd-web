@@ -51,11 +51,11 @@ hd-header {
   display: flex;
   justify-content: space-between;
   gap: var(--sp-700);
+}
 
-  a {
-    text-decoration: inherit;
-    color: inherit;
-  }
+.hd-header_links a {
+  text-decoration: inherit;
+  color: inherit;
 }
 
 .hd-header_menuButton {
@@ -89,16 +89,16 @@ hd-header {
     justify-content: flex-start;
     gap: var(--sp-100);
     transition: left 0.5s ease;
+  }
 
-    li {
-      width: 100%;
-    }
+  .hd-header_links li {
+    width: 100%;
+  }
 
-    a {
-      display: block;
-      padding: var(--sp-400) 0;
-      text-align: center;
-    }
+  .hd-header_links a {
+    display: block;
+    padding: var(--sp-400) 0;
+    text-align: center;
   }
 
   .hd-header_links--show {

@@ -1,4 +1,4 @@
-import { WebComponent } from '../shared/index.js'
+import { WebComponent } from '../../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
   static override _key = 'hd-header'

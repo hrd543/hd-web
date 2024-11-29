@@ -1,4 +1,4 @@
-import { WebComponent } from '@hd-web/components'
+import { WebComponent } from '../../shared/WebComponent.js'
 
 export class HdButton extends WebComponent {
   static override _key = 'hd-button'

@@ -1,9 +1,9 @@
 import { type JSX } from '@hd-web/jsx'
 import { addTermsField, removeTermsField } from './addTermsField.js'
-import { WebComponent } from '../shared/WebComponent.js'
+import { WebComponent } from '../../shared/WebComponent.js'
 import { Toast } from '../Toast/Toast.js'
 
-export type FormProps = {
+export type HdFormProps = {
   action: string
 }
 
@@ -12,7 +12,7 @@ const successMessage =
 
 export class HdForm extends WebComponent {
   static override _key = 'hd-form'
-  props: JSX.Props<FormProps>
+  props: JSX.Props<HdFormProps>
   loading: boolean
 
   constructor() {

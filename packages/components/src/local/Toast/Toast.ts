@@ -1,5 +1,5 @@
 import './Toast.css'
-import { WebComponent } from '../shared/index.js'
+import { WebComponent } from '../../shared/index.js'
 import { ToastEvent } from './toastEvents.js'
 import { ToastId, ToastParams } from './types.js'
 

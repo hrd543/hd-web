@@ -7,11 +7,29 @@
     "play": "cd playground && tsx buildPlayground.ts",
     "test": "echo \"testing\""
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/shared/index.d.ts",
+        "default": "./dist/shared/index.js"
+      }
+    },
+    "./local": {
+      "import": {
+        "types": "./dist/local/index.d.ts",
+        "default": "./dist/local/index.js"
+      }
+    },
+    "./global": {
+      "import": {
+        "types": "./dist/global/index.d.ts",
+        "default": "./dist/global/index.js"
+      }
+    }
+  },
   "dependencies": {
     "@hd-web/jsx": "0.0.2"
   },

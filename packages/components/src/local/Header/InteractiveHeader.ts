@@ -1,4 +1,4 @@
-import { WebComponent } from '../shared/index.js'
+import { WebComponent } from '../../shared/index.js'
 
 export class InteractiveHeader extends WebComponent {
   static override _key = 'hd-header'
@@ -14,8 +14,8 @@ export class InteractiveHeader extends WebComponent {
 
   showHideMenu(show: boolean) {
     const type = show ? 'add' : 'remove'
-    this.menu?.classList[type]('Header_links-show')
-    this.buttonContainer?.classList[type]('MenuButton-open')
+    this.menu?.classList[type]('hd-header_links--show')
+    this.buttonContainer?.classList[type]('MenuButton--open')
   }
 
   onClick(e: MouseEvent) {
@@ -33,7 +33,7 @@ export class InteractiveHeader extends WebComponent {
 
     // If the menu button, then show/hide
     if (this.buttonContainer.contains(target)) {
-      if (this.menu.classList.contains('Header_links-show')) {
+      if (this.menu.classList.contains('hd-header_links--show')) {
         this.showHideMenu(false)
       } else {
         this.showHideMenu(true)
@@ -42,7 +42,7 @@ export class InteractiveHeader extends WebComponent {
   }
 
   override connect() {
-    this.menu = this.querySelector('.Header_links')
+    this.menu = this.querySelector('.hd-header_links')
     this.buttonContainer = this.querySelector('.MenuButton')
   }
 }

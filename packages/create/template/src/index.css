@@ -3,6 +3,36 @@
   Or add your own.
 */
 :root {
+  /* Site padding / width */
+  --page-max-width: 1200px;
+  /* width + 2 * (x + padding) = 100vw */
+  --page-padding: max(calc(50vw - var(--page-max-width) / 2), 32px);
+
+  /* Font sizes */
+  --fs-0: 12px;
+  --fs-100: 14px;
+  --fs-200: 16px;
+  --fs-300: 18px;
+  --fs-400: 20px;
+  --fs-500: 24px;
+  --fs-600: 30px;
+  --fs-700: 36px;
+  --fs-800: 48px;
+  --fs-900: 60px;
+  --fs-1000: 72px;
+
+  /* Spacing */
+  --sp-0: 4px;
+  --sp-100: 8px;
+  --sp-200: 12px;
+  --sp-300: 16px;
+  --sp-400: 24px;
+  --sp-500: 32px;
+  --sp-600: 48px;
+  --sp-700: 64px;
+  --sp-800: 96px;
+  --sp-900: 128px;
+
   --backgroundColour: #000;
   --headerColour: var(--backgroundColour);
   --foregroundColour: #000000;
@@ -12,18 +42,6 @@
   --success: #44632c;
   --failure: #772e1a;
   --neutral: #574c41;
-  --headerHeight: 64px;
-  --pagePadding: 32px;
-  --sectionPadding: 100px;
-  --pageMaxWidth: 1200px;
-  /* width + 2 * (x + padding) = 100vw */
-  --calculatedPadding: max(
-    calc(50vw - var(--pageMaxWidth) / 2),
-    var(--pagePadding)
-  );
-  --fontSizeTitle: 58px;
-  --fontSizeSubTitle: 32px;
-  --fontSizeText: 24px;
 }
 
 html {
@@ -41,6 +59,11 @@ ul {
   padding: 0;
 }
 
+ul,
+ol {
+  list-style: none;
+}
+
 p {
   font-size: var(--fontSizeText);
 }
@@ -50,7 +73,7 @@ button {
 }
 
 main > section {
-  padding: var(--sectionPadding) var(--calculatedPadding);
+  padding: var(--sp-800) var(--page-padding);
 }
 
 section:nth-child(even) {

@@ -1,0 +1,107 @@
+.hd-header {
+  height: var(--_height);
+  background-color: var(--_bg-colour);
+  display: flex;
+  justify-content: center;
+  font-size: var(--fs-400);
+  color: var(--_font-colour);
+  position: sticky;
+  top: 0;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+/* 
+  Make sure the hero takes up 100vh - header height
+  without needing to explicitly know how tall the header is.
+
+  See https://www.smashingmagazine.com/2024/09/sticky-headers-full-height-elements-tricky-combination/
+ */
+body::before {
+  content: '';
+  height: 100vh;
+  grid-column: 1 / -1;
+  grid-row: 1 / span 2;
+}
+
+.hd-header + * {
+  grid-column-start: 1;
+  grid-row-start: 2;
+}
+
+body {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+}
+
+hd-header {
+  width: 100%;
+  padding: 0 var(--page-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hd-header_logo {
+  font-weight: bold;
+  font-size: var(--fs-600);
+}
+
+.hd-header_links {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-700);
+}
+
+.hd-header_links a {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+.hd-header_menuButton {
+  display: none;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+}
+
+@media (max-width: 820px) {
+  .hd-header {
+    font-size: var(--fs-500);
+  }
+
+  .hd-header_logo {
+    font-size: var(--fs-500);
+  }
+
+  .hd-header_menuButton {
+    display: unset;
+  }
+
+  .hd-header_links {
+    position: fixed;
+    left: 100vw;
+    top: var(--_height);
+    flex-direction: column;
+    background-color: var(--_bg-colour);
+    width: 100%;
+    height: calc(100vh - var(--_height));
+    justify-content: flex-start;
+    gap: var(--sp-100);
+    transition: left 0.5s ease;
+  }
+
+  .hd-header_links li {
+    width: 100%;
+  }
+
+  .hd-header_links a {
+    display: block;
+    padding: var(--sp-400) 0;
+    text-align: center;
+  }
+
+  .hd-header_links--show {
+    left: 0;
+  }
+}

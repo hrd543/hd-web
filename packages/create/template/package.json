@@ -1,13 +1,13 @@
 {
   "name": "hd-web-site",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "My hd-web site",
   "scripts": {
     "build": "tsx build.ts",
     "dev": "tsx dev.ts"
   },
   "dependencies": {
-    "@hd-web/components": "^0.0.2"
+    "@hd-web/components": "^0.0.3"
   },
   "devDependencies": {
     "@hd-web/build": "^0.0.3",

@@ -12,14 +12,16 @@
 }
 
 /* 
-  Make sure the hero takes up 100vh - header height
+  Make sure the hero takes up 100svh - header height
   without needing to explicitly know how tall the header is.
+  (Using vh as a fallback if svh isn't supported.)
 
   See https://www.smashingmagazine.com/2024/09/sticky-headers-full-height-elements-tricky-combination/
  */
 body::before {
   content: '';
   height: 100vh;
+  height: 100svh;
   grid-column: 1 / -1;
   grid-row: 1 / span 2;
 }
@@ -86,6 +88,7 @@ hd-header {
     background-color: var(--_bg-colour);
     width: 100%;
     height: calc(100vh - var(--_height));
+    height: calc(100svh - var(--_height));
     justify-content: flex-start;
     gap: var(--sp-100);
     transition: left 0.5s ease;

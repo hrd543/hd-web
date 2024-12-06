@@ -1,6 +1,6 @@
 import { WebComponent } from '../../shared/index.js'
 
-export class InteractiveHeader extends WebComponent {
+export class HdHeader extends WebComponent {
   static override _key = 'hd-header'
   menu: HTMLElement | null
   buttonContainer: HTMLButtonElement | null

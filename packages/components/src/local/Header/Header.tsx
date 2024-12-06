@@ -1,7 +1,7 @@
 import './Header.css'
 import { JSX } from '@hd-web/jsx'
 import type { HeaderProps } from './types.js'
-import { InteractiveHeader } from './InteractiveHeader.js'
+import { HdHeader } from './HdHeader.js'
 import { MenuButton } from './MenuButton.js'
 
 export const Header: JSX.FuncComponent<HeaderProps> = ({
@@ -20,7 +20,7 @@ export const Header: JSX.FuncComponent<HeaderProps> = ({
       '--_font-colour': fontColour
     }}
   >
-    <InteractiveHeader>
+    <HdHeader>
       <div class="hd-header_logo">{logo}</div>
       <ul class="hd-header_links">
         {items.map(({ link, title }) => (
@@ -30,6 +30,6 @@ export const Header: JSX.FuncComponent<HeaderProps> = ({
         ))}
       </ul>
       <MenuButton height={30} className="hd-header_menuButton" />
-    </InteractiveHeader>
+    </HdHeader>
   </nav>
 )

@@ -19,10 +19,10 @@ import { createDevServer, watch } from '@hd-web/dev-server'
 import { BuildDevConfig, validateConfig } from './config.js'
 import { buildPages } from '../shared/pages.js'
 import { getRefreshClientScript } from './refreshClient.js'
+import { copyStaticFolder } from './copyStaticFolder.js'
 
 const rebuild = async (
-  port: number,
-  entryFile: string,
+  config: BuildDevConfig,
   htmlTemplate: string,
   filesystem: FileSystem,
   ws?: () => WebSocket | null
@@ -32,14 +32,14 @@ const rebuild = async (
   // Need to define the global types BEFORE building the contents
   const getCustomElements = initialiseGlobals()
 
-  const built = await buildDev(entryFile)
+  const built = await buildDev(config)
   const pages = await buildPages('', getPageBuilders(built.js))
 
   // Write the js to the filesystem, adding in what we need.
   filesystem.write(
     buildFile,
     insertIntoIife(built.js, defineCustomElements(getCustomElements)) +
-      getRefreshClientScript(port)
+      getRefreshClientScript(config.port)
   )
 
   // And write the css if it exists.
@@ -63,8 +63,9 @@ const rebuild = async (
  * rebuilding and refreshing the page on each change.
  */
 export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
-  const { entry, port } = validateConfig(rawConfig)
-  const entryDir = path.dirname(entry)
+  const config = validateConfig(rawConfig)
+
+  const entryDir = path.dirname(config.entry)
 
   const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
     script: buildScriptElements([buildFile]),
@@ -72,10 +73,13 @@ export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
   })
 
   const filesystem = new FileSystem()
-  await rebuild(port, entry, htmlTemplate, filesystem)
-  const getWs = createDevServer(port, filesystem)
 
-  await watch(entryDir, () =>
-    rebuild(port, entry, htmlTemplate, filesystem, getWs)
-  )
+  if (config.staticFolder) {
+    await copyStaticFolder(config.staticFolder, filesystem)
+  }
+
+  await rebuild(config, htmlTemplate, filesystem)
+  const getWs = createDevServer(config.port, filesystem)
+
+  await watch(entryDir, () => rebuild(config, htmlTemplate, filesystem, getWs))
 }

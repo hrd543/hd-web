@@ -10,12 +10,12 @@ const formatFile = (file: string) => file.replace(fileRegex, '')
  * Only supports very basic functionality
  */
 export default class FileSystem {
-  private files: Record<string, string>
+  private files: Record<string, string | Buffer>
   constructor() {
     this.files = {}
   }
 
-  write(filename: string, content: string) {
+  write(filename: string, content: string | Buffer) {
     this.files[formatFile(filename)] = content
   }
 

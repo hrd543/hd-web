@@ -5,6 +5,8 @@ export type BuildDevConfig = {
   entry: string
   /** The port for the dev server */
   port: number
+  /** The folder, relative to cwd, containing static assets */
+  staticFolder?: string
 }
 
 const defaultBuildDevConfig: BuildDevConfig = {

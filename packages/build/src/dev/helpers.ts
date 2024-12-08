@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild'
 import { buildFile } from '../shared/constants.js'
+import { BuildDevConfig } from './config.js'
 
 const pagesName = '__pages'
 
@@ -19,10 +20,10 @@ export const getPageBuilders = (contents: string) => {
 /**
  * Build the js file located at entryFile into a string
  */
-export const buildDev = async (entryFile: string) => {
+export const buildDev = async (config: BuildDevConfig) => {
   const built = await esbuild.build({
     bundle: true,
-    entryPoints: [entryFile],
+    entryPoints: [config.entry],
     target: 'esnext',
     minify: false,
     allowOverwrite: true,
@@ -32,7 +33,9 @@ export const buildDev = async (entryFile: string) => {
     globalName: pagesName,
     write: false,
     // This is needed just so the css is written to a "file"
-    outfile: buildFile
+    outfile: buildFile,
+    // Ignore the static folder
+    external: config.staticFolder ? [config.staticFolder] : undefined
   })
 
   // Now find the js and css files (if they exist)

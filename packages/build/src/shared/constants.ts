@@ -14,5 +14,12 @@ export const defaultConfig: BuildOptions = {
     // We want to support static fields so that the classes
     // can be removed if not actually referenced.
     'class-static-field': true
+  },
+  // Copy images over
+  assetNames: '[name]-[hash]',
+  loader: {
+    '.jpg': 'copy',
+    '.webp': 'copy',
+    '.png': 'copy'
   }
 }

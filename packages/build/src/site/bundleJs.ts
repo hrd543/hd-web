@@ -20,14 +20,7 @@ export const bundleFirstPass = async (entry: string, out: string) => {
     // Use esm to preserve imports and enable splitting
     format: 'esm',
     // Needed to get the names of the files with any hashes.
-    metafile: true,
-    // Copy images over
-    assetNames: '[name]-[hash]',
-    loader: {
-      '.jpg': 'copy',
-      '.webp': 'copy',
-      '.png': 'copy'
-    }
+    metafile: true
   })
 
   return Object.entries(metafile.outputs).reduce((all, [file, output]) => {

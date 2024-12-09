@@ -34,18 +34,30 @@ export const buildDev = async (config: BuildDevConfig) => {
     write: false,
     // This is needed just so the css is written to a "file"
     outfile: buildFile,
-    // Ignore the static folder
-    external: config.staticFolder ? [config.staticFolder] : undefined
+    // Copy images over
+    assetNames: '[name]-[hash]',
+    loader: {
+      '.jpg': 'copy',
+      '.webp': 'copy',
+      '.png': 'copy'
+    }
   })
 
-  // Now find the js and css files (if they exist)
-  const js = built.outputFiles.find((f) => f.path.endsWith('.js'))!
-  const css = built.outputFiles.find((f) => f.path.endsWith('.css'))
+  // Now get the js content and any other files used.
+  let js = ''
+  const otherFiles: esbuild.OutputFile[] = []
 
-  // and return their content
+  built.outputFiles.forEach((file) => {
+    if (file.path.endsWith('.js')) {
+      js = file.text
+    } else {
+      otherFiles.push(file)
+    }
+  })
+
   return {
-    js: js.text,
-    css: css?.text
+    js: js!,
+    files: otherFiles
   }
 }
 

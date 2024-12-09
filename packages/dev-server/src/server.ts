@@ -3,11 +3,9 @@ import path from 'path'
 import { WebSocketServer, type WebSocket } from 'ws'
 import { mimeTypes } from './mimeTypes.js'
 
-type FileData = string | Buffer | undefined
-
 type FileSystem = {
   exists: (file: string) => boolean | Promise<boolean>
-  read: (file: string) => FileData | Promise<FileData>
+  read: (file: string) => any | Promise<any>
 }
 
 /**

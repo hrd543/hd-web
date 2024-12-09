@@ -19,7 +19,6 @@ import { createDevServer, watch } from '@hd-web/dev-server'
 import { BuildDevConfig, validateConfig } from './config.js'
 import { buildPages } from '../shared/pages.js'
 import { getRefreshClientScript } from './refreshClient.js'
-import { copyStaticFolder } from './copyStaticFolder.js'
 
 const rebuild = async (
   config: BuildDevConfig,
@@ -42,9 +41,11 @@ const rebuild = async (
       getRefreshClientScript(config.port)
   )
 
-  // And write the css if it exists.
-  if (built.css) {
-    filesystem.write(getCssPathFromJs(buildFile), built.css)
+  // And write any other files (css / images) to the filesystem
+  if (built.files.length) {
+    built.files.forEach((file) => {
+      filesystem.write(path.relative(process.cwd(), file.path), file.contents)
+    })
   }
 
   pages.forEach(([p, content, is404]) => {
@@ -73,11 +74,6 @@ export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
   })
 
   const filesystem = new FileSystem()
-
-  if (config.staticFolder) {
-    await copyStaticFolder(config.staticFolder, filesystem)
-  }
-
   await rebuild(config, htmlTemplate, filesystem)
   const getWs = createDevServer(config.port, filesystem)
 

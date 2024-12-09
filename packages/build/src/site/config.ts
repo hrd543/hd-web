@@ -5,6 +5,8 @@ export type BuildSiteConfig = {
   entry: string
   /** The directory, relative to cwd, in which the site will be built */
   out: string
+  /** The folder containing any static files, like a favicon */
+  staticFolder?: string
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {

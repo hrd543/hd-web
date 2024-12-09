@@ -33,12 +33,12 @@ export const writeToHtml = async (
         replaceHtml(htmlTemplate, {
           script: buildScriptElements(
             built
-              .filter((file) => file.type === 'js')
+              .filter((file) => file.type === '.js')
               .map((file) => file.relativePath)
           ),
           css: buildStyleElements(
             built
-              .filter((file) => file.type === 'css')
+              .filter((file) => file.type === '.css')
               .map((file) => file.relativePath)
           ),
           body: content

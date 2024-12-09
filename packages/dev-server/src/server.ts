@@ -5,7 +5,7 @@ import { mimeTypes } from './mimeTypes.js'
 
 type FileSystem = {
   exists: (file: string) => boolean | Promise<boolean>
-  read: (file: string) => string | undefined | Promise<string | undefined>
+  read: (file: string) => any | Promise<any>
 }
 
 /**

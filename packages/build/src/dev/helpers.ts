@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild'
-import { buildFile } from '../shared/constants.js'
+import { buildFile, defaultConfig } from '../shared/constants.js'
+import { BuildDevConfig } from './config.js'
 
 const pagesName = '__pages'
 
@@ -19,11 +20,12 @@ export const getPageBuilders = (contents: string) => {
 /**
  * Build the js file located at entryFile into a string
  */
-export const buildDev = async (entryFile: string) => {
+export const buildDev = async (config: BuildDevConfig) => {
   const built = await esbuild.build({
-    bundle: true,
-    entryPoints: [entryFile],
+    ...defaultConfig,
+    entryPoints: [config.entry],
     target: 'esnext',
+    treeShaking: false,
     minify: false,
     allowOverwrite: true,
     format: 'iife',
@@ -35,14 +37,21 @@ export const buildDev = async (entryFile: string) => {
     outfile: buildFile
   })
 
-  // Now find the js and css files (if they exist)
-  const js = built.outputFiles.find((f) => f.path.endsWith('.js'))!
-  const css = built.outputFiles.find((f) => f.path.endsWith('.css'))
+  // Now get the js content and any other files used.
+  let js = ''
+  const otherFiles: esbuild.OutputFile[] = []
 
-  // and return their content
+  built.outputFiles.forEach((file) => {
+    if (file.path.endsWith('.js')) {
+      js = file.text
+    } else {
+      otherFiles.push(file)
+    }
+  })
+
   return {
-    js: js.text,
-    css: css?.text
+    js: js!,
+    files: otherFiles
   }
 }
 

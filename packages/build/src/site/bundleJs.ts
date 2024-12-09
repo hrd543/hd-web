@@ -5,7 +5,7 @@ import { defaultConfig } from '../shared/constants.js'
 export type BuiltFile = {
   path: string
   relativePath: string
-  type: 'css' | 'js'
+  type: string
   isEntry?: true
 }
 
@@ -27,7 +27,7 @@ export const bundleFirstPass = async (entry: string, out: string) => {
     const builtFile: BuiltFile = {
       path: file,
       relativePath: path.relative(out, file),
-      type: file.endsWith('.css') ? 'css' : 'js'
+      type: path.extname(file)
     }
 
     // This means the file is the main entry point

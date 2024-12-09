@@ -31,10 +31,15 @@ export const buildSite = async (
     config = await adapter.before(config)
   }
 
-  const { entry, out } = config
+  const { entry, out, staticFolder } = config
 
   // Delete the build folder
   await fs.rm(out, { recursive: true, force: true })
+
+  // Copy over any static assets
+  if (staticFolder) {
+    await fs.cp(staticFolder, out, { recursive: true })
+  }
 
   const entryDir = path.dirname(entry)
 

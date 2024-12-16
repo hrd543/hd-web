@@ -1,10 +1,13 @@
 import './Toast.css'
-import { WebComponent } from '../../shared/index.js'
 import { ToastEvent } from './toastEvents.js'
 import { ToastId, ToastParams } from './types.js'
+import { WebComponent } from './WebComponent.js'
 
 type ToastDescription = ToastParams & ToastId
 
+/**
+ * @deprecated
+ */
 export class Toast extends WebComponent {
   static override _key = 'hd-toast'
 

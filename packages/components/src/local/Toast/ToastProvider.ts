@@ -1,10 +1,13 @@
 import './ToastProvider.css'
-import { WebComponent } from '../../shared/index.js'
 import { generateId } from './generateId.js'
 import { Toast } from './Toast.js'
 import { AddToastEventDetail, ToastEvent } from './toastEvents.js'
 import { ToastInfo } from './types.js'
+import { WebComponent } from './WebComponent.js'
 
+/**
+ * @deprecated
+ */
 export class ToastProvider extends WebComponent {
   static override _key = 'hd-toast-provider'
   toasts: Record<string, ToastInfo> | undefined

@@ -20,7 +20,9 @@ export const bundleFirstPass = async (entry: string, out: string) => {
     // Use esm to preserve imports and enable splitting
     format: 'esm',
     // Needed to get the names of the files with any hashes.
-    metafile: true
+    metafile: true,
+    // The first pass is run in node
+    platform: 'node'
   })
 
   return Object.entries(metafile.outputs).reduce((all, [file, output]) => {

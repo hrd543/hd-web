@@ -4,6 +4,7 @@ import type { HeaderProps } from './types.js'
 import { header } from './headerInteract.js'
 import { MenuButton } from './MenuButton.js'
 import { interact } from '@hd-web/build'
+import { attachIdToElement } from '../../shared/getContainerElement.js'
 
 export const Header: JSX.FuncComponent<HeaderProps> = ({
   items,
@@ -24,7 +25,7 @@ export const Header: JSX.FuncComponent<HeaderProps> = ({
         '--_font-colour': fontColour
       }}
     >
-      <div data-hd-id={id} class="hd-header_container">
+      <div {...attachIdToElement(id)} class="hd-header_container">
         <div class="hd-header_logo">{logo}</div>
         <ul class="hd-header_links">
           {items.map(({ link, title }) => (

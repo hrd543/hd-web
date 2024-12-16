@@ -19,9 +19,9 @@ export type InteractCallback<T = undefined> = T extends undefined
 export function interact(
   callback: InteractCallback<undefined>,
   args?: undefined
-): void
+): number
 
-export function interact<T>(callback: InteractCallback<T>, args: T): void
+export function interact<T>(callback: InteractCallback<T>, args: T): number
 
 export function interact<T>(callback: InteractCallback<T>, args: T) {
   const name = callback.name

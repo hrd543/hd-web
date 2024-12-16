@@ -1,1 +1,1 @@
-export { HdForm, type HdFormProps } from './HdForm.js'
+export { formInteract as form } from './form.js'

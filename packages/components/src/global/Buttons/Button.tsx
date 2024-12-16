@@ -1,6 +1,7 @@
 import { JSX } from '@hd-web/jsx'
 import { ButtonType } from './types.js'
-import { HdButton } from './HdButton.js'
+import { interact } from '@hd-web/build'
+import { buttonInteract } from './buttonInteract.js'
 
 export type ButtonProps = {
   type: ButtonType
@@ -13,11 +14,15 @@ export const Button: JSX.FuncComponent<ButtonProps> = ({
   disabled = false,
   title
 }) => {
+  const id = interact(buttonInteract)
+
   return (
-    <HdButton>
-      <button disabled={disabled} class={`Button Button--${type}`}>
-        {title}
-      </button>
-    </HdButton>
+    <button
+      data-hd-id={id}
+      disabled={disabled}
+      class={`Button Button--${type}`}
+    >
+      {title}
+    </button>
   )
 }

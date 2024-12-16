@@ -5,17 +5,25 @@ export const initialiseInteractions = () => {
   globalThis._hdInteractions = []
 }
 
+export type InteractCallback<T = undefined> = T extends undefined
+  ? (id: number) => void
+  : (id: number, args: T) => void
+
 /**
- * Register the callback to be run with args on the client.
+ * Register the callback to be run on the client with the given args.
  * Also provides you with a unique id to use for selecting instances
  * of components.
  *
  * NB the callback must be defined outside the scope of the component.
  */
-export const interact = <T>(
-  callback: (id: number, args: T) => void,
-  args: T
-) => {
+export function interact(
+  callback: InteractCallback<undefined>,
+  args?: undefined
+): void
+
+export function interact<T>(callback: InteractCallback<T>, args: T): void
+
+export function interact<T>(callback: InteractCallback<T>, args: T) {
   const name = callback.name
 
   if (!name || name === 'anonymous') {

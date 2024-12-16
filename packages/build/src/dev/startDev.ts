@@ -16,8 +16,8 @@ import { BuildDevConfig, validateConfig } from './config.js'
 import { buildPages } from '../shared/pages.js'
 import { getRefreshClientScript } from './refreshClient.js'
 import {
-  defineInteractive,
-  initialiseInteractive
+  defineInteractions,
+  initialiseInteractions
 } from '../shared/interactivity.js'
 
 const rebuild = async (
@@ -29,7 +29,7 @@ const rebuild = async (
   console.log('Rebuilding...')
 
   // Need to define the global types BEFORE building the contents
-  initialiseInteractive()
+  initialiseInteractions()
 
   const built = await buildDev(config)
   const pages = await buildPages('', getPageBuilders(built.js))
@@ -37,7 +37,7 @@ const rebuild = async (
   // Write the js to the filesystem, adding in what we need.
   filesystem.write(
     buildFile,
-    insertIntoIife(built.js, defineInteractive()) +
+    insertIntoIife(built.js, defineInteractions()) +
       getRefreshClientScript(config.port)
   )
 

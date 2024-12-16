@@ -7,7 +7,7 @@ import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
 import { buildPages } from '../shared/pages.js'
-import { initialiseInteractive } from '../shared/interactivity.js'
+import { initialiseInteractions } from '../shared/interactivity.js'
 
 /**
  * Create the html, css and js files for a site.
@@ -43,8 +43,8 @@ export const buildSite = async (
 
   const entryDir = path.dirname(entry)
 
-  // Need to define the global types BEFORE importing the component
-  initialiseInteractive()
+  // Need to initialise any interactions before importing the components
+  initialiseInteractions()
 
   const builtFiles = await bundleFirstPass(entry, out)
   const outFile = builtFiles.find((file) => file.isEntry)!.path

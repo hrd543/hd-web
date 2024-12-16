@@ -1,7 +1,9 @@
 /**
  * Reset and initialise all interactivity scripts within the site
  */
-export const initialiseInteractive = () => (globalThis._hdInteractive = [])
+export const initialiseInteractions = () => {
+  globalThis._hdInteractions = []
+}
 
 /**
  * Register the callback to be run with args on the client.
@@ -10,7 +12,7 @@ export const initialiseInteractive = () => (globalThis._hdInteractive = [])
  *
  * NB the callback must be defined outside the scope of the component.
  */
-export const interactive = <T>(
+export const interact = <T>(
   callback: (id: number, args: T) => void,
   args: T
 ) => {
@@ -22,9 +24,9 @@ export const interactive = <T>(
     )
   }
 
-  const id = globalThis._hdInteractive.length
+  const id = globalThis._hdInteractions.length
 
-  globalThis._hdInteractive.push({ name, args, id })
+  globalThis._hdInteractions.push({ name, args, id })
 
   return id
 }
@@ -32,14 +34,14 @@ export const interactive = <T>(
 /**
  * Get the current interactive callbacks which have been registered
  */
-export const getInteractive = () => globalThis._hdInteractive
+export const getInteractions = () => globalThis._hdInteractions
 
 /**
  * Take the interactive scripts, and their args, and create a js snippet
  * to be run on the client which will call each callback.
  */
-export const defineInteractive = () => {
-  const callbacks = getInteractive()
+export const defineInteractions = () => {
+  const callbacks = getInteractions()
 
   return callbacks.reduce((js, { name, args, id }) => {
     return js + `${name}(${id}, ${JSON.stringify(args)});`
@@ -50,7 +52,7 @@ export const defineInteractive = () => {
 // building the components, so any variables here won't nec.
 // be the same.
 declare namespace globalThis {
-  let _hdInteractive: Array<{
+  let _hdInteractions: Array<{
     name: string
     args: any
     id: number

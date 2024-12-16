@@ -32,10 +32,10 @@ abstract class HdComponent extends HTMLElement {
     return document.createElement(this.key) as InstanceType<T>
   }
 }
-
 /**
  * A wrapper around HTMLElement which makes it easier to work with
  * web components.
+ * @deprecated
  */
 export class WebComponent extends HdComponent {
   protected _listeners: Listener[]

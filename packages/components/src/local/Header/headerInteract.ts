@@ -1,12 +1,8 @@
 import { InteractCallback } from '@hd-web/build'
+import { getContainerElement } from '../../shared/getContainerElement.js'
 
 export const header: InteractCallback = (id) => {
-  const container = document.querySelector(
-    `[data-hd-id="${id}"]`
-  ) as HTMLElement | null
-  if (!container) {
-    throw new Error('Did you forget to attach an hd id to your header?')
-  }
+  const container = getContainerElement(id, 'header') as HTMLElement
 
   const showHideMenu = (el: Element, show: boolean) => {
     const type = show ? 'add' : 'remove'

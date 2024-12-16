@@ -2,6 +2,7 @@ import { addTermsField } from './addTermsField.js'
 import { Toast } from '../Toast/Toast.js'
 import { InteractCallback } from '@hd-web/build'
 import { ButtonUtils } from '../../global/index.js'
+import { getContainerElement } from '../../shared/getContainerElement.js'
 
 export type FormProps = {
   action: string
@@ -11,13 +12,7 @@ const successMessage =
   "Thanks, we've received your message and will be in touch"
 
 export const formInteract: InteractCallback<FormProps> = (id, { action }) => {
-  const form = document.querySelector(
-    `[data-hd-id="${id}"]`
-  ) as HTMLFormElement | null
-
-  if (!form) {
-    throw new Error('Did you forget to add an hd-id to your form?')
-  }
+  const form = getContainerElement(id, 'form') as HTMLFormElement
 
   let startedTyping: number | null = null
   let loading = false

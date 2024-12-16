@@ -1,4 +1,5 @@
 import { InteractCallback } from '@hd-web/build'
+import { getContainerElement } from '../../shared/getContainerElement.js'
 
 export const startLoading = (button: Element) => {
   button.classList.add('Button--loading')
@@ -13,11 +14,7 @@ export const isLoading = (button: Element) => {
 }
 
 export const buttonInteract: InteractCallback = (id) => {
-  const button = document.querySelector(`[data-hd-id="${id}"]`)
-
-  if (!button) {
-    throw new Error('Did you forget to wrap your button with data-hd-id?')
-  }
+  const button = getContainerElement(id, 'button')
 
   button.addEventListener('click', (e) => {
     // If we're loading, don't allow further clicks

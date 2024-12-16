@@ -1,1 +1,1 @@
-export * from './WebComponent.js'
+export * from './getContainerElement.js'

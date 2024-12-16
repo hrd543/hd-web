@@ -34,7 +34,9 @@ export const buildDev = async (config: BuildDevConfig) => {
     globalName: pagesName,
     write: false,
     // This is needed just so the css is written to a "file"
-    outfile: buildFile
+    outfile: buildFile,
+    // The code is run in node for the dev server
+    platform: 'node'
   })
 
   // Now get the js content and any other files used.

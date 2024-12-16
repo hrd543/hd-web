@@ -6,8 +6,8 @@ import { type Adapter } from '@hd-web/adapters'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
-import { initialiseGlobals } from '../shared/customElements.js'
 import { buildPages } from '../shared/pages.js'
+import { initialiseInteractive } from '../shared/interactivity.js'
 
 /**
  * Create the html, css and js files for a site.
@@ -44,7 +44,7 @@ export const buildSite = async (
   const entryDir = path.dirname(entry)
 
   // Need to define the global types BEFORE importing the component
-  const getCustomElements = initialiseGlobals()
+  initialiseInteractive()
 
   const builtFiles = await bundleFirstPass(entry, out)
   const outFile = builtFiles.find((file) => file.isEntry)!.path
@@ -55,7 +55,7 @@ export const buildSite = async (
 
   // This needs to be done after the pages have been built so that
   // the custom elements contain all which are referenced.
-  await processJs(outFile, getCustomElements)
+  await processJs(outFile)
 
   await Promise.all([
     writeToHtml(pages, entryDir, builtFiles),

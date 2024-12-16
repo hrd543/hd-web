@@ -1,22 +1,16 @@
 import fs from 'fs/promises'
-import { defineCustomElements } from '../shared/customElements.js'
 import { removeExports } from './removeExports.js'
+import { defineInteractive } from '../shared/interactivity.js'
 
 /**
  * Remove any exports from file, and append any custom element definitions
  * found in getCustomElements.
  */
-export const processJs = async (
-  file: string,
-  getCustomElements: () => Record<string, string>
-) => {
+export const processJs = async (file: string) => {
   const outFileHandle = await fs.open(file, 'r+')
   try {
     await removeExports(outFileHandle)
-    outFileHandle.write(
-      defineCustomElements(getCustomElements),
-      (await outFileHandle.stat()).size
-    )
+    outFileHandle.write(defineInteractive(), (await outFileHandle.stat()).size)
   } finally {
     await outFileHandle.close()
   }

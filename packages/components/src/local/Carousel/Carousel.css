@@ -1,0 +1,22 @@
+.hd-carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-300);
+
+  & .hd-carousel__main {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  & .hd-carousel__items {
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 100px;
+    transition: transform 0.4s ease-in-out;
+  }
+}

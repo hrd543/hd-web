@@ -8,21 +8,18 @@ type HdCarouselProps = {
   gap: string
 }
 
-const getSlideCount = (itemCount: number, itemsPerSlide: number) =>
-  Math.ceil(itemCount / itemsPerSlide)
-
 export const carousel: InteractCallback<HdCarouselProps> = (
   id,
   { minWidth, maxItemsPerSlide, itemCount, gap }
 ) => {
   const container = getContainerElement(id, 'carousel')
+  const itemsDiv = container.querySelector(
+    '.hd-carousel__items'
+  ) as HTMLDivElement
 
   // state
   let activeIndex = 0
   let itemsPerSlide = 0
-
-  // We want to attach listeners to the buttons to change the activeIndex
-  const items = container.querySelector('.hd-carousel__items') as HTMLDivElement
 
   const updateActiveIndex = (index: number) => {
     if (index === activeIndex) {
@@ -30,12 +27,23 @@ export const carousel: InteractCallback<HdCarouselProps> = (
     }
 
     activeIndex = index
-    items.style.transform =
-      activeIndex === 0
-        ? ''
-        : `translateX(calc(-${100 * activeIndex}% - ${activeIndex} * ${gap}))`
+    itemsDiv.style.transform = getTransform(index, gap)
   }
 
+  const updateItemsPerSlide = (unboundedCount: number) => {
+    const newCount = Math.min(unboundedCount, maxItemsPerSlide)
+    if (itemsPerSlide === newCount) {
+      return
+    }
+
+    itemsPerSlide = newCount
+    itemsDiv.style.gridAutoColumns = getGridColumns(newCount, gap)
+    updateActiveIndex(
+      Math.min(activeIndex, getSlideCount(itemCount, newCount) - 1)
+    )
+  }
+
+  // Handlers
   const prev = () => {
     updateActiveIndex(
       activeIndex === 0
@@ -55,33 +63,44 @@ export const carousel: InteractCallback<HdCarouselProps> = (
   container.querySelector('.hd-carousel__prev')?.addEventListener('click', prev)
   container.querySelector('.hd-carousel__next')?.addEventListener('click', next)
 
-  const updateItemsPerSlide = (unboundedCount: number) => {
-    const newCount = Math.min(unboundedCount, maxItemsPerSlide)
-
-    if (itemsPerSlide === newCount) {
-      return
-    }
-
-    itemsPerSlide = newCount
-    items.style.gridAutoColumns =
-      itemsPerSlide === 1
-        ? '100%'
-        : `calc((100% - ${itemsPerSlide - 1} * ${gap}) / ${itemsPerSlide})`
-    const slideCount = getSlideCount(itemCount, newCount)
-    updateActiveIndex(Math.min(activeIndex, slideCount - 1))
-  }
-  // And listen for the item container being resized in order to change itemsPerSlide
+  // Each time the itemsDiv is resized, we make sure each item is wider
+  // than the minimum width
+  const itemsDivStyle = window.getComputedStyle(itemsDiv)
   const resize = new ResizeObserver((entries) => {
-    // We're only observing one element, the items container
-    const entry = entries[0]!
-    const W = entry.borderBoxSize[0]!.inlineSize
-    const g = Number(
-      window.getComputedStyle(entry.target).getPropertyValue('gap').slice(0, -2)
-    )
-    // const w = (W - (itemsPerSlide - 1) * g) / itemsPerSlide
+    const W = entries[0]!.borderBoxSize[0]!.inlineSize
+    const g = getComputedGap(itemsDivStyle)
 
+    // This calculation comes from two equations:
+    // 1. The width of the container is the items plus gaps
+    // 2. The width of each item should be greater than the minWidth
     updateItemsPerSlide(Math.floor((W + g) / (minWidth + g)))
   })
 
-  resize.observe(items)
+  resize.observe(itemsDiv)
 }
+
+const getSlideCount = (itemCount: number, itemsPerSlide: number) =>
+  Math.ceil(itemCount / itemsPerSlide)
+
+/** Push the items back so that we only see those we should be visible */
+const getTransform = (activeIndex: number, gap: string) => {
+  if (activeIndex === 0) {
+    return ''
+  }
+
+  return `translateX(calc(-${100 * activeIndex}% - ${activeIndex} * ${gap}))`
+}
+
+/** Make the carousel show only x items at once */
+const getGridColumns = (itemsPerSlide: number, gap: string) => {
+  if (itemsPerSlide === 1) {
+    return '100%'
+  }
+
+  return `calc((100% - ${itemsPerSlide - 1} * ${gap}) / ${itemsPerSlide})`
+}
+
+/** Get the actual value of the grid gap, in px */
+const getComputedGap = (style: CSSStyleDeclaration) =>
+  // Remove the trailing px and convert into a number
+  Number(style.getPropertyValue('gap').slice(0, -2))

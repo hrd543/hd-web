@@ -80,25 +80,3 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
     </div>
   )
 }
-
-/*
-
-There are two interactions we need to support
-1. Clicking the next / prev buttons:
-  - If we click next, we add one to the active index, or set it to 0
-    if we're on the last slide.
-  - If we click prev, we subtract one from the active index, or set
-    it to the last slide if we're on 0
-
-2. Resizing the window
-  - Each time we resize, we need to change the number of cards which are visible
-    at once, and make sure the activeIndex still points to something.
-
-We have two pieces of reactive state:
-- itemsPerSlide
-- activeIndex
-
-
-
-
-*/

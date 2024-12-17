@@ -1,8 +1,8 @@
 import { InteractCallback } from '@hd-web/build'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 
-export const header: InteractCallback = (id) => {
-  const container = getContainerElement(id, 'header') as HTMLElement
+export const useHeader: InteractCallback = (id) => {
+  const header = getContainerElement(id, 'header') as HTMLElement
 
   const showHideMenu = (el: Element, show: boolean) => {
     const type = show ? 'add' : 'remove'
@@ -40,5 +40,5 @@ export const header: InteractCallback = (id) => {
     }
   }
 
-  container.addEventListener('click', handleClick)
+  header.addEventListener('click', handleClick)
 }

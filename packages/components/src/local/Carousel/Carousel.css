@@ -1,0 +1,25 @@
+.hd-carousel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-300);
+
+  & button {
+    border: none;
+    color: inherit;
+    background-color: transparent;
+  }
+
+  & .hd-carousel__main {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  & .hd-carousel__items {
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    transition: transform 0.4s ease-in-out;
+  }
+}

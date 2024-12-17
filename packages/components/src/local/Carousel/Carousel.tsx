@@ -1,7 +1,7 @@
 import './Carousel.css'
 
 import { type JSX } from '@hd-web/jsx'
-import { carousel } from './carouselInteract.js'
+import { useCarousel } from './useCarousel.js'
 import { interact } from '@hd-web/build'
 import { attachIdToElement } from '@hd-web/components'
 
@@ -27,7 +27,7 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
   maxItemsPerSlide = Infinity,
   gap = 'var(--sp-400)'
 }) => {
-  const id = interact(carousel, {
+  const id = interact(useCarousel, {
     minWidth,
     maxItemsPerSlide,
     itemCount: items.length,

@@ -1,19 +1,19 @@
 import { InteractCallback } from '@hd-web/build'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 
-type HdCarouselProps = {
+type UseCarouselProps = {
   minWidth: number
   maxItemsPerSlide: number
   itemCount: number
   gap: string
 }
 
-export const carousel: InteractCallback<HdCarouselProps> = (
+export const useCarousel: InteractCallback<UseCarouselProps> = (
   id,
   { minWidth, maxItemsPerSlide, itemCount, gap }
 ) => {
-  const container = getContainerElement(id, 'carousel')
-  const itemsDiv = container.querySelector(
+  const carousel = getContainerElement(id, 'carousel')
+  const itemsDiv = carousel.querySelector(
     '.hd-carousel__items'
   ) as HTMLDivElement
 
@@ -60,8 +60,8 @@ export const carousel: InteractCallback<HdCarouselProps> = (
     )
   }
 
-  container.querySelector('.hd-carousel__prev')?.addEventListener('click', prev)
-  container.querySelector('.hd-carousel__next')?.addEventListener('click', next)
+  carousel.querySelector('.hd-carousel__prev')?.addEventListener('click', prev)
+  carousel.querySelector('.hd-carousel__next')?.addEventListener('click', next)
 
   // Each time the itemsDiv is resized, we make sure each item is wider
   // than the minimum width

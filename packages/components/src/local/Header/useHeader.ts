@@ -9,7 +9,9 @@ export const useHeader: InteractCallback = (id) => {
     el.querySelector('.hd-header_links')!.classList[type](
       'hd-header_links--show'
     )
-    el.querySelector('.MenuButton')!.classList[type]('MenuButton--open')
+    const button = el.querySelector('.MenuButton')!
+    button.classList[type]('MenuButton--open')
+    button.ariaExpanded = show ? 'true' : 'false'
   }
 
   const handleClick = (e: MouseEvent) => {

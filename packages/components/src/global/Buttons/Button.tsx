@@ -1,7 +1,7 @@
 import { JSX } from '@hd-web/jsx'
 import { ButtonType } from './types.js'
 import { interact } from '@hd-web/build'
-import { buttonInteract } from './buttonInteract.js'
+import { useButton } from './useButton.js'
 import { attachIdToElement } from '../../shared/getContainerElement.js'
 
 export type ButtonProps = {
@@ -15,7 +15,7 @@ export const Button: JSX.FuncComponent<ButtonProps> = ({
   disabled = false,
   title
 }) => {
-  const id = interact(buttonInteract)
+  const id = interact(useButton)
 
   return (
     <button

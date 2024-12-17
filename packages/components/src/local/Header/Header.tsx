@@ -1,7 +1,7 @@
 import './Header.css'
 import { JSX } from '@hd-web/jsx'
 import type { HeaderProps } from './types.js'
-import { header } from './headerInteract.js'
+import { useHeader } from './useHeader.js'
 import { MenuButton } from './MenuButton.js'
 import { interact } from '@hd-web/build'
 import { attachIdToElement } from '../../shared/getContainerElement.js'
@@ -14,7 +14,7 @@ export const Header: JSX.FuncComponent<HeaderProps> = ({
   bgColour,
   fontColour
 }) => {
-  const id = interact(header)
+  const id = interact(useHeader)
 
   return (
     <nav

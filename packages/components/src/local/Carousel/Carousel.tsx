@@ -1,9 +1,10 @@
 import './Carousel.css'
 
 import { type JSX } from '@hd-web/jsx'
-import { carousel } from './carouselInteract.js'
+import { useCarousel } from './useCarousel.js'
 import { interact } from '@hd-web/build'
 import { attachIdToElement } from '@hd-web/components'
+import { appendUniqueId } from '../../shared/appendUniqueId.js'
 
 export type CarouselProps = {
   items: JSX.Element[]
@@ -27,12 +28,14 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
   maxItemsPerSlide = Infinity,
   gap = 'var(--sp-400)'
 }) => {
-  const id = interact(carousel, {
+  const id = interact(useCarousel, {
     minWidth,
     maxItemsPerSlide,
     itemCount: items.length,
     gap
   })
+
+  const itemsId = appendUniqueId('hd-carousel-items', id)
 
   return (
     <div
@@ -45,7 +48,7 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
       <button
         class="hd-carousel__prev"
         aria-label="Previous"
-        aria-controls="hd-carousel-items"
+        aria-controls={itemsId}
       >
         {prevIcon}
       </button>
@@ -54,7 +57,7 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
           class="hd-carousel__items"
           style={{ gap }}
           aria-live="polite"
-          id="hd-carousel-items"
+          id={itemsId}
         >
           {items.map((item, index) => {
             return (
@@ -73,7 +76,7 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
       <button
         class="hd-carousel__next"
         aria-label="Next"
-        aria-controls="hd-carousel-items"
+        aria-controls={itemsId}
       >
         {nextIcon}
       </button>

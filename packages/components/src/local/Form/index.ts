@@ -1,1 +1,1 @@
-export { formInteract as form } from './form.js'
+export { useForm, type UseFormProps } from './useForm.js'

@@ -4,14 +4,14 @@ import { InteractCallback } from '@hd-web/build'
 import { ButtonUtils } from '../../global/index.js'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 
-export type FormProps = {
+export type UseFormProps = {
   action: string
 }
 
 const successMessage =
   "Thanks, we've received your message and will be in touch"
 
-export const formInteract: InteractCallback<FormProps> = (id, { action }) => {
+export const useForm: InteractCallback<UseFormProps> = (id, { action }) => {
   const form = getContainerElement(id, 'form') as HTMLFormElement
 
   let startedTyping: number | null = null

@@ -7,11 +7,8 @@ import { attachIdToElement } from '@hd-web/components'
 
 export type CarouselProps = {
   items: JSX.Element[]
-  /** The number of slides visible at each breakpoint */
-  breakpoints: Array<{
-    width: number
-    count: number
-  }>
+  minWidth: number
+  maxItemsPerSlide?: number
   label: string
   prevIcon: JSX.Element
   nextIcon: JSX.Element
@@ -26,10 +23,16 @@ export const Carousel: JSX.FuncComponent<CarouselProps> = ({
   label,
   prevIcon,
   nextIcon,
-  breakpoints,
+  minWidth,
+  maxItemsPerSlide = Infinity,
   gap = 'var(--sp-400)'
 }) => {
-  const id = interact(carousel, { breakpoints, itemCount: items.length, gap })
+  const id = interact(carousel, {
+    minWidth,
+    maxItemsPerSlide,
+    itemCount: items.length,
+    gap
+  })
 
   return (
     <div

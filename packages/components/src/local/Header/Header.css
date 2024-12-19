@@ -34,6 +34,8 @@ body::before {
 body {
   display: grid;
   grid-template-rows: min-content 1fr;
+  /* Make sure content fits into the screen */
+  grid-template-columns: 100%;
 }
 
 .hd-header_container {

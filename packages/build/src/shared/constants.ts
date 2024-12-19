@@ -15,8 +15,8 @@ export const defaultConfig: BuildOptions = {
   // Copy images over
   assetNames: '[name]-[hash]',
   loader: {
-    '.jpg': 'copy',
-    '.webp': 'copy',
-    '.png': 'copy'
+    '.jpg': 'file',
+    '.webp': 'file',
+    '.png': 'file'
   }
 }

@@ -15,5 +15,5 @@
     "skipLibCheck": true,
     "noImplicitOverride": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "index.d.ts"]
 }

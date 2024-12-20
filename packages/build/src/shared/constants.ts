@@ -3,6 +3,9 @@ import { BuildOptions } from 'esbuild'
 /** The file containing the bundled js for the whole site */
 export const buildFile = 'main.js'
 
+export const assetExts = ['jpg', 'webp', 'png']
+export const assetFolder = 'assets'
+
 export const defaultConfig: BuildOptions = {
   bundle: true,
   target: 'es6',
@@ -13,10 +16,6 @@ export const defaultConfig: BuildOptions = {
     'class-static-field': true
   },
   // Copy images over
-  assetNames: '[name]-[hash]',
-  loader: {
-    '.jpg': 'file',
-    '.webp': 'file',
-    '.png': 'file'
-  }
+  assetNames: 'static-[name]-[hash]',
+  loader: assetExts.reduce((all, ext) => ({ ...all, [`.${ext}`]: 'file' }), {})
 }

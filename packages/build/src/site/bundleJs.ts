@@ -11,7 +11,6 @@ export type BuiltFile = {
 }
 
 const assetRegex = new RegExp(`.*\\.(${assetExts.join('|')})$`)
-console.log(assetRegex)
 
 export const bundleFirstPass = async (entry: string, out: string) => {
   const { metafile } = await esbuild.build({

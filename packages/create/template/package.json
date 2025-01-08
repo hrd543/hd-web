@@ -7,11 +7,11 @@
     "dev": "tsx dev.ts"
   },
   "dependencies": {
-    "@hd-web/components": "^0.0.3"
+    "@hd-web/components": "^0.0.4"
   },
   "devDependencies": {
-    "@hd-web/build": "^0.0.3",
-    "@hd-web/jsx": "^0.0.2",
+    "@hd-web/build": "^0.0.4",
+    "@hd-web/jsx": "^0.0.3",
     "eslint": "^9.9.1",
     "@eslint/js": "^9.9.1",
     "prettier": "^3.3.3",

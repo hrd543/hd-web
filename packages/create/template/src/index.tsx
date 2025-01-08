@@ -1,5 +1,6 @@
 import { Page } from '@hd-web/build'
-import './index.css'
+import './defaults.css'
+import './variables.css'
 
 // This is your page's html
 const App: Page = () => ({

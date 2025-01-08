@@ -1,7 +1,7 @@
 {
-  "name": "web-components",
+  "name": "hd-web",
   "version": "0.0.1",
-  "description": "Testing web components",
+  "description": "A set of open source packages to help you quickly create static websites with a splash of interactivity using the html, css and js you already know.",
   "scripts": {
     "build": "npm run build --workspaces",
     "lint:eslint": "eslint",

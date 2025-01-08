@@ -1,7 +1,7 @@
 {
   "name": "@hd-web/dev-server",
   "version": "0.0.2",
-  "description": "Testing web components",
+  "description": "Create a simple local dev server",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
     "test": "echo \"testing\""

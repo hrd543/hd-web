@@ -1,7 +1,7 @@
 {
   "name": "@hd-web/build",
   "version": "0.0.3",
-  "description": "Testing web components",
+  "description": "Build your hd-web site or start a dev server",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
     "test": "node --import tsx --test \"src/**/*.test.ts\""

@@ -1,7 +1,7 @@
 {
   "name": "@hd-web/adapters",
   "version": "0.0.5",
-  "description": "Testing web components",
+  "description": "Adapt the behaviour of hd-web to build for specific targets",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
     "test": "echo \"testing\""

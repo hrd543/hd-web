@@ -1,7 +1,7 @@
 {
   "name": "@hd-web/components",
   "version": "0.0.3",
-  "description": "Testing web components",
+  "description": "A set of components and utilities for use in your hd-web project",
   "scripts": {
     "build": "npx @hd-web/build-package src dist \".+\\.css$\" && tsc",
     "play": "cd playground && tsx buildPlayground.ts",

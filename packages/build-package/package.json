@@ -1,7 +1,7 @@
 {
   "name": "@hd-web/build-package",
   "version": "0.0.2",
-  "description": "Testing web components",
+  "description": "Build a package within the hd-web monorepo",
   "bin": {
     "@hd-web/build-package": "dist/build.js"
   },

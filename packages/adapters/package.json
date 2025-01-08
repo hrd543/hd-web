@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/adapters",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Adapt the behaviour of hd-web to build for specific targets",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",

@@ -16,10 +16,9 @@
     "esbuild": "^0.23.1"
   },
   "devDependencies": {
-    "@types/node": "^22.2.0",
-    "@types/ws": "^8.5.12",
+    "@hd-web/adapters": "^0.0.4",
     "@hd-web/build-package": "0.0.2",
-    "@hd-web/adapters": "^0.0.4"
+    "@types/ws": "^8.5.13"
   },
   "sideEffects": false,
   "type": "module"

@@ -14,7 +14,7 @@ export const stringifyStyle = (style: JSX.CssProperties): string => {
 
 export const stringifyAttribute = (
   key: string,
-  value: string | number | boolean | URL | undefined
+  value: string | number | boolean | URL | undefined | null
 ): string => {
   switch (typeof value) {
     case 'string':
@@ -28,7 +28,7 @@ export const stringifyAttribute = (
       }
   }
 
-  if (value === undefined) {
+  if (value === undefined || value === null) {
     return ''
   }
 

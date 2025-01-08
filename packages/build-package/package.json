@@ -14,9 +14,6 @@
   "files": [
     "/dist"
   ],
-  "devDependencies": {
-    "@types/node": "^22.2.0"
-  },
   "sideEffects": false,
   "type": "module"
 }

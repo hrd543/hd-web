@@ -1,20 +1,30 @@
-import { addTermsField } from './addTermsField.js'
-import { Toast } from '../Toast/Toast.js'
 import { InteractCallback } from '@hd-web/build'
+
+import { addTermsField } from './addTermsField.js'
 import { ButtonUtils } from '../../global/index.js'
 import { getContainerElement } from '../../shared/getContainerElement.js'
+import { HdFormDetail, HdFormEvent } from './events.js'
 
 export type UseFormProps = {
   action: string
 }
 
-const successMessage =
-  "Thanks, we've received your message and will be in touch"
-
+/**
+ * Provides functionality for a simple form which will submit data via POST
+ * to `action`.
+ * This requires a `form` element within the container and a `button` element
+ * to submit the form.
+ *
+ * On submit, will dispatch an `HdFormEvent` to the form element. This could be
+ * used to, among other things, show a success / error message.
+ *
+ * A hidden terms field with the name `"terms"` will be added in order to
+ * check for bots.
+ */
 export const useForm: InteractCallback<UseFormProps> = (id, { action }) => {
-  const form = getContainerElement(id, 'form') as HTMLFormElement
+  const container = getContainerElement(id, 'form') as HTMLElement
 
-  let startedTyping: number | null = null
+  let pageLoaded = Date.now()
   let loading = false
 
   const start = (f: HTMLFormElement) => {
@@ -22,18 +32,26 @@ export const useForm: InteractCallback<UseFormProps> = (id, { action }) => {
     ButtonUtils.startLoading(f.querySelector('button')!)
   }
 
-  const finish = (f: HTMLFormElement, reset = true) => {
+  const finish = (
+    f: HTMLFormElement,
+    eventDetails: HdFormDetail,
+    reset = true
+  ) => {
     loading = false
-    startedTyping = null
+    pageLoaded = Date.now()
     ButtonUtils.stopLoading(f.querySelector('button')!)
+
+    f.dispatchEvent(new HdFormEvent(eventDetails))
 
     if (reset) {
       f.reset()
     }
   }
 
-  const submit = (e: SubmitEvent) => {
+  const submit = async (e: SubmitEvent) => {
     e.preventDefault()
+
+    // Don't allow submitting the form if it's loading
     if (loading) {
       e.stopPropagation()
 
@@ -43,48 +61,37 @@ export const useForm: InteractCallback<UseFormProps> = (id, { action }) => {
     const f = e.currentTarget as HTMLFormElement
     start(f)
 
-    setTimeout(async () => {
-      // In this case, it's likely to have been a bot, so reset the form
-      // and show a success message
-      if (startedTyping && Date.now() - startedTyping < 1000) {
-        finish(f)
-        Toast.show(successMessage, 'success', 5000)
+    // In this case, it's likely to have been a bot, so reset the form
+    // and show a success message
+    if (Date.now() - pageLoaded < 3000) {
+      finish(f, { type: 'success' })
 
-        return
-      }
+      return
+    }
 
-      const formData = new FormData(f)
+    const formData = new FormData(f)
 
-      if (formData.has('terms')) {
-        finish(f)
-        Toast.show(successMessage, 'success', 5000)
+    // This indicates a bot probably filled this in
+    if (formData.has('terms')) {
+      finish(f, { type: 'success' })
 
-        return
-      }
+      return
+    }
 
-      const response = await fetch(action, {
-        method: 'POST',
-        body: formData
-      })
+    // Make the api call and dispatch the corresponding event
+    const response = await fetch(action, {
+      method: 'POST',
+      body: formData
+    })
 
-      if (response.ok) {
-        finish(f)
-        Toast.show(successMessage, 'success', 5000)
-      } else {
-        Toast.show(
-          "Sorry, there's been an error, please try again later",
-          'failure',
-          5000
-        )
-
-        finish(f, false)
-      }
-    }, 3000)
+    if (response.ok) {
+      finish(f, { type: 'success' })
+    } else {
+      finish(f, { type: 'failure', message: response.statusText }, false)
+    }
   }
 
+  const form = container.querySelector('form')!
   form.addEventListener('submit', submit)
-  form.querySelector('textarea')?.addEventListener('input', () => {
-    startedTyping ??= Date.now()
-  })
-  addTermsField(form)
+  addTermsField(id, form)
 }

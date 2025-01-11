@@ -5,7 +5,7 @@ import { ButtonUtils } from '../../global/index.js'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 import { HdFormDetail, HdFormEvent } from './events.js'
 
-export type UseFormProps = {
+export type UsePostFormProps = {
   action: string
 }
 
@@ -21,7 +21,7 @@ export type UseFormProps = {
  * A hidden terms field with the name `"terms"` will be added in order to
  * check for bots.
  */
-export const useForm: InteractHook<UseFormProps> = (id, { action }) => {
+export const usePostForm: InteractHook<UsePostFormProps> = (id, { action }) => {
   const container = getContainerElement(id, 'form') as HTMLElement
 
   let pageLoaded = Date.now()

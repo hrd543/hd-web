@@ -2,7 +2,7 @@ import { InteractHook } from '@hd-web/build'
 
 import { addTermsField } from './addTermsField.js'
 import { ButtonUtils } from '../../global/index.js'
-import { getContainerElement } from '../../shared/getContainerElement.js'
+import { getContainerElement } from '../../shared/index.js'
 import { HdFormDetail, HdFormEvent } from './events.js'
 
 export type UsePostFormProps = {

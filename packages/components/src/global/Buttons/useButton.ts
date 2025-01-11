@@ -1,8 +1,8 @@
-import { InteractCallback } from '@hd-web/build'
+import { InteractHook } from '@hd-web/build'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 import { isLoading } from './utils.js'
 
-export const useButton: InteractCallback = (id) => {
+export const useButton: InteractHook = (id) => {
   const button = getContainerElement(id, 'button')
 
   button.addEventListener('click', (e) => {

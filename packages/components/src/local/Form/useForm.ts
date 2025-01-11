@@ -1,4 +1,4 @@
-import { InteractCallback } from '@hd-web/build'
+import { InteractHook } from '@hd-web/build'
 
 import { addTermsField } from './addTermsField.js'
 import { ButtonUtils } from '../../global/index.js'
@@ -21,7 +21,7 @@ export type UseFormProps = {
  * A hidden terms field with the name `"terms"` will be added in order to
  * check for bots.
  */
-export const useForm: InteractCallback<UseFormProps> = (id, { action }) => {
+export const useForm: InteractHook<UseFormProps> = (id, { action }) => {
   const container = getContainerElement(id, 'form') as HTMLElement
 
   let pageLoaded = Date.now()

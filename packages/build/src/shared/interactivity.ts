@@ -40,41 +40,31 @@ const getNewId = () => globalThis._hdInteractions.length
  * Also provides you with a unique id to use for selecting instances
  * of components.
  *
+ * Or you can pass in `idOverride` to pass that id into the hook instead
+ * of this uniquely created one. This can be useful if using more than
+ * one hook within a component.
+ *
  * NB the hook must be defined outside the scope of the component.
  */
 export function interact(
   hook: InteractHook<undefined>,
-  args?: undefined
+  args?: undefined,
+  idOverride?: number
 ): number
 
-export function interact<T>(hook: InteractHook<T>, args: T): number
-
-export function interact<T>(hook: InteractHook<T>, args: T) {
-  const id = getNewId()
-  addInteraction(getCallbackName(hook), args, id)
-
-  return id
-}
-
-/**
- * Register all the hooks and their associated args with the same id
- * passed to each.
- *
- * @see `interact`
- */
-export function interactMultiple(...hooks: Array<[hook: InteractHook]>): number
-
-export function interactMultiple<T>(
-  ...hooks: Array<[hook: InteractHook<T>, args: T]>
+export function interact<T>(
+  hook: InteractHook<T>,
+  args: T,
+  idOverride?: number
 ): number
 
-export function interactMultiple<T>(
-  ...hooks: Array<[hook: InteractHook<T>, args?: T]>
+export function interact<T>(
+  hook: InteractHook<T>,
+  args: T,
+  idOverride?: number
 ) {
-  const id = getNewId()
-  hooks.forEach(([hook, args]) =>
-    addInteraction(getCallbackName(hook), args, id)
-  )
+  const id = idOverride ?? getNewId()
+  addInteraction(getCallbackName(hook), args, id)
 
   return id
 }

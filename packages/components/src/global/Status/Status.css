@@ -1,0 +1,18 @@
+.hd-status {
+  border-radius: 4px;
+  border-width: 2px;
+  border-style: solid;
+  padding: var(--sp-500) var(--sp-400);
+}
+
+.hd-status--success {
+  border-color: var(--success-dark);
+  color: var(--success-dark);
+  background-color: var(--success-light);
+}
+
+.hd-status--error {
+  border-color: var(--error-dark);
+  color: var(--error-dark);
+  background-color: var(--error-light);
+}

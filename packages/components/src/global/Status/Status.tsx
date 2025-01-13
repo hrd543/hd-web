@@ -8,5 +8,9 @@ export type StatusProps = {
 }
 
 export const Status: JSX.FuncComponent<StatusProps> = ({ type, message }) => {
-  return <div class={`hd-status hd-status--${type}`}>{message}</div>
+  return (
+    <div class={`hd-status hd-status--${type}`}>
+      <p>{message}</p>
+    </div>
+  )
 }

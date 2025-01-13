@@ -1,4 +1,4 @@
-import { InteractCallback } from '@hd-web/build'
+import { InteractHook } from '@hd-web/build'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 
 type UseCarouselProps = {
@@ -8,7 +8,7 @@ type UseCarouselProps = {
   gap: string
 }
 
-export const useCarousel: InteractCallback<UseCarouselProps> = (
+export const useCarousel: InteractHook<UseCarouselProps> = (
   id,
   { minWidth, maxItemsPerSlide, itemCount, gap }
 ) => {

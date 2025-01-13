@@ -1,7 +1,7 @@
-import { InteractCallback } from '@hd-web/build'
+import { InteractHook } from '@hd-web/build'
 import { getContainerElement } from '../../shared/getContainerElement.js'
 
-export const useHeader: InteractCallback = (id) => {
+export const useHeader: InteractHook = (id) => {
   const header = getContainerElement(id, 'header') as HTMLElement
 
   const showHideMenu = (el: Element, show: boolean) => {

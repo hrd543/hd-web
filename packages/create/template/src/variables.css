@@ -67,6 +67,12 @@
   --grey-700: #7c8a9c;
   --grey-800: #9fb3cc;
   --grey-900: #dce6f4;
+
+  --success-light: #b9e9c4;
+  --success-dark: #10421c;
+
+  --error-light: #edc9ce;
+  --error-dark: #620e16;
 }
 
 @media (max-width: 500px) {

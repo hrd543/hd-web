@@ -5,25 +5,15 @@ export const initialiseInteractions = () => {
   globalThis._hdInteractions = []
 }
 
-export type InteractCallback<T = undefined> = T extends undefined
+/**
+ * A hook to be used within the `interact` function to add interactivity
+ * to a component.
+ */
+export type InteractHook<T = undefined> = T extends undefined
   ? (id: number) => void
   : (id: number, args: T) => void
 
-/**
- * Register the callback to be run on the client with the given args.
- * Also provides you with a unique id to use for selecting instances
- * of components.
- *
- * NB the callback must be defined outside the scope of the component.
- */
-export function interact(
-  callback: InteractCallback<undefined>,
-  args?: undefined
-): number
-
-export function interact<T>(callback: InteractCallback<T>, args: T): number
-
-export function interact<T>(callback: InteractCallback<T>, args: T) {
+const getCallbackName = <T>(callback: InteractHook<T>) => {
   const name = callback.name
 
   if (!name || name === 'anonymous') {
@@ -32,15 +22,55 @@ export function interact<T>(callback: InteractCallback<T>, args: T) {
     )
   }
 
-  const id = globalThis._hdInteractions.length
+  return name
+}
 
+const addInteraction = (name: string, args: any, id: number) => {
   globalThis._hdInteractions.push({ name, args, id })
+}
+
+/**
+ * Get a new id for use in the interact function. Just use the current number
+ * of interactions.
+ */
+const getNewId = () => globalThis._hdInteractions.length
+
+/**
+ * Register the hook to be run on the client with the given args.
+ * Also provides you with a unique id to use for selecting instances
+ * of components.
+ *
+ * Or you can pass in `idOverride` to pass that id into the hook instead
+ * of this uniquely created one. This can be useful if using more than
+ * one hook within a component.
+ *
+ * NB the hook must be defined outside the scope of the component.
+ */
+export function interact(
+  hook: InteractHook<undefined>,
+  args?: undefined,
+  idOverride?: number
+): number
+
+export function interact<T>(
+  hook: InteractHook<T>,
+  args: T,
+  idOverride?: number
+): number
+
+export function interact<T>(
+  hook: InteractHook<T>,
+  args: T,
+  idOverride?: number
+) {
+  const id = idOverride ?? getNewId()
+  addInteraction(getCallbackName(hook), args, id)
 
   return id
 }
 
 /**
- * Get the current interactive callbacks which have been registered
+ * Get the current interactive hooks which have been registered
  */
 export const getInteractions = () => globalThis._hdInteractions
 
@@ -49,9 +79,9 @@ export const getInteractions = () => globalThis._hdInteractions
  * to be run on the client which will call each callback.
  */
 export const defineInteractions = () => {
-  const callbacks = getInteractions()
+  const interactions = getInteractions()
 
-  return callbacks.reduce((js, { name, args, id }) => {
+  return interactions.reduce((js, { name, args, id }) => {
     return js + `${name}(${id}, ${JSON.stringify(args)});`
   }, '')
 }

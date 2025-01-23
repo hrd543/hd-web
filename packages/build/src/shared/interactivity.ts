@@ -2,7 +2,32 @@
  * Reset and initialise all interactivity scripts within the site
  */
 export const initialiseInteractions = () => {
-  globalThis._hdInteractions = []
+  globalThis._hdWeb = {
+    interactions: [],
+    currentPage: ''
+  }
+}
+
+/**
+ * In order to make it compatible with the location api, replace
+ * any \ with / and add a leading / if not present.
+ */
+const formatPage = (page: string) => {
+  // replace \ with /
+  const pageForwardSlash = page.replaceAll('\\', '/')
+
+  if (pageForwardSlash.startsWith('/')) {
+    return pageForwardSlash
+  }
+
+  return `/${pageForwardSlash}`
+}
+
+/**
+ * Update the current page for defining interactions.
+ */
+export const updateInteractionsPage = (page: string) => {
+  globalThis._hdWeb.currentPage = formatPage(page)
 }
 
 /**
@@ -26,14 +51,19 @@ const getCallbackName = <T>(callback: InteractHook<T>) => {
 }
 
 const addInteraction = (name: string, args: any, id: number) => {
-  globalThis._hdInteractions.push({ name, args, id })
+  globalThis._hdWeb.interactions.push({
+    name,
+    args,
+    id,
+    page: globalThis._hdWeb.currentPage
+  })
 }
 
 /**
  * Get a new id for use in the interact function. Just use the current number
  * of interactions.
  */
-const getNewId = () => globalThis._hdInteractions.length
+const getNewId = () => globalThis._hdWeb.interactions.length
 
 /**
  * Register the hook to be run on the client with the given args.
@@ -72,27 +102,72 @@ export function interact<T>(
 /**
  * Get the current interactive hooks which have been registered
  */
-export const getInteractions = () => globalThis._hdInteractions
+const getInteractions = () => globalThis._hdWeb.interactions
+
+type InternalInteractionArgs = {
+  name: string
+  args: any
+  id: number
+  page: string
+}
+
+const defineSingleInteraction = ({
+  name,
+  id,
+  args
+}: InternalInteractionArgs) => {
+  return `${name}(${id}, ${JSON.stringify(args)});`
+}
 
 /**
  * Take the interactive scripts, and their args, and create a js snippet
  * to be run on the client which will call each callback.
+ *
+ * Only run the callback if we're on the page in which it was meant to be run.
  */
 export const defineInteractions = () => {
   const interactions = getInteractions()
 
-  return interactions.reduce((js, { name, args, id }) => {
-    return js + `${name}(${id}, ${JSON.stringify(args)});`
-  }, '')
+  if (interactions.length === 0) {
+    return ''
+  }
+
+  const interactionsByPage = interactions.reduce(
+    (all, interaction) => {
+      if (all[interaction.page]) {
+        all[interaction.page]!.push(interaction)
+      } else {
+        all[interaction.page] = [interaction]
+      }
+
+      return all
+    },
+    {} as Record<string, InternalInteractionArgs[]>
+  )
+
+  // Use a switch statement to check if the path matches our current page
+  let js = `
+    switch(window.location.pathname) {
+  `
+
+  // Loop through each page and add specific case statements.
+  for (const page in interactionsByPage) {
+    js += `case "${page}": {
+      ${interactionsByPage[page]!.map((int) => defineSingleInteraction(int)).join('')}
+      break
+    }`
+  }
+
+  // close the switch statement
+  return js + '}'
 }
 
 // Using the global object since this gets bundled and used when
 // building the components, so any variables here won't nec.
 // be the same.
 declare namespace globalThis {
-  let _hdInteractions: Array<{
-    name: string
-    args: any
-    id: number
-  }>
+  let _hdWeb: {
+    interactions: InternalInteractionArgs[]
+    currentPage: string
+  }
 }

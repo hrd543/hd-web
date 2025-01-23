@@ -17,19 +17,22 @@ import { BuiltFile } from './bundleJs.js'
 export const writeToHtml = async (
   pages: BuiltPage[],
   entry: string,
+  out: string,
   built: BuiltFile[]
 ) => {
   const htmlTemplate = await getHtmlTemplate(entry)
 
-  // Create directories for each page
-  await Promise.all(pages.map(([p]) => fs.mkdir(p, { recursive: true })))
+  // Create directories for each page, remembering to prefix the output dir
+  await Promise.all(
+    pages.map(([p]) => fs.mkdir(path.join(out, p), { recursive: true }))
+  )
 
   // Create the index.html files by replacing the template with the necessary
   // content and script locations
   await Promise.all(
     pages.map(([p, content, is404]) =>
       fs.writeFile(
-        path.join(p, getHtmlFile(is404)),
+        path.join(out, p, getHtmlFile(is404)),
         replaceHtml(htmlTemplate, {
           script: buildScriptElements(
             built

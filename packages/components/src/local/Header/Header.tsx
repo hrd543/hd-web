@@ -26,7 +26,9 @@ export const Header: JSX.FuncComponent<HeaderProps> = ({
       }}
     >
       <div {...attachIdToElement(id)} class="hd-header_container">
-        <div class="hd-header_logo">{logo}</div>
+        <a href="/" class="hd-header_logo">
+          {logo}
+        </a>
         <ul class="hd-header_links">
           {items.map(({ link, title }) => (
             <li class="hd-header_item">

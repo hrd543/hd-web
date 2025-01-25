@@ -1,5 +1,17 @@
 import path from 'path'
-import { BuiltPage, PageReturn } from './types.js'
+import { BuiltPage, Site, SubPage } from './types.js'
+
+const validateString = (obj: any, key: string, path: string) => {
+  if (!(key in obj) || typeof obj[key] !== 'string') {
+    throw new Error(`${key} missing or wrong type in${path} `)
+  }
+}
+
+const validateObject = (obj: any, message: string) => {
+  if (typeof obj !== 'object' || !obj) {
+    throw new Error(message)
+  }
+}
 
 // exported for testing
 /**
@@ -9,70 +21,73 @@ import { BuiltPage, PageReturn } from './types.js'
 export const validatePage = async (
   page: unknown,
   path: string
-): Promise<PageReturn> => {
+): Promise<SubPage | Site> => {
   if (typeof page !== 'function') {
     throw new Error(`Page at ${path} is not a function`)
   }
 
+  /** Is this the entry point? */
+  const initial = path === ''
   const result = await page()
 
-  if (typeof result === 'string') {
-    return result
-  }
+  validateObject(result, `Page at ${path} doesn't return a string or object`)
+  validateString(result, 'body', path)
+  validateString(result, 'title', path)
 
-  if (typeof result !== 'object' || !result) {
-    throw new Error(`Page at ${path} doesn't return a string or object`)
-  }
-
-  if (!('body' in result) || typeof result.body !== 'string') {
-    throw new Error(`Body missing or wrong type in ${path}`)
+  // The entry point requires head
+  if (initial) {
+    validateString(result, 'head', path)
   }
 
   if (!('routes' in result)) {
     return result
   }
 
-  if (typeof result.routes !== 'object' || result.routes === null) {
-    throw new Error(`Routes at page ${path} is not an object`)
-  }
+  validateObject(result.routes, `Routes at page ${path} is not an object`)
 
   return result
 }
 
+const getRoutes = (routes: Site['routes'], currentPath: string) => {
+  if (!routes) {
+    return []
+  }
+
+  return Object.entries(routes).map<[string, unknown]>(([route, subPage]) => [
+    path.join(currentPath, route),
+    subPage
+  ])
+}
+
 /**
- * Given a suspected page, root, and a base path, base, try and recursively
+ * Given a suspected page, root, try and recursively
  * build all the pages, making sure they are the correct type.
  */
-export const buildPages = async (
-  base: string,
-  root: unknown
-): Promise<BuiltPage[]> => {
-  const stack: Array<[string, unknown]> = [[base, root]]
+export const buildPages = async (root: unknown): Promise<BuiltPage[]> => {
+  const stack: Array<[string, unknown]> = [['', root]]
   const contents: BuiltPage[] = []
+  let entryHead = ''
 
   while (stack.length) {
     const [p, page] = stack.pop()!
+    const isEntry = p === ''
 
-    const result = await validatePage(page, p)
+    const { routes, ...result } = await validatePage(page, p)
 
-    if (typeof result === 'string') {
-      contents.push([p, result])
-
-      continue
+    if (isEntry) {
+      entryHead = result.head!
     }
 
-    contents.push([p, result.body ?? ''])
-    if (result.content404) {
-      contents.push([p, result.content404, true])
-    }
+    contents.push([
+      p,
+      {
+        ...result,
+        head: result.head ?? entryHead
+      },
+      routes !== undefined || isEntry
+    ])
 
-    if (result.routes) {
-      stack.push(
-        ...Object.entries(result.routes).map<[string, unknown]>(
-          ([route, subPage]) => [path.join(p, route), subPage]
-        )
-      )
-    }
+    stack.push(...getRoutes(routes, p))
   }
 
   return contents

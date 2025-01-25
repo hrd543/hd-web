@@ -1,14 +1,7 @@
 import path from 'path'
 import { type WebSocket } from 'ws'
 import { buildDev, getPageBuilders, insertIntoIife } from './helpers.js'
-import {
-  buildScriptElements,
-  buildStyleElements,
-  getCssPathFromJs,
-  getHtmlFile,
-  getHtmlTemplate,
-  replaceHtml
-} from '../shared/html.js'
+import { buildHtml, getCssPathFromJs, getHtmlFilepath } from '../shared/html.js'
 import { buildFile } from '../shared/constants.js'
 import FileSystem from './filesystem.js'
 import { createDevServer, watch } from '@hd-web/dev-server'
@@ -22,7 +15,6 @@ import {
 
 const rebuild = async (
   config: BuildDevConfig,
-  htmlTemplate: string,
   filesystem: FileSystem,
   ws?: () => WebSocket | null
 ) => {
@@ -32,7 +24,7 @@ const rebuild = async (
   initialiseInteractions()
 
   const built = await buildDev(config)
-  const pages = await buildPages('', getPageBuilders(built.js))
+  const pages = await buildPages(getPageBuilders(built.js))
 
   // Write the js to the filesystem, adding in what we need.
   filesystem.write(
@@ -48,10 +40,10 @@ const rebuild = async (
     })
   }
 
-  pages.forEach(([p, content, is404]) => {
+  pages.forEach(([p, content, createFolder]) => {
     filesystem.write(
-      path.join(p, getHtmlFile(is404)),
-      replaceHtml(htmlTemplate, { body: content })
+      getHtmlFilepath(p, createFolder),
+      buildHtml(content, [buildFile], [getCssPathFromJs(buildFile)])
     )
   })
 
@@ -68,14 +60,9 @@ export const startDev = async (rawConfig: Partial<BuildDevConfig>) => {
 
   const entryDir = path.dirname(config.entry)
 
-  const htmlTemplate = replaceHtml(await getHtmlTemplate(entryDir), {
-    script: buildScriptElements([buildFile]),
-    css: buildStyleElements([getCssPathFromJs(buildFile)])
-  })
-
   const filesystem = new FileSystem()
-  await rebuild(config, htmlTemplate, filesystem)
+  await rebuild(config, filesystem)
   const getWs = createDevServer(config.port, filesystem)
 
-  await watch(entryDir, () => rebuild(config, htmlTemplate, filesystem, getWs))
+  await watch(entryDir, () => rebuild(config, filesystem, getWs))
 }

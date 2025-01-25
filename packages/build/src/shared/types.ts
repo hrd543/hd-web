@@ -1,23 +1,53 @@
-/** The return type of the Page function */
-export type PageReturn =
-  | {
-      body: string | null
-      content404?: string | null
-      routes?: Record<string, Page>
-    }
-  | string
+import { type JSX } from '@hd-web/jsx'
 
 /**
- * An hd-web equivalent of a functional component.
- * Should return the html content of a page and any sub
- * routes.
+ * The return type of the SubPage function.
  */
-export type Page = () => PageReturn | Promise<PageReturn>
+export type SubPage = Partial<Site> & Pick<Site, 'body' | 'title'>
+
+/**
+ * A subpage of your site.
+ *
+ * Contains information about each page with optional entries
+ * overwritten by the main Site function.
+ */
+export type SubPageFunction = () => SubPage | Promise<SubPage>
+
+/**
+ * The return type of the SiteFunction.
+ */
+export type Site = {
+  title: string
+  description?: string
+  body: JSX.Element
+  head: JSX.Element
+  // If this doesn't have any routes, we can just create about.html
+  /**
+   * Specify the subpages of this particular page.
+   */
+  routes?: Record<string, SubPageFunction>
+}
+
+/**
+ * The entry point for your hd-web app.
+ *
+ * Provides information about the content, metadata and subpages
+ * contained within the site.
+ */
+export type SiteFunction = () => Site | Promise<Site>
 
 /**
  * Only to be used internally.
  *
  * Contains the path and contents of a single page, as well
- * as whether it represents a 404 page.
+ * as whether the page needs a new folder or just a file.
+ *
+ * For example, if a page doesn't have any subroutes, it can
+ * be made into a `name.html` file rather than `index.html`
+ * within a name folder.
  */
-export type BuiltPage = [path: string, content: string, is404?: boolean]
+export type BuiltPage = [
+  path: string,
+  content: Exclude<Site, 'routes'>,
+  createFolder: boolean
+]

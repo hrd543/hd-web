@@ -15,8 +15,6 @@ export const validatePage = async (
     throw new Error(`Page at ${path} is not a function`)
   }
 
-  // before working out the page, we need to update it for the interactions
-  updateInteractionsPage(path)
   const result = await page()
 
   if (typeof result === 'string') {
@@ -56,6 +54,9 @@ export const buildPages = async (
   while (stack.length) {
     const [p, page] = stack.pop()!
 
+    // before working out the page, we need to update it
+    // for the interactions
+    updateInteractionsPage(p)
     const result = await validatePage(page, p)
 
     if (typeof result === 'string') {

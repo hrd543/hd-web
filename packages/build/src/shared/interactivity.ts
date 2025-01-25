@@ -50,7 +50,8 @@ const getCallbackName = <T>(callback: InteractHook<T>) => {
   return name
 }
 
-const addInteraction = (name: string, args: any, id: number) => {
+// exported for testing
+export const addInteraction = (name: string, args: any, id: number) => {
   globalThis._hdWeb.interactions.push({
     name,
     args,
@@ -146,16 +147,15 @@ export const defineInteractions = () => {
   )
 
   // Use a switch statement to check if the path matches our current page
-  let js = `
-    switch(window.location.pathname) {
-  `
+  let js = `switch(window.location.pathname) {`
 
   // Loop through each page and add specific case statements.
   for (const page in interactionsByPage) {
-    js += `case "${page}": {
-      ${interactionsByPage[page]!.map((int) => defineSingleInteraction(int)).join('')}
-      break
-    }`
+    const interactionString = interactionsByPage[page]!.map((int) =>
+      defineSingleInteraction(int)
+    ).join('')
+
+    js += `case "${page}": {${interactionString}break}`
   }
 
   // close the switch statement

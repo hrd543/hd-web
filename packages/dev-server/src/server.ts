@@ -8,6 +8,21 @@ type FileSystem = {
   read: (file: string) => any | Promise<any>
 }
 
+const getFilename = async (pathname: string, filesystem: FileSystem) => {
+  // If the path represents a flie, return it
+  if (await filesystem.exists(pathname)) {
+    return pathname
+  }
+
+  // Otherwise, check for "x.html" and then "x/index.html"
+  const filename = `${pathname.replace(/[\\/]$/, '')}.html`
+  if (await filesystem.exists(filename)) {
+    return filename
+  }
+
+  return path.join(pathname, 'index.html')
+}
+
 /**
  * Create a simple dev server. Don't use in production.
  * @param port The port at which the server will be used
@@ -34,9 +49,7 @@ export const createDevServer = (
 
     const pathname = path.normalize(parsedUrl.pathname)
 
-    const filename = (await filesystem.exists(pathname))
-      ? pathname
-      : path.join(pathname, 'index.html')
+    const filename = await getFilename(pathname, filesystem)
     const content = await filesystem.read(filename)
 
     if (!content) {

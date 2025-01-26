@@ -1,45 +1,38 @@
-// import assert from 'assert/strict'
-// import { describe, it } from 'node:test'
-// import { replaceHtml } from './html.js'
+import assert from 'assert/strict'
+import { describe, it } from 'node:test'
+import { buildHtml } from './html.js'
 
-// const hdWeb = (str: string) => `%hd-web-${str}%`
+describe('html', () => {
+  describe('buildHtml', () => {
+    it('should correctly add all elements to the html', () => {
+      assert.equal(
+        buildHtml(
+          {
+            title: 'henry',
+            description: 'my new site',
+            body: 'body',
+            head: 'head'
+          },
+          ['main.js'],
+          ['index.css']
+        ),
+        '<!DOCTYPE html><html><head><title>henry</title><meta name="description" content="my new site" />head<script type="module" src="/main.js"></script><link rel="stylesheet" href="/index.css" /></head><body>body</body></html>'
+      )
+    })
 
-// describe('replaceHtml', () => {
-//   it('should return the string if empty object', () => {
-//     const test = 'hello'
-//     assert.equal(test, replaceHtml(test, {}))
-//   })
-
-//   it('should replace one instance of hd-web', () => {
-//     const test = `hello there ${hdWeb('henry')}`
-//     assert.equal(
-//       'hello there Mr Henry',
-//       replaceHtml(test, {
-//         henry: 'Mr Henry'
-//       })
-//     )
-//   })
-
-//   it('should replace multiple instances of hd-web', () => {
-//     it('should replace one instance of hd-web', () => {
-//       const test = `hello there ${hdWeb('henry')}, aged ${hdWeb('age')}`
-//       assert.equal(
-//         'hello there Mr Henry, aged 25',
-//         replaceHtml(test, {
-//           henry: 'Mr Henry',
-//           age: '25'
-//         })
-//       )
-//     })
-//   })
-
-//   it('should throw if no occurence of replacement in string', () => {
-//     const test = `hello there`
-//     assert.throws(() => replaceHtml(test, { henry: 'Henry' }))
-//   })
-
-//   it('should throw if multiple occurences of replacement', () => {
-//     const test = `hello there ${hdWeb('henry')} ${hdWeb('henry')}`
-//     assert.throws(() => replaceHtml(test, { henry: 'henry' }))
-//   })
-// })
+    it('should leave out an empty description', () => {
+      assert.equal(
+        buildHtml(
+          {
+            title: 'henry',
+            body: 'body',
+            head: 'head'
+          },
+          ['main.js'],
+          ['index.css']
+        ),
+        '<!DOCTYPE html><html><head><title>henry</title>head<script type="module" src="/main.js"></script><link rel="stylesheet" href="/index.css" /></head><body>body</body></html>'
+      )
+    })
+  })
+})

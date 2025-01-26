@@ -15,7 +15,9 @@ export const buildHtml = (
     <html>
       <head>
         <title>{html.title}</title>
-        <meta name="description" content={html.description} />
+        {html.description ? (
+          <meta name="description" content={html.description} />
+        ) : null}
         {html.head}
         {scripts.map((script) => (
           <script type="module" src={`/${script}`} />

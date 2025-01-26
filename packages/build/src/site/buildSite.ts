@@ -1,5 +1,4 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
-import path from 'path'
 import url from 'url'
 import fs from 'fs/promises'
 import { type Adapter } from '@hd-web/adapters'
@@ -41,15 +40,12 @@ export const buildSite = async (
     await fs.cp(staticFolder, out, { recursive: true })
   }
 
-  const entryDir = path.dirname(entry)
-
   // Need to initialise any interactions before importing the components
   initialiseInteractions()
 
   const builtFiles = await bundleFirstPass(entry, out)
   const outFile = builtFiles.find((file) => file.isEntry)!.path
   const pages = await buildPages(
-    '',
     (await import(url.pathToFileURL(outFile).href)).default
   )
 
@@ -58,7 +54,7 @@ export const buildSite = async (
   await processJs(outFile)
 
   await Promise.all([
-    writeToHtml(pages, entryDir, out, builtFiles),
+    writeToHtml(pages, out, builtFiles),
     bundleFinalPass(outFile)
   ])
 

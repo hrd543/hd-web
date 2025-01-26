@@ -1,5 +1,6 @@
 import path from 'path'
 import { BuiltPage, Site, SubPage } from './types.js'
+import { updateInteractionsPage } from './interactivity.js'
 
 const validateString = (obj: any, key: string, path: string) => {
   if (!(key in obj) || typeof obj[key] !== 'string') {
@@ -71,6 +72,10 @@ export const buildPages = async (root: unknown): Promise<BuiltPage[]> => {
   while (stack.length) {
     const [p, page] = stack.pop()!
     const isEntry = p === ''
+
+    // before working out the page, we need to update it
+    // for the interactions
+    updateInteractionsPage(p)
 
     const { routes, ...result } = await validatePage(page, p)
 

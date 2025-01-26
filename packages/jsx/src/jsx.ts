@@ -34,7 +34,10 @@ export const Fragment = ({ children }: JSX.WithChildren): string => {
   }
 
   if (Array.isArray(children)) {
-    return children.reduce<string>((all, child) => all + (child ?? ''), '')
+    return children.reduce<string>(
+      (all, child) => all + Fragment({ children: child }),
+      ''
+    )
   }
 
   return children

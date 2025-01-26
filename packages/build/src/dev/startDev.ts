@@ -40,6 +40,7 @@ const rebuild = async (
     })
   }
 
+  // Finally write the page html files to the filesystem
   pages.forEach(([p, content, createFolder]) => {
     filesystem.write(
       getHtmlFilepath(p, createFolder),

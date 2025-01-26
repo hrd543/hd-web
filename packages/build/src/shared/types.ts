@@ -21,7 +21,6 @@ export type Site = {
   description?: string
   body: JSX.Element
   head: JSX.Element
-  // If this doesn't have any routes, we can just create about.html
   /**
    * Specify the subpages of this particular page.
    */

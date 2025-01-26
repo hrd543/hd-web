@@ -5,8 +5,8 @@ import { BuiltPage } from '../shared/types.js'
 import { BuiltFile } from './bundleJs.js'
 
 /**
- * Using the template at html.entry, replace its body with htmlBody
- * and link the style and script tags appropriately.
+ * Create all necessary html files for the build pages, including
+ * the styles, js and assets needed for the site.
  */
 export const writeToHtml = async (
   pages: BuiltPage[],

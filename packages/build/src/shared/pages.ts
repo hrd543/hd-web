@@ -17,7 +17,7 @@ const validateObject = (obj: any, message: string) => {
 // exported for testing
 /**
  * Run the page function (if it's a function) and make sure it matches the
- * schema for a PageReturn object
+ * schema for a page
  */
 export const validatePage = async (
   page: unknown,

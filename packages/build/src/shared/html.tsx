@@ -6,6 +6,10 @@ export const getCssPathFromJs = (jsPath: string) => {
   return jsPath.replace(/\.js$/, '.css')
 }
 
+/**
+ * Build the full html content given the site information and
+ * script/styling file locations.
+ */
 export const buildHtml = (
   html: Site,
   scripts: string[],
@@ -33,6 +37,12 @@ export const buildHtml = (
   return `<!DOCTYPE html>${main}`
 }
 
+/**
+ * Get the filepath for the html file created for pagePath.
+ *
+ * If createFolder is true, then uses `path/index.html`, otherwise,
+ * use path.html
+ */
 export const getHtmlFilepath = (pagePath: string, createFolder: boolean) => {
   if (createFolder) {
     return path.join(pagePath, 'index.html')

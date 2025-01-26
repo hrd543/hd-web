@@ -49,7 +49,7 @@ export const buildSite = async (
   const builtFiles = await bundleFirstPass(entry, out)
   const outFile = builtFiles.find((file) => file.isEntry)!.path
   const pages = await buildPages(
-    out,
+    '',
     (await import(url.pathToFileURL(outFile).href)).default
   )
 
@@ -58,7 +58,7 @@ export const buildSite = async (
   await processJs(outFile)
 
   await Promise.all([
-    writeToHtml(pages, entryDir, builtFiles),
+    writeToHtml(pages, entryDir, out, builtFiles),
     bundleFinalPass(outFile)
   ])
 

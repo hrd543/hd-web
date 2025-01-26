@@ -19,5 +19,9 @@ export type Page = () => PageReturn | Promise<PageReturn>
  *
  * Contains the path and contents of a single page, as well
  * as whether it represents a 404 page.
+ *
+ * Path will be relative to the url, so you may have
+ * example.com => ""
+ * example.com/about => "about"
  */
 export type BuiltPage = [path: string, content: string, is404?: boolean]

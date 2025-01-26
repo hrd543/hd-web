@@ -1,5 +1,6 @@
 import path from 'path'
 import { BuiltPage, PageReturn } from './types.js'
+import { updateInteractionsPage } from './interactivity.js'
 
 // exported for testing
 /**
@@ -53,6 +54,9 @@ export const buildPages = async (
   while (stack.length) {
     const [p, page] = stack.pop()!
 
+    // before working out the page, we need to update it
+    // for the interactions
+    updateInteractionsPage(p)
     const result = await validatePage(page, p)
 
     if (typeof result === 'string') {

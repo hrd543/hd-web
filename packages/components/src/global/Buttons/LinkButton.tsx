@@ -4,18 +4,18 @@ import './Button.css'
 import './LinkButton.css'
 
 export type LinkButtonProps = {
-  _key: string
+  link: string
   title: string
   type: ButtonType
 }
 
 export const LinkButton: JSX.FuncComponent<LinkButtonProps> = ({
-  _key,
+  link,
   title,
   type
 }) => {
   return (
-    <a href={`#${_key}`} class={`Button LinkButton Button--${type}`}>
+    <a href={link} class={`Button LinkButton Button--${type}`}>
       {title}
     </a>
   )

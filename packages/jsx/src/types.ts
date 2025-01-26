@@ -3,9 +3,11 @@ import type * as Css from 'csstype'
 
 export type Primitive = string | number | boolean | null | undefined
 export type Element = string | null
-export type Children = Element | Element[] | undefined
+export type Children = Element | Element[] | undefined | Children[]
 
-export type WithChildren<T = object> = T & { children?: Children }
+export type WithChildren<T = object> = T & {
+  children?: Children
+}
 export type HtmlAttributes = Html.AllAttributes
 export type CssProperties = Css.PropertiesHyphen & {
   // allow css variables

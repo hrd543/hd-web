@@ -9,6 +9,7 @@
   top: 0;
   grid-column-start: 1;
   grid-row-start: 1;
+  z-index: 2;
 }
 
 /* 
@@ -93,7 +94,6 @@ body {
     background-color: var(--_bg-colour);
     width: 100%;
     height: calc(100vh - var(--_height));
-    height: calc(100svh - var(--_height));
     justify-content: flex-start;
     gap: var(--sp-100);
     transition: left 0.5s ease;

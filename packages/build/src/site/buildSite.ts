@@ -54,7 +54,7 @@ export const buildSite = async (
   await processJs(outFile)
 
   await Promise.all([
-    writeToHtml(pages, out, builtFiles),
+    writeToHtml(pages, config, builtFiles),
     bundleFinalPass(outFile)
   ])
 

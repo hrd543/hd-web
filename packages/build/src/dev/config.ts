@@ -5,11 +5,14 @@ export type BuildDevConfig = {
   entry: string
   /** The port for the dev server */
   port: number
+  /** The language of your site, defaults to British English "en-GB" */
+  lang: string
 }
 
 const defaultBuildDevConfig: BuildDevConfig = {
   entry: 'src/index.tsx',
-  port: 8080
+  port: 8080,
+  lang: 'en-GB'
 }
 
 /**

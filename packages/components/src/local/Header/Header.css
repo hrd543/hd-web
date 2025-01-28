@@ -49,6 +49,9 @@ body {
 .hd-header_logo {
   font-weight: bold;
   font-size: var(--fs-600);
+  /* Remove the styling from the link element */
+  color: inherit;
+  text-decoration: none;
 }
 
 .hd-header_links {

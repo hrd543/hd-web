@@ -44,7 +44,12 @@ const rebuild = async (
   pages.forEach(([p, content, createFolder]) => {
     filesystem.write(
       getHtmlFilepath(p, createFolder),
-      buildHtml(content, [buildFile], [getCssPathFromJs(buildFile)])
+      buildHtml(
+        content,
+        config.lang,
+        [buildFile],
+        [getCssPathFromJs(buildFile)]
+      )
     )
   })
 

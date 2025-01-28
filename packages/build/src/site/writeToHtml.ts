@@ -3,6 +3,7 @@ import path from 'path'
 import { buildHtml, getHtmlFilepath } from '../shared/html.js'
 import { BuiltPage } from '../shared/types.js'
 import { BuiltFile } from './bundleJs.js'
+import { BuildSiteConfig } from './config.js'
 
 /**
  * Create all necessary html files for the build pages, including
@@ -10,7 +11,7 @@ import { BuiltFile } from './bundleJs.js'
  */
 export const writeToHtml = async (
   pages: BuiltPage[],
-  out: string,
+  { lang, out }: BuildSiteConfig,
   built: BuiltFile[]
 ) => {
   // Create directories for each page which needs it
@@ -30,6 +31,7 @@ export const writeToHtml = async (
         filepath,
         buildHtml(
           content,
+          lang,
           built
             .filter((file) => file.type === '.js')
             .map((file) => file.relativePath),

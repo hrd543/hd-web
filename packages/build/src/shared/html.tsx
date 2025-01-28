@@ -12,11 +12,12 @@ export const getCssPathFromJs = (jsPath: string) => {
  */
 export const buildHtml = (
   html: Site,
+  lang: string,
   scripts: string[],
   styles: string[]
 ): string => {
   const main: JSX.Element = (
-    <html>
+    <html lang={lang}>
       <head>
         <title>{html.title}</title>
         {html.description ? (

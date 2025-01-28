@@ -7,11 +7,14 @@ export type BuildSiteConfig = {
   out: string
   /** The folder containing any static files, like a favicon */
   staticFolder?: string
+  /** The language of your site, defaults to British English "en-GB" */
+  lang: string
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
   entry: 'src/index.tsx',
-  out: 'build'
+  out: 'build',
+  lang: 'en-GB'
 }
 
 /**

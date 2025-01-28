@@ -23,6 +23,12 @@
         "default": "./dist/local/index.js"
       }
     },
+    "./head": {
+      "import": {
+        "types": "./dist/head/index.d.ts",
+        "default": "./dist/head/index.js"
+      }
+    },
     "./global": {
       "import": {
         "types": "./dist/global/index.d.ts",

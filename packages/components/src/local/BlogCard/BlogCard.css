@@ -1,0 +1,39 @@
+.Card {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-200);
+
+  & > * {
+    flex: 1;
+  }
+
+  & .Card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-200);
+
+    & .Card__title {
+      flex-grow: 1;
+    }
+
+    & .Card__info {
+      font-size: var(--fs-100);
+      display: inline-flex;
+      gap: var(--sp-200);
+
+      & .Card__author {
+        color: var(--secondary-500);
+      }
+
+      & .Card__date {
+        color: var(--grey-600);
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .Card {
+    flex-direction: row-reverse;
+  }
+}

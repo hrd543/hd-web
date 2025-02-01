@@ -10,6 +10,10 @@
     color: inherit;
   }
 
+  & a:hover {
+    text-decoration: underline;
+  }
+
   /* Make the link cover the whole card */
   & a::after {
     content: '';

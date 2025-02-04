@@ -1,0 +1,14 @@
+& .BlogInfo {
+  font-size: var(--fs-100);
+  display: inline-flex;
+  gap: var(--sp-200);
+
+  & address {
+    color: var(--secondary-500);
+    font-style: normal;
+  }
+
+  & time {
+    color: var(--grey-600);
+  }
+}

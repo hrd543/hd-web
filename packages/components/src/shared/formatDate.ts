@@ -8,3 +8,15 @@ export const formatShortDate = (date: Date) =>
     day: 'numeric',
     month: 'short'
   })
+
+/**
+ * Format a date in a long format:
+ *
+ * 24 August 2024 for example.
+ */
+export const formatLongDate = (date: Date) =>
+  date.toLocaleDateString('en-gb', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  })

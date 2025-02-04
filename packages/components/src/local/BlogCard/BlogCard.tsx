@@ -1,4 +1,4 @@
-import { formatShortDate } from '../../shared/formatDate.js'
+import { BlogInfo } from '../BlogInfo/BlogInfo.js'
 import './BlogCard.css'
 
 import { type JSX } from '@hd-web/jsx'
@@ -26,10 +26,7 @@ export const BlogCard: JSX.FuncComponent<BlogCardProps> = ({
         <a href={link}>
           <h3 class="BlogCard__title">{title}</h3>
         </a>
-        <div class="BlogCard__info">
-          <p class="BlogCard__author">{author}</p>
-          <p class="BlogCard__date">{formatShortDate(date)}</p>
-        </div>
+        <BlogInfo date={date} author={author} />
       </div>
       <div class="BlogCard__thumbnail">
         <img src={thumbnailSrc} alt={thumbnailAlt} />

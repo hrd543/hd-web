@@ -37,20 +37,6 @@
     & .BlogCard__title {
       flex-grow: 1;
     }
-
-    & .BlogCard__info {
-      font-size: var(--fs-100);
-      display: inline-flex;
-      gap: var(--sp-200);
-
-      & .BlogCard__author {
-        color: var(--secondary-500);
-      }
-
-      & .BlogCard__date {
-        color: var(--grey-600);
-      }
-    }
   }
 }
 

@@ -1,4 +1,4 @@
-.Card {
+.BlogCard {
   display: flex;
   flex-direction: column-reverse;
   gap: var(--sp-200);
@@ -29,25 +29,25 @@
     flex: 1;
   }
 
-  & .Card__content {
+  & .BlogCard__content {
     display: flex;
     flex-direction: column;
     gap: var(--sp-200);
 
-    & .Card__title {
+    & .BlogCard__title {
       flex-grow: 1;
     }
 
-    & .Card__info {
+    & .BlogCard__info {
       font-size: var(--fs-100);
       display: inline-flex;
       gap: var(--sp-200);
 
-      & .Card__author {
+      & .BlogCard__author {
         color: var(--secondary-500);
       }
 
-      & .Card__date {
+      & .BlogCard__date {
         color: var(--grey-600);
       }
     }
@@ -55,7 +55,7 @@
 }
 
 @media (max-width: 800px) {
-  .Card {
+  .BlogCard {
     flex-direction: row-reverse;
   }
 }

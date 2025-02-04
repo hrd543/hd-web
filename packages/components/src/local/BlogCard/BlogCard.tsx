@@ -21,17 +21,17 @@ export const BlogCard: JSX.FuncComponent<BlogCardProps> = ({
   date
 }) => {
   return (
-    <article class="Card">
-      <div class="Card__content">
+    <article class="BlogCard">
+      <div class="BlogCard__content">
         <a href={link}>
-          <h3 class="Card__title">{title}</h3>
+          <h3 class="BlogCard__title">{title}</h3>
         </a>
-        <div class="Card__info">
-          <p class="Card__author">{author}</p>
-          <p class="Card__date">{formatShortDate(date)}</p>
+        <div class="BlogCard__info">
+          <p class="BlogCard__author">{author}</p>
+          <p class="BlogCard__date">{formatShortDate(date)}</p>
         </div>
       </div>
-      <div class="Card__thumbnail">
+      <div class="BlogCard__thumbnail">
         <img src={thumbnailSrc} alt={thumbnailAlt} />
       </div>
     </article>

@@ -46,15 +46,17 @@ export const bundleFirstPass = async (entry: string, out: string) => {
 /**
  * Remove the unused code in the outFile by rebuilding
  */
-export const bundleFinalPass = (outFile: string) =>
-  esbuild.build({
+export const bundleFinalPass = async (outFile: string) => {
+  await esbuild.build({
     ...defaultConfig,
-    // Don't bundle in this pass since we've already built,
-    // We just want to remove the unused code for the entry point
-    bundle: false,
+    // We don't want to actually bundle (hence everything is external)
+    // However, we need it to be true so that it removes dead code.
+    bundle: true,
+    external: ['*'],
     entryPoints: [outFile],
     outfile: outFile,
     format: 'esm',
     allowOverwrite: true,
     minify: true
   })
+}

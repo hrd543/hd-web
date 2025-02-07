@@ -1,11 +1,15 @@
+import { Image } from '../../global/index.js'
 import { BlogInfo } from '../BlogInfo/BlogInfo.js'
 import './BlogCard.css'
 
 import { type JSX } from '@hd-web/jsx'
 
 export type BlogCardProps = {
-  thumbnailSrc: string
-  thumbnailAlt: string
+  thumbnail: {
+    src: string
+    alt: string
+    srcMobile?: string
+  }
   title: string
   link: string
   author: string
@@ -13,8 +17,7 @@ export type BlogCardProps = {
 }
 
 export const BlogCard: JSX.FuncComponent<BlogCardProps> = ({
-  thumbnailSrc,
-  thumbnailAlt,
+  thumbnail,
   title,
   link,
   author,
@@ -28,9 +31,7 @@ export const BlogCard: JSX.FuncComponent<BlogCardProps> = ({
         </a>
         <BlogInfo date={date} author={author} />
       </div>
-      <div class="BlogCard__thumbnail">
-        <img src={thumbnailSrc} alt={thumbnailAlt} />
-      </div>
+      <Image {...thumbnail} ratio={16 / 9} />
     </article>
   )
 }

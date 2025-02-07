@@ -7,36 +7,7 @@
   color: var(--_font-colour);
   position: sticky;
   top: 0;
-  grid-column-start: 1;
-  grid-row-start: 1;
   z-index: 2;
-}
-
-/* 
-  Make sure the hero takes up 100svh - header height
-  without needing to explicitly know how tall the header is.
-  (Using vh as a fallback if svh isn't supported.)
-
-  See https://www.smashingmagazine.com/2024/09/sticky-headers-full-height-elements-tricky-combination/
- */
-body::before {
-  content: '';
-  height: 100vh;
-  height: 100svh;
-  grid-column: 1 / -1;
-  grid-row: 1 / span 2;
-}
-
-.hd-header + * {
-  grid-column-start: 1;
-  grid-row-start: 2;
-}
-
-body {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  /* Make sure content fits into the screen */
-  grid-template-columns: 100%;
 }
 
 .hd-header_container {

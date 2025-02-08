@@ -49,28 +49,47 @@ export const validatePage = async (
   return result
 }
 
-const getRoutes = (routes: Site['routes'], currentPath: string) => {
+type PageStack = [path: string, page: unknown, title: string]
+
+const getRoutes = (
+  routes: Site['routes'],
+  currentPath: string,
+  title: string
+) => {
   if (!routes) {
     return []
   }
 
-  return Object.entries(routes).map<[string, unknown]>(([route, subPage]) => [
+  return Object.entries(routes).map<PageStack>(([route, subPage]) => [
     path.join(currentPath, route),
-    subPage
+    subPage,
+    title
   ])
+}
+
+/** Sometimes we need to join each page's title together */
+const getTitle = (suffix: string, title: string, joinTitles: boolean) => {
+  if (!joinTitles || !suffix) {
+    return title
+  }
+
+  return `${title} | ${suffix}`
 }
 
 /**
  * Given a suspected page, root, try and recursively
  * build all the pages, making sure they are the correct type.
  */
-export const buildPages = async (root: unknown): Promise<BuiltPage[]> => {
-  const stack: Array<[string, unknown]> = [['', root]]
+export const buildPages = async (
+  root: unknown,
+  joinTitles: boolean
+): Promise<BuiltPage[]> => {
+  const stack: PageStack[] = [['', root, '']]
   const contents: BuiltPage[] = []
   let entryHead = ''
 
   while (stack.length) {
-    const [p, page] = stack.pop()!
+    const [p, page, titleSuffix] = stack.pop()!
     const isEntry = p === ''
 
     // before working out the page, we need to update it
@@ -83,16 +102,18 @@ export const buildPages = async (root: unknown): Promise<BuiltPage[]> => {
       entryHead = result.head!
     }
 
+    const title = getTitle(titleSuffix, result.title, joinTitles)
     contents.push([
       p,
       {
         ...result,
-        head: result.head ?? entryHead
+        head: result.head ?? entryHead,
+        title
       },
       routes !== undefined || isEntry
     ])
 
-    stack.push(...getRoutes(routes, p))
+    stack.push(...getRoutes(routes, p, title))
   }
 
   return contents

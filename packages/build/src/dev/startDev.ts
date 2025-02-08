@@ -24,7 +24,7 @@ const rebuild = async (
   initialiseInteractions()
 
   const built = await buildDev(config)
-  const pages = await buildPages(getPageBuilders(built.js))
+  const pages = await buildPages(getPageBuilders(built.js), config.joinTitles)
 
   // Write the js to the filesystem, adding in what we need.
   filesystem.write(

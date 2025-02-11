@@ -46,7 +46,8 @@ export const buildSite = async (
   const builtFiles = await bundleFirstPass(entry, out)
   const outFile = builtFiles.find((file) => file.isEntry)!.path
   const pages = await buildPages(
-    (await import(url.pathToFileURL(outFile).href)).default
+    (await import(url.pathToFileURL(outFile).href)).default,
+    config.joinTitles
   )
 
   // This needs to be done after the pages have been built so that

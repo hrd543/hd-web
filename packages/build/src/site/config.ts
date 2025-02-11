@@ -9,12 +9,15 @@ export type BuildSiteConfig = {
   staticFolder?: string
   /** The language of your site, defaults to British English "en-GB" */
   lang: string
+  /** Should the titles be joined */
+  joinTitles: boolean
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
   entry: 'src/index.tsx',
   out: 'build',
-  lang: 'en-GB'
+  lang: 'en-GB',
+  joinTitles: true
 }
 
 /**

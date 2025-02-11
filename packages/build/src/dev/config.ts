@@ -7,12 +7,15 @@ export type BuildDevConfig = {
   port: number
   /** The language of your site, defaults to British English "en-GB" */
   lang: string
+  /** Should the titles be joined */
+  joinTitles: boolean
 }
 
 const defaultBuildDevConfig: BuildDevConfig = {
   entry: 'src/index.tsx',
   port: 8080,
-  lang: 'en-GB'
+  lang: 'en-GB',
+  joinTitles: true
 }
 
 /**

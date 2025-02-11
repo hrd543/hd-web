@@ -1,0 +1,47 @@
+.BlogCard {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-200);
+  /* Needed to make the link cover the whole card */
+  position: relative;
+
+  & a {
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+  & a:hover {
+    text-decoration: underline;
+  }
+
+  /* Make the link cover the whole card */
+  & a::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+  }
+
+  & > * {
+    flex: 1;
+  }
+
+  & .BlogCard__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-200);
+
+    & .BlogCard__title {
+      flex-grow: 1;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .BlogCard {
+    flex-direction: row-reverse;
+  }
+}

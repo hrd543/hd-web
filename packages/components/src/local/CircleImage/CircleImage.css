@@ -1,0 +1,8 @@
+.CircleImage {
+  clip-path: circle(50%);
+
+  & img {
+    clip-path: circle(50%);
+    aspect-ratio: 1;
+  }
+}

@@ -4,7 +4,9 @@ html {
   color: var(--grey-300);
 }
 
-input {
+input,
+textarea,
+select {
   padding: var(--sp-100);
   border: 1px solid var(--grey-700);
   border-radius: 2px;
@@ -15,9 +17,11 @@ img {
 }
 
 input,
+textarea,
 label,
+select,
 p {
-  font-size: inherit;
+  font: inherit;
 }
 
 label {
@@ -63,6 +67,10 @@ button {
 
 section {
   padding: var(--sp-800) var(--page-padding);
+}
+
+section:first-of-type {
+  padding: var(--sp-500) var(--page-padding);
 }
 
 @media (max-width: 1200px) {

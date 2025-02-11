@@ -1,0 +1,12 @@
+/* Puts all items into a flex box with wrapping */
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-300);
+  align-items: center;
+
+  & > * {
+    /* This means the elements should wrap on mobile */
+    flex: 1 1 300px;
+  }
+}

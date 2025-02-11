@@ -1,6 +1,4 @@
-import { type JSX } from '@hd-web/jsx'
-
-export type ImageProps = JSX.IntrinsicElements['picture'] & {
+export type ImageProps = {
   src: string
   srcMobile?: string
   alt: string

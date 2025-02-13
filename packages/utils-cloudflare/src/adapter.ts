@@ -13,7 +13,7 @@ import type { Adapter } from '@hd-web/build'
  * You will end up with a worker at example.com/api
  */
 export const adapterCloudflare = (apiFolder = 'src/api'): Adapter => ({
-  after: async (out: string) => {
+  after: async ({ out }) => {
     // First delete the functions folder if it exists
     await fs.rm('functions', { recursive: true, force: true })
 

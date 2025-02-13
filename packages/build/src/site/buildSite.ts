@@ -1,12 +1,16 @@
 import { BuildSiteConfig, validateConfig } from './config.js'
 import url from 'url'
 import fs from 'fs/promises'
-import { type Adapter } from '@hd-web/adapters'
 import { processJs } from './processJs.js'
 import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
 import { writeToHtml } from './writeToHtml.js'
 import { buildPages } from '../shared/pages.js'
 import { initialiseInteractions } from '../shared/interactivity.js'
+import {
+  type Adapter,
+  runAfterAdapters,
+  runBeforeAdapters
+} from './adapters.js'
 
 /**
  * Create the html, css and js files for a site.
@@ -19,16 +23,14 @@ import { initialiseInteractions } from '../shared/interactivity.js'
  *
  * Will delete the contents of out before building!
  *
- * Supply an adapter to modify the build for a specific hosting provider.
+ * Supply adapters to modify the build for a specific hosting provider.
  */
 export const buildSite = async (
   rawConfig: Partial<BuildSiteConfig>,
-  adapter?: Adapter
+  adapters?: Adapter[]
 ) => {
   let config = validateConfig(rawConfig)
-  if (adapter?.before) {
-    config = await adapter.before(config)
-  }
+  config = await runBeforeAdapters(config, adapters)
 
   const { entry, out, staticFolder } = config
 
@@ -59,5 +61,5 @@ export const buildSite = async (
     bundleFinalPass(outFile)
   ])
 
-  await adapter?.after?.(out)
+  await runAfterAdapters(config, adapters)
 }

@@ -1,8 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import * as esbuild from 'esbuild'
-
-import { type Adapter } from '../shared/index.js'
+import type { Adapter } from '@hd-web/build'
 
 /**
  * Use this adapter to make your build compatible with cloudflare
@@ -10,8 +9,10 @@ import { type Adapter } from '../shared/index.js'
  * All functions located in apiFolder will be used as the "functions"
  * directory and run in a worker: they will be added to a functions
  * folder located at root.
+ *
+ * You will end up with a worker at example.com/api
  */
-const adapter = (apiFolder = 'src/api'): Adapter => ({
+export const adapterCloudflare = (apiFolder = 'src/api'): Adapter => ({
   after: async (out: string) => {
     // First delete the functions folder if it exists
     await fs.rm('functions', { recursive: true, force: true })
@@ -65,5 +66,3 @@ const adapter = (apiFolder = 'src/api'): Adapter => ({
     )
   }
 })
-
-export default adapter

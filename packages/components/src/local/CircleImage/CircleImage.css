@@ -1,8 +1,6 @@
-.CircleImage {
+.CircleImage > img {
   clip-path: circle(50%);
-
-  & img {
-    clip-path: circle(50%);
-    aspect-ratio: 1;
-  }
+  border: solid 4px black;
+  border-radius: 100%;
+  box-sizing: border-box;
 }

@@ -7,4 +7,5 @@ export type ImageProps = {
   /** Should the width or height determing the size. Defaults to w */
   dim?: 'w' | 'h' | null
   lazy?: boolean
+  clazz?: string
 }

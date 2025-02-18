@@ -9,7 +9,7 @@ export const Image: JSX.FuncComponent<ImageProps> = ({
   ratio,
   dim = 'w',
   lazy = true,
-  ...rest
+  clazz
 }) => {
   const imgSrc = srcMobile ?? src
   const sourceSrc = srcMobile ? src : undefined
@@ -19,7 +19,7 @@ export const Image: JSX.FuncComponent<ImageProps> = ({
   const width = height * ratio
 
   return (
-    <picture class="Image" {...rest}>
+    <picture class={`Image ${clazz ?? ''}`}>
       {sourceSrc ? (
         <source srcset={getImageSrc(sourceSrc)} media="(min-width: 800px)" />
       ) : null}

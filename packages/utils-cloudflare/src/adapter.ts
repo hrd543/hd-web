@@ -31,14 +31,12 @@ export const adapterCloudflare = (apiFolder = 'src/api'): Adapter => ({
 
         return ext === '.ts' || ext === '.js'
       })
+      .map((file) => path.join(file.parentPath, file.name))
 
-    // Now build each of these files and place them in the functions
-    // folder within outFolder.
-    // We place all functions within an api folder so that the request must
-    // be made to example.com/api/...
-    const files = contents.map((file) => path.join(file.parentPath, file.name))
+    // Now build each of these files into the functions/api folder.
+    // This means requests will be made to example.com/api/...
     await esbuild.build({
-      entryPoints: files,
+      entryPoints: contents,
       outdir: 'functions/api',
       target: 'esnext',
       format: 'esm',

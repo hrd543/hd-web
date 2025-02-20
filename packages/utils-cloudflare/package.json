@@ -1,0 +1,24 @@
+{
+  "name": "@hd-web/utils-cloudflare",
+  "version": "0.0.1",
+  "description": "A set of utilities to help building for cloudflare pages",
+  "scripts": {
+    "build": "npx @hd-web/build-package && tsc",
+    "test": "echo \"testing\""
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "peerDependencies": {
+    "@hd-web/build": "^0.0.4",
+    "esbuild": "^0.25.0"
+  },
+  "devDependencies": {
+    "@hd-web/build-package": "0.0.3",
+    "@cloudflare/workers-types": "^4.20250204.0"
+  },
+  "sideEffects": false,
+  "type": "module"
+}

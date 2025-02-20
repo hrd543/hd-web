@@ -36,21 +36,17 @@ export const adapterCloudflare = (apiFolder = 'src/api'): Adapter => ({
     // folder within outFolder.
     // We place all functions within an api folder so that the request must
     // be made to example.com/api/...
-    for (const file of contents) {
-      await esbuild.build({
-        entryPoints: [path.join(file.parentPath, file.name)],
-        outfile: path.join(
-          'functions/api',
-          path.relative(apiFolder, file.parentPath),
-          file.name
-        ),
-        target: 'esnext',
-        format: 'esm',
-        bundle: true,
-        minify: true,
-        treeShaking: true
-      })
-    }
+    const files = contents.map((file) => path.join(file.parentPath, file.name))
+    await esbuild.build({
+      entryPoints: files,
+      outdir: 'functions/api',
+      target: 'esnext',
+      format: 'esm',
+      platform: 'node',
+      bundle: true,
+      minify: true,
+      treeShaking: true
+    })
 
     // Finally we need to make a _routes.json file so that we only invoke
     // the worker for api calls.

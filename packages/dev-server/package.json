@@ -9,11 +9,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "ws": "^8.18.0"
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@hd-web/build-package": "0.0.3",
-    "@types/ws": "^8.5.13"
+    "@types/ws": "^8.5.14"
   },
   "files": [
     "/dist"

@@ -43,7 +43,8 @@ export const adapterCloudflare = (apiFolder = 'src/api'): Adapter => ({
       platform: 'node',
       bundle: true,
       minify: true,
-      treeShaking: true
+      treeShaking: true,
+      external: ['cloudflare:email']
     })
 
     // Finally we need to make a _routes.json file so that we only invoke

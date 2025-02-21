@@ -6,8 +6,20 @@
     "build": "npx @hd-web/build-package && tsc",
     "test": "echo \"testing\""
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "./adapter": {
+      "import": {
+        "types": "./dist/adapter.d.ts",
+        "default": "./dist/adapter.js"
+      }
+    },
+    "./workers": {
+      "import": {
+        "types": "./dist/workers/index.d.ts",
+        "default": "./dist/workers/index.js"
+      }
+    }
+  },
   "files": [
     "/dist"
   ],

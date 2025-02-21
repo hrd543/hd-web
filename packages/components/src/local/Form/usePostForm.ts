@@ -7,6 +7,7 @@ import { HdFormDetail, HdFormEvent } from './events.js'
 
 export type UsePostFormProps = {
   action: string
+  headers?: Record<string, string>
 }
 
 /**
@@ -21,7 +22,10 @@ export type UsePostFormProps = {
  * A hidden terms field with the name `"terms"` will be added in order to
  * check for bots.
  */
-export const usePostForm: InteractHook<UsePostFormProps> = (id, { action }) => {
+export const usePostForm: InteractHook<UsePostFormProps> = (
+  id,
+  { action, headers }
+) => {
   const container = getContainerElement(id, 'form') as HTMLElement
 
   let pageLoaded = Date.now()
@@ -81,6 +85,7 @@ export const usePostForm: InteractHook<UsePostFormProps> = (id, { action }) => {
     // Make the api call and dispatch the corresponding event
     const response = await fetch(action, {
       method: 'POST',
+      headers: new Headers(headers),
       body: formData
     })
 

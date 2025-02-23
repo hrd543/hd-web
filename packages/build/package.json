@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/build",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Build your hd-web site or start a dev server",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
@@ -12,12 +12,12 @@
     "/dist"
   ],
   "dependencies": {
-    "@hd-web/dev-server": "0.0.4",
-    "@hd-web/jsx": "^0.0.4",
+    "@hd-web/dev-server": "0.1.0",
+    "@hd-web/jsx": "^0.1.0",
     "esbuild": "^0.25.0"
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.0.3",
+    "@hd-web/build-package": "0.1.0",
     "@types/ws": "^8.5.14"
   },
   "sideEffects": false,

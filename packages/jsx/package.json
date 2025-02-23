@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/jsx",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Provides types and functionality to turn jsx into an html string.",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
@@ -17,7 +17,7 @@
     }
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.0.3",
+    "@hd-web/build-package": "0.1.0",
     "@michijs/htmltype": "^0.2.18",
     "csstype": "^3.1.3"
   },

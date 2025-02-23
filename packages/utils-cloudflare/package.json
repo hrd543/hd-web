@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/utils-cloudflare",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A set of utilities to help building for cloudflare pages",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
@@ -24,7 +24,7 @@
     "/dist"
   ],
   "peerDependencies": {
-    "@hd-web/build": "^0.0.6",
+    "@hd-web/build": "^0.1.0",
     "esbuild": "^0.25.0"
   },
   "devDependencies": {

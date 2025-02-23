@@ -1,6 +1,7 @@
 import './defaults.css'
 import './variables.css'
 import './utils.css'
+import './fonts.css'
 import { SiteFunction } from '@hd-web/build'
 import { Meta } from '@hd-web/components/head'
 import { NotFound } from '@hd-web/components/global'

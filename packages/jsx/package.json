@@ -17,7 +17,7 @@
     }
   },
   "devDependencies": {
-    "@hd-web/build-package": "0.1.0",
+    "@hd-web/build-package": "^0.1.0",
     "@michijs/htmltype": "^0.2.18",
     "csstype": "^3.1.3"
   },

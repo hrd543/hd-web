@@ -17,6 +17,7 @@ export const defaultConfig: BuildOptions = {
   loader: {
     '.jpg': 'file',
     '.webp': 'file',
-    '.png': 'file'
+    '.png': 'file',
+    '.woff2': 'file'
   }
 }

@@ -43,7 +43,7 @@
     "@hd-web/build-package": "0.0.3"
   },
   "peerDependencies": {
-    "@hd-web/build": "^0.0.5"
+    "@hd-web/build": "^0.0.6"
   },
   "sideEffects": false,
   "type": "module"

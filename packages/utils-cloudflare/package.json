@@ -24,7 +24,7 @@
     "/dist"
   ],
   "peerDependencies": {
-    "@hd-web/build": "^0.0.5",
+    "@hd-web/build": "^0.0.6",
     "esbuild": "^0.25.0"
   },
   "devDependencies": {

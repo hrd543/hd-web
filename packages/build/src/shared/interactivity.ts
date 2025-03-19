@@ -10,17 +10,10 @@ export const initialiseInteractions = () => {
 
 /**
  * In order to make it compatible with the location api, replace
- * any \ with / and add a leading / if not present.
+ * any \ with / and remove any leading/trailing /
  */
 const formatPage = (page: string) => {
-  // replace \ with /
-  const pageForwardSlash = page.replaceAll('\\', '/')
-
-  if (pageForwardSlash.startsWith('/')) {
-    return pageForwardSlash
-  }
-
-  return `/${pageForwardSlash}`
+  return page.replaceAll('\\', '/').replaceAll(/^\/|\/$/g, '')
 }
 
 /**
@@ -147,7 +140,8 @@ export const defineInteractions = () => {
   )
 
   // Use a switch statement to check if the path matches our current page
-  let js = `switch(window.location.pathname) {`
+  // Also removing any leading / trailing / (mimicking formatPage)
+  let js = `switch(window.location.pathname.replaceAll(/^\\/|\\/$/g, "")) {`
 
   // Loop through each page and add specific case statements.
   for (const page in interactionsByPage) {

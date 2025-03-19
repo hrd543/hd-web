@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/build",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build your hd-web site or start a dev server",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",

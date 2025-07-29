@@ -1,4 +1,4 @@
-import type * as JSX from './types.js'
+import type * as JSX from '../../types.js'
 
 export const stringifyStyle = (style: JSX.CssProperties): string => {
   let styleString = ' style="'

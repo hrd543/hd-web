@@ -1,6 +1,6 @@
 import assert from 'assert/strict'
 import { describe, it } from 'node:test'
-import { stringifyAttribute, stringifyStyle } from './stringify.js'
+import { stringifyAttribute, stringifyStyle } from './stringifyAttributes.js'
 
 describe('stringifyAttribute', () => {
   it('should stringify strings', () => {

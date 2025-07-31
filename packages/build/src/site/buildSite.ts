@@ -23,7 +23,7 @@ export const buildSite = async (
   await esbuild.build({
     target: 'esnext',
     entryPoints: ['./App2.tsx'],
-    outfile: 'main.js',
+    outdir: 'build',
     minify: true,
     format: 'esm',
     plugins: [hdPlugin(rawConfig, adapters)]

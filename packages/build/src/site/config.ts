@@ -1,3 +1,5 @@
+import * as esbuild from 'esbuild'
+
 import { mergeConfig } from '../shared/mergeConfig.js'
 
 export type BuildSiteConfig = {
@@ -7,6 +9,8 @@ export type BuildSiteConfig = {
   lang: string
   /** Should the titles be joined */
   joinTitles: boolean
+  /** Extra options to be passed into esbuild */
+  esbuildOptions?: esbuild.BuildOptions
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {

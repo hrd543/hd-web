@@ -1,4 +1,4 @@
-import { JSX } from '@hd-web/jsx'
+import { type JSX } from '@hd-web/jsx'
 
 export const client = <T extends JSX.BaseProps>(
   components: Map<string, JSX.IComponent<T>>

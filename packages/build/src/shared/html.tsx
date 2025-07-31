@@ -1,4 +1,4 @@
-import type { JSX } from '@hd-web/jsx'
+import { renderToString } from '@hd-web/jsx'
 import { Site } from './types.js'
 import path from 'path'
 
@@ -10,32 +10,36 @@ export const getCssPathFromJs = (jsPath: string) => {
  * Build the full html content given the site information and
  * script/styling file locations.
  */
-export const buildHtml = (
+export const buildHtmlHead = (
   html: Site,
-  lang: string,
   scripts: string[],
   styles: string[]
 ): string => {
-  const main: JSX.Element = (
-    <html lang={lang}>
-      <head>
-        <title>{html.title}</title>
-        {html.description ? (
-          <meta name="description" content={html.description} />
-        ) : null}
-        {html.head}
+  const main = (
+    <head>
+      <title>{html.title}</title>
+      {html.description ? (
+        <meta name="description" content={html.description} />
+      ) : null}
+      {html.head}
+      <>
         {scripts.map((script) => (
           <script type="module" src={`/${script}`} />
         ))}
+      </>
+      <>
         {styles.map((style) => (
           <link rel="stylesheet" href={`/${style}`} />
         ))}
-      </head>
-      <body>{html.body}</body>
-    </html>
+      </>
+    </head>
   )
 
-  return `<!DOCTYPE html>${main}`
+  return renderToString(main).html
+}
+
+export const buildHtml = (head: string, body: string, lang: string) => {
+  return `<!DOCTYPE html><html lang="${lang}">${head}<body>${body}</body></html>`
 }
 
 /**

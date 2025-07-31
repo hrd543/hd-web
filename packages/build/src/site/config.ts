@@ -1,10 +1,6 @@
 import { mergeConfig } from '../shared/mergeConfig.js'
 
 export type BuildSiteConfig = {
-  /** The file, relative to cwd, containing the pages */
-  entry: string
-  /** The directory, relative to cwd, in which the site will be built */
-  out: string
   /** The folder containing any static files, like a favicon */
   staticFolder?: string
   /** The language of your site, defaults to British English "en-GB" */
@@ -14,8 +10,6 @@ export type BuildSiteConfig = {
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
-  entry: 'src/index.tsx',
-  out: 'build',
   lang: 'en-GB',
   joinTitles: true
 }

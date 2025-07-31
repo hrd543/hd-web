@@ -1,6 +1,6 @@
 import path from 'path'
 import { BuiltPage, Site, SubPage } from './types.js'
-import { updateInteractionsPage } from './interactivity.js'
+import { JSX } from '@hd-web/jsx'
 
 const validateString = (obj: any, key: string, path: string) => {
   if (!(key in obj) || typeof obj[key] !== 'string') {
@@ -32,12 +32,13 @@ export const validatePage = async (
   const result = await page()
 
   validateObject(result, `Page at ${path} doesn't return a string or object`)
-  validateString(result, 'body', path)
+  // TODO: fix these
+  // validateString(result, 'body', path)
   validateString(result, 'title', path)
 
   // The entry point requires head
   if (initial) {
-    validateString(result, 'head', path)
+    // validateString(result, 'head', path)
   }
 
   if (!('routes' in result)) {
@@ -86,16 +87,11 @@ export const buildPages = async (
 ): Promise<BuiltPage[]> => {
   const stack: PageStack[] = [['', root, '']]
   const contents: BuiltPage[] = []
-  let entryHead = ''
+  let entryHead: JSX.Element
 
   while (stack.length) {
     const [p, page, titleSuffix] = stack.pop()!
     const isEntry = p === ''
-
-    // before working out the page, we need to update it
-    // for the interactions
-    updateInteractionsPage(p)
-
     const { routes, ...result } = await validatePage(page, p)
 
     if (isEntry) {
@@ -107,7 +103,7 @@ export const buildPages = async (
       p,
       {
         ...result,
-        head: result.head ?? entryHead,
+        head: result.head ?? entryHead!,
         title
       },
       routes !== undefined || isEntry

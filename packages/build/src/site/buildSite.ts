@@ -1,16 +1,7 @@
-import { BuildSiteConfig, validateConfig } from './config.js'
-import url from 'url'
-import fs from 'fs/promises'
-import { processJs } from './processJs.js'
-import { bundleFinalPass, bundleFirstPass } from './bundleJs.js'
-import { writeToHtml } from './writeToHtml.js'
-import { buildPages } from '../shared/pages.js'
-import { initialiseInteractions } from '../shared/interactivity.js'
-import {
-  type Adapter,
-  runAfterAdapters,
-  runBeforeAdapters
-} from './adapters.js'
+import { BuildSiteConfig } from './config.js'
+import * as esbuild from 'esbuild'
+import { type Adapter } from './adapters.js'
+import { hdPlugin } from './build.js'
 
 /**
  * Create the html, css and js files for a site.
@@ -29,37 +20,12 @@ export const buildSite = async (
   rawConfig: Partial<BuildSiteConfig>,
   adapters?: Adapter[]
 ) => {
-  let config = validateConfig(rawConfig)
-  config = await runBeforeAdapters(config, adapters)
-
-  const { entry, out, staticFolder } = config
-
-  // Delete the build folder
-  await fs.rm(out, { recursive: true, force: true })
-
-  // Copy over any static assets
-  if (staticFolder) {
-    await fs.cp(staticFolder, out, { recursive: true })
-  }
-
-  // Need to initialise any interactions before importing the components
-  initialiseInteractions()
-
-  const builtFiles = await bundleFirstPass(entry, out)
-  const outFile = builtFiles.find((file) => file.isEntry)!.path
-  const pages = await buildPages(
-    (await import(url.pathToFileURL(outFile).href)).default,
-    config.joinTitles
-  )
-
-  // This needs to be done after the pages have been built so that
-  // the custom elements contain all which are referenced.
-  await processJs(outFile)
-
-  await Promise.all([
-    writeToHtml(pages, config, builtFiles),
-    bundleFinalPass(outFile)
-  ])
-
-  await runAfterAdapters(config, adapters)
+  await esbuild.build({
+    target: 'esnext',
+    entryPoints: ['./App2.tsx'],
+    outfile: 'main.js',
+    minify: true,
+    format: 'esm',
+    plugins: [hdPlugin(rawConfig, adapters)]
+  })
 }

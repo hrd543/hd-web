@@ -1,6 +1,5 @@
 import { BuildSiteConfig } from './config.js'
 import * as esbuild from 'esbuild'
-import { type Adapter } from './adapters.js'
 import { hdPlugin } from './build.js'
 
 /**
@@ -16,16 +15,13 @@ import { hdPlugin } from './build.js'
  *
  * Supply adapters to modify the build for a specific hosting provider.
  */
-export const buildSite = async (
-  rawConfig: Partial<BuildSiteConfig>,
-  adapters?: Adapter[]
-) => {
+export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
   await esbuild.build({
     target: 'esnext',
     entryPoints: ['./App2.tsx'],
     outdir: 'build',
     minify: true,
     format: 'esm',
-    plugins: [hdPlugin(rawConfig, adapters)]
+    plugins: [hdPlugin(rawConfig)]
   })
 }

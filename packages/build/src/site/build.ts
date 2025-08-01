@@ -6,10 +6,10 @@ import path from 'path'
 import { writeToHtml } from './writeToHtml.js'
 import {
   getEntryPoint,
-  getHtml,
   getOutFolder,
   loopComponents,
-  readMetafile
+  readMetafile,
+  reduceMap
 } from './pluginHelpers.js'
 import url from 'url'
 import { getClientCode } from './client.js'
@@ -40,8 +40,8 @@ export const hdPlugin = (
         joinTitles
       )
 
-      const { map, html } = getHtml(pages)
-      const { imports, entries } = loopComponents(map)
+      const fullMap = reduceMap(pages.map(([, { components }]) => components))
+      const { imports, entries } = loopComponents(fullMap)
 
       await fs.writeFile(
         outFile,
@@ -52,25 +52,17 @@ export const hdPlugin = (
       )
 
       return {
-        warnings: [
-          {
-            pluginName: 'hd-plugin',
-            detail: {
-              html,
-              pages
-            }
-          }
-        ]
+        warnings: [{ pluginName: 'hd-plugin', detail: pages }]
       }
     })
 
     build.onEnd(async (result) => {
-      const { html, pages } = result.warnings.find(
+      const pages = result.warnings.find(
         (m) => m.pluginName === 'hd-plugin'
       )!.detail
       // Write the html files linking the built files.
       const files = readMetafile(result.metafile!, entry, out)
-      await writeToHtml(pages, config, files, html, out)
+      await writeToHtml(pages, config, files, out)
     })
 
     build.initialOptions.entryPoints = [outFile]

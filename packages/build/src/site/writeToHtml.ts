@@ -19,7 +19,6 @@ export const writeToHtml = async (
   pages: BuiltPage[],
   { lang }: BuildSiteConfig,
   built: BuiltFile[],
-  html: string[],
   out: string
 ) => {
   // Create directories for each page which needs it
@@ -32,11 +31,14 @@ export const writeToHtml = async (
   // Create the index.html files by replacing the template with the necessary
   // content and script locations
   await Promise.all(
-    pages.map(([p, content, createFolder], i) => {
-      const filepath = getHtmlFilepath(path.join(out, p), createFolder)
+    pages.map(([p, content, hasChildren], i) => {
+      const filepath = getHtmlFilepath(
+        path.join(out, p),
+        hasChildren || i === 0
+      )
 
       const head = buildHtmlHead(
-        content,
+        content.head,
         built
           .filter((file) => file.type === '.js')
           .map((file) => file.relativePath),
@@ -45,7 +47,7 @@ export const writeToHtml = async (
           .map((file) => file.relativePath)
       )
 
-      return fs.writeFile(filepath, buildHtml(head, html[i]!, lang))
+      return fs.writeFile(filepath, buildHtml(head, content.body, lang))
     })
   )
 }

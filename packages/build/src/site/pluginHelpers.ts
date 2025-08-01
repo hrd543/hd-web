@@ -1,8 +1,14 @@
 import * as esbuild from 'esbuild'
-import { renderToString } from '@hd-web/jsx'
-import { BuiltPage } from '../shared/types.js'
 import path from 'path'
 import { BuiltFile } from './writeToHtml.js'
+
+export const reduceMap = <K, V>(maps: Array<Map<K, V>>): Map<K, V> => {
+  return maps.reduce((full, map) => {
+    map.entries().forEach(([k, v]) => full.set(k, v))
+
+    return full
+  }, new Map<K, V>())
+}
 
 export const loopComponents = (components: Map<string, string>) => {
   const imports: string[] = []
@@ -17,24 +23,6 @@ export const loopComponents = (components: Map<string, string>) => {
   return {
     imports: imports.join(''),
     entries: '[' + entries.join(',') + ']'
-  }
-}
-
-export const getHtml = (
-  pages: BuiltPage[]
-): { map: Map<string, string>; html: string[] } => {
-  const all: Map<string, string> = new Map()
-  const html: string[] = []
-
-  pages.forEach(([, site]) => {
-    const { components, html: thisHtml } = renderToString(site.body)
-    components.entries().forEach((pair) => all.set(...pair))
-    html.push(thisHtml)
-  })
-
-  return {
-    html,
-    map: all
   }
 }
 

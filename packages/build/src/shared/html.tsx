@@ -1,5 +1,4 @@
 import { renderToString } from '@hd-web/jsx'
-import { Site } from './types.js'
 import path from 'path'
 
 export const getCssPathFromJs = (jsPath: string) => {
@@ -11,17 +10,13 @@ export const getCssPathFromJs = (jsPath: string) => {
  * script/styling file locations.
  */
 export const buildHtmlHead = (
-  html: Site,
+  head: string,
   scripts: string[],
   styles: string[]
 ): string => {
   const main = (
     <head>
-      <title>{html.title}</title>
-      {html.description ? (
-        <meta name="description" content={html.description} />
-      ) : null}
-      {html.head}
+      {head}
       <>
         {scripts.map((script) => (
           <script type="module" src={`/${script}`} />

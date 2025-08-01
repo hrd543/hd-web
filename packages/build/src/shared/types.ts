@@ -47,6 +47,10 @@ export type SiteFunction = () => Site | Promise<Site>
  */
 export type BuiltPage = [
   path: string,
-  content: Exclude<Site, 'routes'>,
-  createFolder: boolean
+  content: {
+    head: string
+    body: string
+    components: Map<string, string>
+  },
+  hasChildren: boolean
 ]

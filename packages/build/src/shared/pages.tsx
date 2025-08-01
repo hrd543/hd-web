@@ -1,6 +1,6 @@
 import path from 'path'
 import { BuiltPage, Site, SubPage } from './types.js'
-import { JSX } from '@hd-web/jsx'
+import { renderToString } from '@hd-web/jsx'
 
 const validateString = (obj: any, key: string, path: string) => {
   if (!(key in obj) || typeof obj[key] !== 'string') {
@@ -87,30 +87,40 @@ export const buildPages = async (
 ): Promise<BuiltPage[]> => {
   const stack: PageStack[] = [['', root, '']]
   const contents: BuiltPage[] = []
-  let entryHead: JSX.Element
+  // TODO This always defaults to the root, not its parent for example.
+  const entryHead = renderToString((root as Site).head).html
 
   while (stack.length) {
     const [p, page, titleSuffix] = stack.pop()!
-    const isEntry = p === ''
-    const { routes, ...result } = await validatePage(page, p)
+    const validated = await validatePage(page, p)
+    const title = getTitle(titleSuffix, validated.title, joinTitles)
+    const { html, components } = renderToString(validated.body)
+    const meta = buildMeta(title, validated.description)
+    const head = validated.head
+      ? renderToString(validated.head).html
+      : entryHead
 
-    if (isEntry) {
-      entryHead = result.head!
-    }
-
-    const title = getTitle(titleSuffix, result.title, joinTitles)
     contents.push([
       p,
       {
-        ...result,
-        head: result.head ?? entryHead!,
-        title
+        head: `${meta}${head}`,
+        body: html,
+        components
       },
-      routes !== undefined || isEntry
+      validated.routes !== undefined
     ])
 
-    stack.push(...getRoutes(routes, p, title))
+    stack.push(...getRoutes(validated.routes, p, title))
   }
 
   return contents
+}
+
+const buildMeta = (title: string, description?: string): string => {
+  return renderToString(
+    <>
+      <title>{title}</title>
+      {description ? <meta name="description" content={description} /> : null}
+    </>
+  ).html
 }

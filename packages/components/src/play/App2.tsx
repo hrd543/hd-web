@@ -1,21 +1,7 @@
-import { Template, Component } from '@hd-web/jsx'
-import Header from './Header.js'
 import { SiteFunction } from '@hd-web/build'
+import { Wrapper } from './Wrapper.js'
 
-const Logo = () => <div>henry</div>
-
-@Template({
-  render: () => (
-    <div>
-      <Header logo={<Logo />} items={[]} bgColour="" fontColour="" />
-      <span>yoyo</span>
-    </div>
-  )
-})
-class Wrapper extends Component {
-  init() {}
-}
-
+// For some reason, it thinks this is the component attached with the above template
 const A: SiteFunction = () => ({
   body: <Wrapper />,
   head: <div />,

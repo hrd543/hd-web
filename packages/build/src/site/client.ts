@@ -21,7 +21,7 @@ const getImports = (components: Map<string, string>) => {
   return components
     .entries()
     .toArray()
-    .map(([name, file]) => `import ${name} from "${file.slice(8)}"`)
+    .map(([name, file]) => `import {${name}} from "${file.slice(8)}"`)
     .join(';')
 }
 

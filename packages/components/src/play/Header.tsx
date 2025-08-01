@@ -48,7 +48,7 @@ export type HeaderProps = {
     )
   }
 })
-class Header extends Component<HeaderProps> {
+export class Header extends Component<HeaderProps> {
   private toggleMenu() {
     const links = this.refs.get('links')!
     const menu = this.refs.get('menu')!
@@ -74,5 +74,3 @@ class Header extends Component<HeaderProps> {
     }
   }
 }
-
-export default Header

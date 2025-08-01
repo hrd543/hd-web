@@ -33,8 +33,9 @@ export const hdPlugin = (
     let pages: BuiltPage[] = []
 
     build.onStart(async () => {
-      // Delete the build folder
-      // await fs.rm(out, { recursive: true, force: true })
+      // Reset the contents of the build folder.
+      await fs.rm(out, { recursive: true, force: true })
+      await fs.mkdir(out)
 
       const importPath = url.pathToFileURL(path.join(process.cwd(), entry)).href
       pages = await buildPages((await import(importPath)).default, joinTitles)

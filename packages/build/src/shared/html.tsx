@@ -1,10 +1,6 @@
 import { renderToString } from '@hd-web/jsx'
 import path from 'path'
 
-export const getCssPathFromJs = (jsPath: string) => {
-  return jsPath.replace(/\.js$/, '.css')
-}
-
 /**
  * Build the full html content given the site information and
  * script/styling file locations.
@@ -34,7 +30,14 @@ export const buildHtmlHead = (
 }
 
 export const buildHtml = (head: string, body: string, lang: string) => {
-  return `<!DOCTYPE html><html lang="${lang}">${head}<body>${body}</body></html>`
+  const html = (
+    <html lang={lang}>
+      {head}
+      <body>{body}</body>
+    </html>
+  )
+
+  return `<!DOCTYPE html>${renderToString(html).html}`
 }
 
 /**

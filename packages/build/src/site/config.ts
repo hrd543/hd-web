@@ -3,6 +3,7 @@ import * as esbuild from 'esbuild'
 import { mergeConfig } from '../shared/mergeConfig.js'
 
 export type BuildSiteConfig = {
+  dev: boolean
   /** The folder containing any static files, like a favicon */
   staticFolder?: string
   /** The language of your site, defaults to British English "en-GB" */
@@ -15,7 +16,8 @@ export type BuildSiteConfig = {
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
   lang: 'en-GB',
-  joinTitles: true
+  joinTitles: true,
+  dev: false
 }
 
 /**

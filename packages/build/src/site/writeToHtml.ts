@@ -23,7 +23,7 @@ export const writeToHtml = async (
   // Create directories for each page which needs it
   await Promise.all(
     pages
-      .filter(([, , createFolder]) => createFolder)
+      .filter(([, , hasChildren]) => hasChildren)
       .map(([p]) => fs.mkdir(path.join(out, p), { recursive: true }))
   )
 

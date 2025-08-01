@@ -1,3 +1,6 @@
+import { BuiltPage } from '../shared/types.js'
+import { reduceMap } from './pluginHelpers.js'
+
 const componentsVar = '__components'
 
 const getInitialiseCode = (mapEntries: string) => `
@@ -32,9 +35,10 @@ const getMapInit = (components: Map<string, string>) => {
   return '[' + entries + ']'
 }
 
-export const getClientCode = (components: Map<string, string>) => {
-  const imports = getImports(components)
-  const mapInit = getMapInit(components)
+export const getClientCode = (pages: BuiltPage[]) => {
+  const allComponents = reduceMap(pages.map(([, { components }]) => components))
+  const imports = getImports(allComponents)
+  const mapInit = getMapInit(allComponents)
 
   return `${imports}; ${getInitialiseCode(mapInit)}`
 }

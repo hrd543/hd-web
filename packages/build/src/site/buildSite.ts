@@ -22,6 +22,13 @@ export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
     outdir: 'build',
     minify: true,
     format: 'esm',
-    plugins: [hdPlugin(rawConfig)]
+    plugins: [hdPlugin(rawConfig)],
+    assetNames: '[name]-[hash]',
+    loader: {
+      '.jpg': 'file',
+      '.webp': 'file',
+      '.png': 'file',
+      '.woff2': 'file'
+    }
   })
 }

@@ -4,12 +4,7 @@ import { BuildSiteConfig, validateConfig } from './config.js'
 import { buildPages } from '../shared/pages.js'
 import path from 'path'
 import { writeToHtml } from './writeToHtml.js'
-import {
-  getEntryPoint,
-  getOutFolder,
-  readMetafile,
-  reduceMap
-} from './pluginHelpers.js'
+import { getEntryPoint, getOutFolder, readMetafile } from './pluginHelpers.js'
 import url from 'url'
 import { getClientCode } from './client.js'
 import { BuiltPage } from '../shared/types.js'
@@ -40,15 +35,17 @@ export const hdPlugin = (
       const importPath = url.pathToFileURL(path.join(process.cwd(), entry)).href
       pages = await buildPages((await import(importPath)).default, joinTitles)
 
-      const fullMap = reduceMap(pages.map(([, { components }]) => components))
-
-      await fs.writeFile(outFile, getClientCode(fullMap))
+      await fs.writeFile(outFile, getClientCode(pages))
     })
 
     build.onEnd(async (result) => {
       // Write the html files linking the built files.
       const files = readMetafile(result.metafile!, entry, out)
       await writeToHtml(pages, config, files, out)
+    })
+
+    build.onDispose(() => {
+      pages = []
     })
 
     build.initialOptions.entryPoints = [outFile]

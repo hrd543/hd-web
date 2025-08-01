@@ -12,6 +12,7 @@ import {
   readMetafile
 } from './pluginHelpers.js'
 import url from 'url'
+import { getClientCode } from './client.js'
 
 export const hdPlugin = (
   rawConfig: Partial<BuildSiteConfig>
@@ -33,53 +34,22 @@ export const hdPlugin = (
       // Delete the build folder
       // await fs.rm(out, { recursive: true, force: true })
 
-      console.log(1)
       const importPath = url.pathToFileURL(path.join(process.cwd(), entry)).href
-      console.log(importPath)
       const pages = await buildPages(
         (await import(importPath)).default,
         joinTitles
       )
 
-      console.log(2)
-
       const { map, html } = getHtml(pages)
       const { imports, entries } = loopComponents(map)
-
-      const clientFile = `export const client = <T extends JSX.BaseProps>(
-        components: Map<string, JSX.IComponent<T>>
-      ) => {
-        document
-          .querySelectorAll<HTMLElement | SVGElement>(\`[data-hd-id]\`)
-          .forEach((element) => {
-            const Comp = components.get(element.dataset.hdId ?? '')
-      
-            if (Comp) {
-              new Comp(element)
-            }
-          })
-      }`
-      const client = build.esbuild
-        .transformSync(clientFile, {
-          format: 'esm',
-          loader: 'ts',
-          target: 'esnext'
-        })
-        .code.replace(/export[^;]+;/, 'return client;')
-
-      console.log(3)
 
       await fs.writeFile(
         outFile,
         `
         ${imports}
-        const init = () => {${client}}
-
-        int(new Map(${entries}));
+        ${getClientCode(entries)}
       `
       )
-
-      console.log('here')
 
       return {
         warnings: [

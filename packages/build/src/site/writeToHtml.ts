@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { buildHtml, buildHtmlHead, getHtmlFilepath } from '../shared/html.js'
+import { buildHtml, addMetaToHead, getHtmlFilepath } from '../shared/html.js'
 import { BuiltPage } from '../shared/types.js'
 import { BuildSiteConfig } from './config.js'
 
@@ -37,8 +37,10 @@ export const writeToHtml = async (
         hasChildren || i === 0
       )
 
-      const head = buildHtmlHead(
+      const head = addMetaToHead(
         content.head,
+        content.title,
+        content.description,
         built
           .filter((file) => file.type === '.js')
           .map((file) => file.relativePath),

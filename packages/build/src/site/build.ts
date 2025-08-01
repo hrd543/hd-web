@@ -5,11 +5,11 @@ import { buildPages } from '../shared/pages.js'
 import path from 'path'
 import { writeToHtml } from './writeToHtml.js'
 import { getEntryPoint, getOutFolder, readMetafile } from './pluginHelpers.js'
-import url from 'url'
 import { getClientCode } from './client.js'
-import { BuiltPage } from '../shared/types.js'
+import { BuiltPage, SiteFunction } from '../shared/types.js'
 
 export const hdPlugin = (
+  site: SiteFunction,
   rawConfig: Partial<BuildSiteConfig>
 ): esbuild.Plugin => ({
   name: 'hd-plugin',
@@ -32,8 +32,7 @@ export const hdPlugin = (
       await fs.rm(out, { recursive: true, force: true })
       await fs.mkdir(out)
 
-      const importPath = url.pathToFileURL(path.join(process.cwd(), entry)).href
-      pages = await buildPages((await import(importPath)).default, joinTitles)
+      pages = await buildPages(site, joinTitles)
 
       await fs.writeFile(outFile, getClientCode(pages))
     })

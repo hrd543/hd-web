@@ -1,17 +1,21 @@
-import { renderToString } from '@hd-web/jsx'
+import { JSX, renderToString } from '@hd-web/jsx'
 import path from 'path'
 
 /**
- * Build the full html content given the site information and
- * script/styling file locations.
+ * Add the script and style files to the html head element, as well
+ * as meta tags for its title / description
  */
-export const buildHtmlHead = (
-  head: string,
+export const addMetaToHead = (
+  head: JSX.Element,
+  title: string,
+  description: string | undefined,
   scripts: string[],
   styles: string[]
 ): string => {
   const main = (
     <head>
+      <title>{title}</title>
+      {description ? <meta name="description" content={description} /> : null}
       {head}
       <>
         {scripts.map((script) => (
@@ -29,6 +33,9 @@ export const buildHtmlHead = (
   return renderToString(main).html
 }
 
+/**
+ * Build the full html content from its head and body
+ */
 export const buildHtml = (head: string, body: string, lang: string) => {
   const html = (
     <html lang={lang}>

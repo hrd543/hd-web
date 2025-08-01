@@ -1,6 +1,7 @@
 import { BuildSiteConfig } from './config.js'
 import * as esbuild from 'esbuild'
 import { hdPlugin } from './build.js'
+import { SiteFunction } from '../shared/types.js'
 
 /**
  * Create the html, css and js files for a site.
@@ -15,14 +16,17 @@ import { hdPlugin } from './build.js'
  *
  * Supply adapters to modify the build for a specific hosting provider.
  */
-export const buildSite = async (rawConfig: Partial<BuildSiteConfig>) => {
+export const buildSite = async (
+  site: SiteFunction,
+  rawConfig: Partial<BuildSiteConfig>
+) => {
   await esbuild.build({
     target: 'esnext',
     entryPoints: ['./App2.tsx'],
     outdir: 'build',
     minify: true,
     format: 'esm',
-    plugins: [hdPlugin(rawConfig)],
+    plugins: [hdPlugin(site, rawConfig)],
     assetNames: '[name]-[hash]',
     loader: {
       '.jpg': 'file',

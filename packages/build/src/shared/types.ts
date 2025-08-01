@@ -48,7 +48,9 @@ export type SiteFunction = () => Site | Promise<Site>
 export type BuiltPage = [
   path: string,
   content: {
-    head: string
+    head: JSX.Element
+    title: string
+    description?: string
     body: string
     components: Map<string, string>
   },

@@ -7,12 +7,12 @@ import { writeToHtml } from './writeToHtml.js'
 import {
   getEntryPoint,
   getOutFolder,
-  loopComponents,
   readMetafile,
   reduceMap
 } from './pluginHelpers.js'
 import url from 'url'
 import { getClientCode } from './client.js'
+import { BuiltPage } from '../shared/types.js'
 
 export const hdPlugin = (
   rawConfig: Partial<BuildSiteConfig>
@@ -30,36 +30,21 @@ export const hdPlugin = (
       await fs.cp(staticFolder, out, { recursive: true })
     }
 
+    let pages: BuiltPage[] = []
+
     build.onStart(async () => {
       // Delete the build folder
       // await fs.rm(out, { recursive: true, force: true })
 
       const importPath = url.pathToFileURL(path.join(process.cwd(), entry)).href
-      const pages = await buildPages(
-        (await import(importPath)).default,
-        joinTitles
-      )
+      pages = await buildPages((await import(importPath)).default, joinTitles)
 
       const fullMap = reduceMap(pages.map(([, { components }]) => components))
-      const { imports, entries } = loopComponents(fullMap)
 
-      await fs.writeFile(
-        outFile,
-        `
-        ${imports}
-        ${getClientCode(entries)}
-      `
-      )
-
-      return {
-        warnings: [{ pluginName: 'hd-plugin', detail: pages }]
-      }
+      await fs.writeFile(outFile, getClientCode(fullMap))
     })
 
     build.onEnd(async (result) => {
-      const pages = result.warnings.find(
-        (m) => m.pluginName === 'hd-plugin'
-      )!.detail
       // Write the html files linking the built files.
       const files = readMetafile(result.metafile!, entry, out)
       await writeToHtml(pages, config, files, out)

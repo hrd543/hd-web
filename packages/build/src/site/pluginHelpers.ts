@@ -10,22 +10,6 @@ export const reduceMap = <K, V>(maps: Array<Map<K, V>>): Map<K, V> => {
   }, new Map<K, V>())
 }
 
-export const loopComponents = (components: Map<string, string>) => {
-  const imports: string[] = []
-  const entries: string[] = []
-
-  components.entries().forEach(([name, file]) => {
-    // Get rid of the leading file:///
-    imports.push(`import ${name} from "${file.slice(8)}";`)
-    entries.push(`["${name}", ${name}]`)
-  })
-
-  return {
-    imports: imports.join(''),
-    entries: '[' + entries.join(',') + ']'
-  }
-}
-
 export const getEntryPoint = ({
   entryPoints
 }: esbuild.BuildOptions): string => {

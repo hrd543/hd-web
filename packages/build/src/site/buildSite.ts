@@ -22,7 +22,6 @@ export const buildSite = async (
 ) => {
   await esbuild.build({
     target: 'esnext',
-    entryPoints: ['./App2.tsx'],
     outdir: 'build',
     minify: true,
     format: 'esm',

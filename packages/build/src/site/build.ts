@@ -4,7 +4,7 @@ import { BuildSiteConfig, validateConfig } from './config.js'
 import { buildPages } from '../shared/pages.js'
 import path from 'path'
 import { writeToHtml } from './writeToHtml.js'
-import { getEntryPoint, getOutFolder, readMetafile } from './pluginHelpers.js'
+import { getOutFolder, readMetafile } from './pluginHelpers.js'
 import { getClientCode } from './client.js'
 import { BuiltPage, SiteFunction } from '../shared/types.js'
 
@@ -16,7 +16,6 @@ export const hdPlugin = (
   async setup(build) {
     const config = validateConfig(rawConfig)
     const { staticFolder, joinTitles } = config
-    const entry = getEntryPoint(build.initialOptions)
     const out = getOutFolder(build.initialOptions)
     const outFile = path.join(out, 'main.js')
 
@@ -39,7 +38,7 @@ export const hdPlugin = (
 
     build.onEnd(async (result) => {
       // Write the html files linking the built files.
-      const files = readMetafile(result.metafile!, entry, out)
+      const files = readMetafile(result.metafile!, out)
       await writeToHtml(pages, config, files, out)
     })
 

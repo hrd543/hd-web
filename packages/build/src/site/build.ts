@@ -7,7 +7,7 @@ import { writeToHtml } from './writeToHtml.js'
 import { getOutFolder, readMetafile } from './pluginHelpers.js'
 import { getClientCode } from './client.js'
 import { BuiltPage, SiteFunction } from '../shared/types.js'
-import ts from 'typescript'
+import { removeDecorators } from './removeDecorators.js'
 
 // You have to export your component from the file as its name otherwise it won't
 // work.
@@ -54,22 +54,8 @@ export const hdPlugin = (
 
     if (!config.dev) {
       build.onLoad({ filter: /\.tsx$/ }, async (args) => {
-        const inputCode = await fs.readFile(args.path, 'utf8')
-        const sourceFile = ts.createSourceFile(
-          args.path,
-          inputCode,
-          ts.ScriptTarget.Latest,
-          true,
-          ts.ScriptKind.TSX
-        )
-
-        const result = ts.transform(sourceFile, [transformer])
-
-        const printer = ts.createPrinter()
-        const outputCode = printer.printFile(result.transformed[0]!)
-
         return {
-          contents: outputCode,
+          contents: removeDecorators(await fs.readFile(args.path, 'utf8')),
           loader: 'tsx'
         }
       })
@@ -82,22 +68,3 @@ export const hdPlugin = (
     build.initialOptions.metafile = true
   }
 })
-
-const transformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
-  return (sourceFile) => {
-    const visitor = (node: ts.Node): ts.Node | undefined => {
-      // Do I need to check more information?
-      if (ts.isDecorator(node)) {
-        return
-      }
-
-      return ts.visitEachChild(node, visitor, context)
-    }
-
-    const sourceFileVisitor = (sourceFile: ts.SourceFile): ts.SourceFile => {
-      return ts.visitEachChild(sourceFile, visitor, context)
-    }
-
-    return ts.visitNode(sourceFile, sourceFileVisitor, ts.isSourceFile)
-  }
-}

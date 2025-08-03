@@ -1,6 +1,5 @@
-import * as esbuild from 'esbuild'
-
 export type BuildSiteConfig = {
+  /** Certain shortcuts can be taken if building for dev */
   dev: boolean
   /** The folder containing any static files, like a favicon */
   staticFolder?: string
@@ -8,14 +7,15 @@ export type BuildSiteConfig = {
   lang: string
   /** Should the titles be joined */
   joinTitles: boolean
-  /** Extra options to be passed into esbuild */
-  esbuildOptions?: esbuild.BuildOptions
+  /** The folder in which to place the built files */
+  out: string
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
   lang: 'en-GB',
   joinTitles: true,
-  dev: false
+  dev: false,
+  out: 'build'
 }
 
 /**

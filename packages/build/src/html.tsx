@@ -1,8 +1,8 @@
 import { JSX, renderToString } from '@hd-web/jsx'
 import path from 'path'
 import fs from 'fs/promises'
-import { BuiltPage } from './site/types.js'
-import { BuildSiteConfig } from '../site/config.js'
+import { BuiltPage } from './types.js'
+import { BuildSiteConfig } from './config.js'
 
 export type BuiltFile = {
   path: string
@@ -16,9 +16,8 @@ export type BuiltFile = {
  */
 export const writeToHtml = async (
   pages: BuiltPage[],
-  { lang }: BuildSiteConfig,
-  built: BuiltFile[],
-  out: string
+  { lang, out }: BuildSiteConfig,
+  built: BuiltFile[]
 ) => {
   // Create directories for each page which needs it
   await Promise.all(

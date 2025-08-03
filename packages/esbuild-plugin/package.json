@@ -1,0 +1,26 @@
+{
+  "name": "@hd-web/esbuild-plugin",
+  "version": "0.0.1",
+  "description": "Build an hd-web site using esbuild",
+  "scripts": {
+    "build": "npx @hd-web/build-package && tsc",
+    "test": "echo \"testing\""
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@hd-web/build": "^0.1.1"
+  },
+  "devDependencies": {
+    "@hd-web/build-package": "^0.1.0",
+    "esbuild": "^0.25.8"
+  },
+  "files": [
+    "/dist"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "keywords": [
+    "esbuild-plugin"
+  ]
+}

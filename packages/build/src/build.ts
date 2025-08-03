@@ -54,7 +54,9 @@ export const dispose = () => {}
  * Callback to be run when loading each tsx file
  */
 export const load = async (config: BuildSiteConfig, code: string) => {
-  if (!config.dev) {
-    await removeDecorators(code)
+  if (config.dev) {
+    return code
   }
+
+  return await removeDecorators(code)
 }

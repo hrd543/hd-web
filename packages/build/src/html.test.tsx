@@ -1,6 +1,6 @@
 import assert from 'assert/strict'
 import { describe, it } from 'node:test'
-import { addMetaToHead } from './site/html.js'
+import { addMetaToHead } from './html.js'
 
 describe('html', () => {
   describe('addMetaToHead', () => {

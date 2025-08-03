@@ -1,5 +1,12 @@
-import { BuiltPage } from './site/types.js'
-import { reduceMap } from './site/pluginHelpers.js'
+import { BuiltPage } from './types.js'
+
+const reduceMap = <K, V>(maps: Array<Map<K, V>>): Map<K, V> => {
+  return maps.reduce((full, map) => {
+    map.entries().forEach(([k, v]) => full.set(k, v))
+
+    return full
+  }, new Map<K, V>())
+}
 
 const componentsVar = '__components'
 

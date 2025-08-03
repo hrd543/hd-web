@@ -1,5 +1,5 @@
 import path from 'path'
-import { BuiltPage, Site, SiteFunction, SubPageFunction } from './types.js'
+import { BuiltPage, Site, SiteFunction, SubPageFunction } from './site/types.js'
 import { JSX, renderToString } from '@hd-web/jsx'
 
 type PageStack = [

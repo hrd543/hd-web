@@ -1,7 +1,5 @@
 import * as esbuild from 'esbuild'
 
-import { mergeConfig } from '../shared/mergeConfig.js'
-
 export type BuildSiteConfig = {
   dev: boolean
   /** The folder containing any static files, like a favicon */
@@ -28,4 +26,24 @@ export const validateConfig = (rawConfig: Partial<BuildSiteConfig>) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
   return config
+}
+
+const mergeConfig = <T extends Record<string, unknown>>(
+  partial: Partial<T>,
+  defaults: T
+): T => {
+  // First remove all undefineds since otherwise they'll
+  // overwrite
+  const partialCopy = { ...partial }
+  for (const rawKey in partialCopy) {
+    const key = rawKey as keyof T
+    if (partialCopy[key] === undefined) {
+      delete partialCopy[key]
+    }
+  }
+
+  return {
+    ...defaults,
+    ...partialCopy
+  }
 }

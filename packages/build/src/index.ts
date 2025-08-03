@@ -1,7 +1,2 @@
-export { buildSite } from './site/buildSite.js'
-export type {
-  Site,
-  SubPage,
-  SiteFunction,
-  SubPageFunction
-} from './shared/types.js'
+export { buildSite } from './buildSite.js'
+export type { Site, SubPage, SiteFunction, SubPageFunction } from './types.js'

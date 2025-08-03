@@ -1,5 +1,5 @@
-import { BuiltPage } from '../shared/types.js'
-import { reduceMap } from './pluginHelpers.js'
+import { BuiltPage } from './site/types.js'
+import { reduceMap } from './site/pluginHelpers.js'
 
 const componentsVar = '__components'
 

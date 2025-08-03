@@ -1,7 +1,7 @@
 import { BuildSiteConfig } from './config.js'
 import * as esbuild from 'esbuild'
 import { hdPlugin } from './build.js'
-import { SiteFunction } from '../shared/types.js'
+import { SiteFunction } from './site/types.js'
 
 /**
  * Create the html, css and js files for a site.

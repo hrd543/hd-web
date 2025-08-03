@@ -1,0 +1,115 @@
+import { JSX, renderToString } from '@hd-web/jsx'
+import path from 'path'
+import fs from 'fs/promises'
+import { BuiltPage } from './site/types.js'
+import { BuildSiteConfig } from '../site/config.js'
+
+export type BuiltFile = {
+  path: string
+  relativePath: string
+  type: string
+}
+
+/**
+ * Create all necessary html files for the build pages, including
+ * the styles, js and assets needed for the site.
+ */
+export const writeToHtml = async (
+  pages: BuiltPage[],
+  { lang }: BuildSiteConfig,
+  built: BuiltFile[],
+  out: string
+) => {
+  // Create directories for each page which needs it
+  await Promise.all(
+    pages
+      .filter(([, , hasChildren]) => hasChildren)
+      .map(([p]) => fs.mkdir(path.join(out, p), { recursive: true }))
+  )
+
+  // Create the index.html files by replacing the template with the necessary
+  // content and script locations
+  await Promise.all(
+    pages.map(([p, content, hasChildren], i) => {
+      const filepath = getHtmlFilepath(
+        path.join(out, p),
+        hasChildren || i === 0
+      )
+
+      const head = addMetaToHead(
+        content.head,
+        content.title,
+        content.description,
+        built
+          .filter((file) => file.type === '.js')
+          .map((file) => file.relativePath),
+        built
+          .filter((file) => file.type === '.css')
+          .map((file) => file.relativePath)
+      )
+
+      return fs.writeFile(filepath, buildHtml(head, content.body, lang))
+    })
+  )
+}
+
+/**
+ * Add the script and style files to the html head element, as well
+ * as meta tags for its title / description
+ */
+export const addMetaToHead = (
+  head: JSX.Element,
+  title: string,
+  description: string | undefined,
+  scripts: string[],
+  styles: string[]
+): string => {
+  const main = (
+    <head>
+      <title>{title}</title>
+      {description ? <meta name="description" content={description} /> : null}
+      {head}
+      <>
+        {scripts.map((script) => (
+          <script type="module" src={`/${script}`} />
+        ))}
+      </>
+      <>
+        {styles.map((style) => (
+          <link rel="stylesheet" href={`/${style}`} />
+        ))}
+      </>
+    </head>
+  )
+
+  return renderToString(main).html
+}
+
+/**
+ * Build the full html content from its head and body
+ */
+export const buildHtml = (head: string, body: string, lang: string) => {
+  const html = (
+    <html lang={lang}>
+      {head}
+      <body>{body}</body>
+    </html>
+  )
+
+  return `<!DOCTYPE html>${renderToString(html).html}`
+}
+
+/**
+ * Get the filepath for the html file created for pagePath.
+ *
+ * If createFolder is true, then uses `path/index.html`, otherwise,
+ * use path.html
+ */
+const getHtmlFilepath = (pagePath: string, createFolder: boolean) => {
+  if (createFolder) {
+    return path.join(pagePath, 'index.html')
+  }
+
+  // Replace any trailing slashes and add a .html extension
+  return pagePath.replace(/[\\/]$/, '') + '.html'
+}

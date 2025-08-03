@@ -1,13 +1,13 @@
 import * as esbuild from 'esbuild'
 import fs from 'fs/promises'
 import { BuildSiteConfig, validateConfig } from './config.js'
-import { buildPages } from '../shared/pages.js'
+import { buildPages } from './shared/pages.js'
 import path from 'path'
-import { writeToHtml } from './writeToHtml.js'
-import { getOutFolder, readMetafile } from './pluginHelpers.js'
+import { getOutFolder, readMetafile } from './site/pluginHelpers.js'
 import { getClientCode } from './client.js'
-import { BuiltPage, SiteFunction } from '../shared/types.js'
-import { removeDecorators } from './removeDecorators.js'
+import { BuiltPage, SiteFunction } from './site/types.js'
+import { removeDecorators } from './site/removeDecorators.js'
+import { writeToHtml } from './site/html.js'
 
 // You have to export your component from the file as its name otherwise it won't
 // work.

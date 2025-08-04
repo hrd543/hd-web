@@ -12,6 +12,8 @@
   "devDependencies": {
     "@hd-web/build": "^0.1.0",
     "@hd-web/jsx": "^0.1.0",
+    "@hd-web/esbuild-plugin": "^0.0.1",
+    "esbuild": "^0.25.8",
     "eslint": "^9.9.1",
     "@eslint/js": "^9.9.1",
     "prettier": "^3.3.3",

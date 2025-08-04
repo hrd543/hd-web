@@ -20,5 +20,4 @@ const App: SiteFunction = () => ({
   }
 })
 
-// It needs to be the default export in order to build
 export default App

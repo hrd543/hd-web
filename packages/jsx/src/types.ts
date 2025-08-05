@@ -90,10 +90,10 @@ export type BaseProps = {
 }
 
 export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
-// TODO: support Children as the return type here.
+
 export type FuncComponent<T extends BaseProps = BaseProps> = (
   props: Props<T>
-) => Node
+) => Children
 
 // Only props which start with _ are sent to the client.
 export type ClientPropKey = `_${string}`
@@ -105,3 +105,5 @@ type ClientKeys<T> = {
 export type ClientProps<T> = {
   [K in ClientKeys<T>]: string
 }
+
+export type * from '@michijs/htmltype'

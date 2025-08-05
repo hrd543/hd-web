@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/create",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Initialise a new npm project ready to work with hd-web",
   "bin": {
     "@hd-web/create": "dist/index.js"
@@ -16,5 +16,9 @@
     "/dist"
   ],
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
 }

@@ -16,6 +16,7 @@ export const MenuButton: JSX.FuncComponent<MenuButtonProps> = ({
       aria-haspopup="menu"
       aria-label="Open Navigation Menu"
       aria-expanded="false"
+      ref="menu"
     >
       <svg
         viewBox="0 0 100 100"

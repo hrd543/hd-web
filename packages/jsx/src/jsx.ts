@@ -1,46 +1,48 @@
-import type * as JSX from './types.js'
-import { stringifyAttributes } from './stringify.js'
-import { voidElements } from './constants.js'
+import type { ComponentWithRender } from './nodes/index.js'
+import type {
+  BaseProps,
+  Child,
+  Children,
+  FuncComponent,
+  Node,
+  Props
+} from './types.js'
 
-export const jsx = (
-  tag: string | JSX.FuncComponent | JSX.ClassComponent,
-  props: JSX.Props | JSX.WithChildren<JSX.HtmlAttributes> | null
-): string => {
-  // If the tag is a component, we need to check whether class or functional
-  if (typeof tag === 'function') {
-    // If a class, all we need to do is use the key as the tag,
-    // since the component will be dynamic and constructed at runtime
-    if ('key' in tag) {
-      return jsx(tag.key, props)
-    }
-
-    return tag((props ?? {}) as JSX.Props) ?? ''
+const convertChild = (children: Children | undefined): Child[] | undefined => {
+  if (!children) {
+    return
   }
 
-  const { children, ...rest } = (props ??
-    {}) as JSX.WithChildren<JSX.HtmlAttributes>
-  const stringified = `<${tag}${stringifyAttributes(rest)}`
-
-  if (voidElements.has(tag)) {
-    return stringified + ' />'
-  }
-
-  return `${stringified}>${Fragment({ children })}</${tag}>`
+  // @ts-expect-error Shouldn't happen in practice
+  return [children].flat(Infinity)
 }
 
-export const Fragment = ({ children }: JSX.WithChildren): string => {
-  if (!children) {
-    return ''
+export const jsx = <T extends BaseProps>(
+  tag: string | ComponentWithRender<T> | FuncComponent<T>,
+  props: Props<T>
+  // Don't support key for now
+): Node<T> => {
+  const { children, ...rest } = props
+
+  // If this is a functional component, treat it as a fragment
+  if (typeof tag === 'function' && !('render' in tag)) {
+    return {
+      tag: Fragment,
+      props: rest as T,
+      children: convertChild(tag(props))
+    }
   }
 
-  if (Array.isArray(children)) {
-    return children.reduce<string>(
-      (all, child) => all + Fragment({ children: child }),
-      ''
+  return {
+    tag,
+    props: rest as T,
+    children: convertChild(
+      typeof tag === 'string' ? children : tag.render(props)
     )
   }
-
-  return children
 }
 
+export const Fragment = 'FRAGMENT'
+
 export const jsxs = jsx
+export const jsxDEV = jsx

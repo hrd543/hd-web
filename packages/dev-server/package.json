@@ -19,5 +19,9 @@
     "/dist"
   ],
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
 }

@@ -7,17 +7,17 @@
     "dev": "tsx dev.ts"
   },
   "dependencies": {
-    "@hd-web/components": "^0.1.0"
+    "@hd-web/components": "^0.2.0"
   },
   "devDependencies": {
-    "@hd-web/build": "^0.1.0",
-    "@hd-web/jsx": "^0.1.0",
+    "@hd-web/build": "^0.2.0",
+    "@hd-web/jsx": "^0.2.0",
     "@hd-web/esbuild-plugin": "^0.0.1",
     "esbuild": "^0.25.8",
     "eslint": "^9.9.1",
     "@eslint/js": "^9.9.1",
     "prettier": "^3.3.3",
-    "typescript": "^5.5.4",
+    "typescript": "^5.9.2",
     "typescript-eslint": "^8.2.0",
     "tsx": "^4.17.0"
   },

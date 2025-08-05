@@ -8,8 +8,8 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "dependencies": {
-    "@hd-web/build": "^0.1.1"
+  "peerDependencies": {
+    "@hd-web/build": "^0.2.0"
   },
   "devDependencies": {
     "@hd-web/build-package": "^0.1.0",
@@ -22,5 +22,9 @@
   "type": "module",
   "keywords": [
     "esbuild-plugin"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
 }

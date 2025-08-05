@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A set of components and utilities for use in your hd-web project",
   "scripts": {
     "build": "npx @hd-web/build-package src dist \".+\\.css$\" && tsc",
@@ -37,14 +37,18 @@
     }
   },
   "dependencies": {
-    "@hd-web/jsx": "^0.1.0"
+    "@hd-web/jsx": "^0.2.0"
   },
   "devDependencies": {
     "@hd-web/build-package": "^0.1.0"
   },
   "peerDependencies": {
-    "@hd-web/build": "^0.1.0"
+    "@hd-web/build": "^0.2.0"
   },
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
 }

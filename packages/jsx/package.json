@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/jsx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Provides jsx for building sites with hd-web",
   "scripts": {
     "build": "npx @hd-web/build-package && tsc",
@@ -25,5 +25,9 @@
     "/dist"
   ],
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
 }

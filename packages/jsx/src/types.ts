@@ -32,7 +32,7 @@ export type Node<T extends BaseProps = BaseProps> = {
 export type Primitive = string | null
 export type Child = Node | Primitive
 export type Children = Child | Child[]
-export type Element = Node
+export type Element = Children
 
 export type WithChildren<T = object> = T & {
   children?: Children

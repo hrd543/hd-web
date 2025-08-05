@@ -7,10 +7,12 @@ const Logo = () => <div>henry</div>
   render: () => (
     <div>
       <Header logo={<Logo />} items={[]} bgColour="" fontColour="" />
-      <span>yoyo</span>
+      <span>georgey boy</span>
     </div>
   )
 })
 export class Wrapper extends Component {
-  init() {}
+  init() {
+    console.log('h')
+  }
 }

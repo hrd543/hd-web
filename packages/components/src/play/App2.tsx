@@ -5,7 +5,7 @@ import { Wrapper } from './Wrapper.js'
 const A: SiteFunction = () => ({
   body: <Wrapper />,
   head: <div />,
-  title: ''
+  title: 'new title 24'
 })
 
 export default A

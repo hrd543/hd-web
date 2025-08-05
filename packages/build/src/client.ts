@@ -25,11 +25,17 @@ document
 `
 
 const getImports = (components: Map<string, string>) => {
-  return components
-    .entries()
-    .toArray()
-    .map(([name, file]) => `import {${name}} from "${file.slice(8)}"`)
-    .join(';')
+  return (
+    components
+      .entries()
+      .toArray()
+      // This might need to be changed if I require from nodejs
+      .map(
+        ([name, file]) =>
+          `import {${name}} from "${file.replaceAll('\\', '/')}"`
+      )
+      .join(';')
+  )
 }
 
 const getMapInit = (components: Map<string, string>) => {

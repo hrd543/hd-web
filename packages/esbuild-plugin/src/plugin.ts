@@ -1,9 +1,4 @@
-import {
-  SiteFunction,
-  validateConfig,
-  type BuildSiteConfig,
-  Build
-} from '@hd-web/build'
+import { validateConfig, type BuildSiteConfig, Build } from '@hd-web/build'
 import * as esbuild from 'esbuild'
 import path from 'path'
 import fs from 'fs/promises'
@@ -15,7 +10,6 @@ type Unpromise<T extends Promise<any>> = T extends Promise<infer U> ? U : never
  * Create the html, css and js files for an hd-web site using esbuild
  */
 export const plugin = (
-  site: SiteFunction,
   rawConfig: Partial<BuildSiteConfig> = {}
 ): esbuild.Plugin => ({
   name: 'hd-web-plugin',
@@ -28,15 +22,16 @@ export const plugin = (
     let pages: Unpromise<ReturnType<typeof Build.start>> = []
 
     build.onStart(async () => {
-      pages = await Build.start(config, site)
+      pages = await Build.start(config)
     })
 
     build.onEnd(async (result) => {
       await Build.end(config, pages, readMetafile(result.metafile!, config.out))
     })
 
-    build.onDispose(() => {
+    build.onDispose(async () => {
       pages = []
+      await Build.dispose(config)
     })
 
     if (!config.dev) {

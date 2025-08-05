@@ -9,13 +9,16 @@ export type BuildSiteConfig = {
   joinTitles: boolean
   /** The folder in which to place the built files */
   out: string
+  /** The file which contains your App */
+  entry: string
 }
 
 const defaultBuildSiteConfig: BuildSiteConfig = {
   lang: 'en-GB',
   joinTitles: true,
   dev: false,
-  out: 'build'
+  out: 'build',
+  entry: 'src/index.tsx'
 }
 
 /**

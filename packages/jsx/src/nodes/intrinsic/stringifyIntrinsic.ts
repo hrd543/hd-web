@@ -4,6 +4,7 @@ import { RenderStackEntry, StringifyFunction } from '../types.js'
 import { convertPropsToClient } from '../shared/convertPropsToClient.js'
 import { closeIntrinsic, openIntrinsic } from './openAndCloseTag.js'
 import { serialiseListeners } from '../shared/listeners.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
 
 export const stringifyIntrinsic: StringifyFunction<Node & { tag: string }> = (
   entry
@@ -19,7 +20,10 @@ export const stringifyIntrinsic: StringifyFunction<Node & { tag: string }> = (
   return {
     entries: [
       ...(script ? [script] : []),
-      ...(children?.map<RenderStackEntry>((child) => [child, component]) ?? []),
+      ...(flattenChildren(children)?.map<RenderStackEntry>((child) => [
+        child,
+        component
+      ]) ?? []),
       [closeIntrinsic(tag), component]
     ],
     html: openIntrinsic(tag, modifiedProps)

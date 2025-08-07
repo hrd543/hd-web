@@ -1,4 +1,5 @@
 import { Component, JSX, Template } from '@hd-web/jsx'
+import { MenuButton } from './MenuButton.js'
 
 type HeaderItem = {
   link: string
@@ -43,6 +44,7 @@ export type HeaderProps = {
               </li>
             ))}
           </ul>
+          <MenuButton height={30} className="hd-header_menuButton" />
         </div>
       </nav>
     )

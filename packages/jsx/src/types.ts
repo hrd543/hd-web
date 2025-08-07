@@ -26,13 +26,12 @@ export type ComponentRenderFunction<T extends BaseProps = BaseProps> =
 export type Node<T extends BaseProps = BaseProps> = {
   tag: string | IComponent<T>
   props: T | null
-  children?: Child[]
+  children?: Children
 }
 
 export type Primitive = string | null
 export type Child = Node | Primitive
 export type Children = Child | Child[]
-export type Element = Children
 
 export type WithChildren<T = object> = T & {
   children?: Children
@@ -46,9 +45,6 @@ export type CssProperties = Css.PropertiesHyphen & {
   // allow css variables
   [x: `--${string}`]: string
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IntrinsicElements extends IntrinsicElementsMap {}
 
 type IntrinsicElementsMap = HtmlIntrinsicElementsMap & SvgIntrinsicElementsMap
 
@@ -72,15 +68,6 @@ type SvgIntrinsicElementsMap = {
       style?: CssProperties
     }
   >
-}
-
-export interface ElementChildrenAttribute {
-  children: object
-}
-
-// Used for class components to declare the props type
-export interface ElementAttributesProperty {
-  __props: unknown
 }
 
 export type BaseProps = {
@@ -107,3 +94,22 @@ export type ClientProps<T> = {
 }
 
 export type * from '@michijs/htmltype'
+
+// These are TS specific types within the JSX namespace to make
+// the typing work properly.
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IntrinsicElements extends IntrinsicElementsMap {}
+
+export interface ElementChildrenAttribute {
+  children: object
+}
+
+// Used for class components to declare the props type
+export interface ElementAttributesProperty {
+  __props: unknown
+}
+
+export type Element = Node
+
+export type ElementType = string | FuncComponent<any> | IComponent<any>

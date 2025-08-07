@@ -10,8 +10,8 @@ export type ComponentWithRender<
   T extends BaseProps = BaseProps,
   E extends DomElement = DomElement
 > = IComponent<T, E> & {
-  render: ComponentRenderFunction<T>
-  filepath: string
+  __render: ComponentRenderFunction<T>
+  __filepath: string
 }
 
 export function Template<
@@ -21,7 +21,7 @@ export function Template<
   const componentPath = callsites()[1]?.getFileName()
 
   return function (constructor: IComponent<T, E>) {
-    ;(constructor as ComponentWithRender<T, E>).render = render
-    ;(constructor as ComponentWithRender<T, E>).filepath = componentPath ?? ''
+    ;(constructor as ComponentWithRender<T, E>).__render = render
+    ;(constructor as ComponentWithRender<T, E>).__filepath = componentPath ?? ''
   }
 }

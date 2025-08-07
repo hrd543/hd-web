@@ -1,5 +1,6 @@
 import { IComponent, Node } from '../../types.js'
 import { idAttribute } from '../shared/constants.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
 import { ComponentWithRender } from './decorators.js'
 
@@ -8,13 +9,14 @@ export const stringifyComponent: StringifyFunction<
 > = (entry, components) => {
   const [{ tag, props, children }] = entry
   // TODO Make sure component name is unique here
-  components.set(tag.name, (tag as ComponentWithRender).filepath)
+  components.set(tag.name, (tag as ComponentWithRender).__filepath)
+  const flatChildren = flattenChildren(children)
 
-  if (!children || children.length !== 1) {
+  if (!flatChildren || flatChildren.length !== 1) {
     throw new Error(`Component ${tag.name} must have one child`)
   }
 
-  const child = children[0]!
+  const child = flatChildren[0]!
 
   if (typeof child === 'string' || typeof child.tag !== 'string') {
     throw new Error(`Component ${tag.name} must have an intrinsic child`)

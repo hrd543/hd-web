@@ -1,4 +1,5 @@
 import { Node } from '../../types.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
 
 export const Fragment = 'FRAGMENT'
@@ -9,6 +10,6 @@ export const stringifyFragment: StringifyFunction<Node & { tag: string }> = (
   const [{ children }, key] = entry
 
   return {
-    entries: children?.map((child) => [child, key])
+    entries: flattenChildren(children)?.map((child) => [child, key])
   }
 }

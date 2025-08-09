@@ -1,12 +1,10 @@
 import { BuildSiteConfig } from './config.js'
-import path from 'path'
 import fs from 'fs/promises'
 import { buildPages } from './pages.js'
-import { BuiltPage } from './types.js'
-import { getClientCode } from './client.js'
 import { BuiltFile, writeToHtml } from './html.js'
-import { removeDecorators } from './removeDecorators.js'
+import { transformBuiltJs } from './removeDecorators.js'
 import { importSite } from './importSite.js'
+import { getClientCode } from './client.js'
 
 const deleteFolder = async (folder: string) => {
   await fs.rm(folder, { recursive: true, force: true })
@@ -29,14 +27,8 @@ export const initialise = async ({ out, staticFolder }: BuildSiteConfig) => {
 /**
  * Callback to be run at the start of every build
  */
-export const start = async ({ out, joinTitles, entry }: BuildSiteConfig) => {
-  console.log('Building...')
-
-  const site = await importSite(entry)
-  const pages = await buildPages(site, joinTitles)
-  await fs.writeFile(path.join(out, 'main.js'), getClientCode(pages))
-
-  return pages
+export const start = async () => {
+  console.log('Bundling js...')
 }
 
 /**
@@ -44,28 +36,41 @@ export const start = async ({ out, joinTitles, entry }: BuildSiteConfig) => {
  */
 export const end = async (
   config: BuildSiteConfig,
-  pages: BuiltPage[],
-  files: BuiltFile[]
+  files: BuiltFile[],
+  /**
+   * Use this to do any last alterations to the js file.
+   *
+   * For example to remove dead code.
+   */
+  processJs: (code: string) => Promise<string>
 ) => {
+  console.log('Building html...')
+  // TODO: If we support splitting, this might need to change
+  const entry = files.find((f) => f.type === 'js')!.path
+
+  const site = await importSite(entry)
+  const pages = await buildPages(site, config.joinTitles)
   await writeToHtml(pages, config, files)
+
+  console.log('Processing js...')
+  const code = await fs.readFile(entry, { encoding: 'utf-8' })
+
+  await fs.writeFile(
+    entry,
+    await processJs(
+      transformBuiltJs(code, config.dev) + ';' + getClientCode(pages)
+    )
+  )
+
   console.log('Done')
 }
 
 /**
  * Callback to be run at the end of the very last build
  */
-export const dispose = async ({ out }: BuildSiteConfig) => {
-  await deleteFolder(out)
-  console.log('Disposed')
-}
-
-/**
- * Callback to be run when loading each tsx file
- */
-export const load = async (config: BuildSiteConfig, code: string) => {
-  if (config.dev) {
-    return code
+export const dispose = async ({ out, dev }: BuildSiteConfig) => {
+  if (dev) {
+    await deleteFolder(out)
   }
-
-  return await removeDecorators(code)
+  console.log('Disposed')
 }

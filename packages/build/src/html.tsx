@@ -7,7 +7,19 @@ import { BuildSiteConfig } from './config.js'
 export type BuiltFile = {
   path: string
   relativePath: string
-  type: string
+  type: 'css' | 'js' | 'file'
+}
+
+export const getFileType = (end: string): BuiltFile['type'] => {
+  if (end.endsWith('.js') || end.endsWith('.ts')) {
+    return 'js'
+  }
+
+  if (end.endsWith('.css')) {
+    return 'css'
+  }
+
+  return 'file'
 }
 
 /**
@@ -40,10 +52,10 @@ export const writeToHtml = async (
         content.title,
         content.description,
         built
-          .filter((file) => file.type === '.js')
+          .filter((file) => file.type === 'js')
           .map((file) => file.relativePath),
         built
-          .filter((file) => file.type === '.css')
+          .filter((file) => file.type === 'css')
           .map((file) => file.relativePath)
       )
 

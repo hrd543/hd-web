@@ -1,13 +1,22 @@
 import ts from 'typescript'
 
+// If I support more than esbuild, might need to change this file.
+
+export const transformBuiltJs = (code: string, dev: boolean) => {
+  if (dev) {
+    return code
+  }
+
+  return removeUnneededJs(code)
+}
+
 /**
- * Removes all decorators from the input code.
+ * Removes all decorators and exports from the input code.
  */
-export const removeDecorators = (input: string) => {
+const removeUnneededJs = (input: string) => {
   return ts.transpileModule(input, {
     transformers: { before: [transformer] },
     compilerOptions: {
-      jsx: ts.JsxEmit.Preserve,
       target: ts.ScriptTarget.Latest,
       module: ts.ModuleKind.ESNext
     }
@@ -17,8 +26,13 @@ export const removeDecorators = (input: string) => {
 const transformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
   return (sourceFile) => {
     const visitor = (node: ts.Node): ts.Node | undefined => {
-      // Do I need to check more information?
+      // TODO: Only remove hd-web decorators
       if (ts.isDecorator(node)) {
+        return
+      }
+
+      // Delete exports as well
+      if (ts.isExportDeclaration(node) || ts.isExportAssignment(node)) {
         return
       }
 

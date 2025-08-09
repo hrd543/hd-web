@@ -24,25 +24,11 @@ document
   })
 `
 
-const getImports = (components: Map<string, string>) => {
-  return (
-    components
-      .entries()
-      .toArray()
-      // This might need to be changed if I require from nodejs
-      .map(
-        ([name, file]) =>
-          `import {${name}} from "${file.replaceAll('\\', '/')}"`
-      )
-      .join(';')
-  )
-}
-
 const getMapInit = (components: Map<string, string>) => {
   const entries = components
-    .keys()
+    .entries()
     .toArray()
-    .map((name) => `["${name}", ${name}]`)
+    .map(([name, variable]) => `["${name}", ${variable}]`)
     .join(',')
 
   return '[' + entries + ']'
@@ -50,8 +36,7 @@ const getMapInit = (components: Map<string, string>) => {
 
 export const getClientCode = (pages: BuiltPage[]) => {
   const allComponents = reduceMap(pages.map(([, { components }]) => components))
-  const imports = getImports(allComponents)
   const mapInit = getMapInit(allComponents)
 
-  return `${imports}; ${getInitialiseCode(mapInit)}`
+  return getInitialiseCode(mapInit)
 }

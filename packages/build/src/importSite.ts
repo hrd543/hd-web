@@ -1,21 +1,14 @@
-import { createRequire } from 'module'
 import url from 'url'
-import path from 'path'
+import fs from 'fs/promises'
 
 export const importSite = async (entry: string) => {
-  const req = createRequire(import.meta.url)
-  clearRequireCache(req, entry)
+  // We need the site to be interpreted as ts for decorators.
+  const entryTs = entry.replace('.js', '.ts')
+  await fs.rename(entry, entryTs)
 
-  return req(url.pathToFileURL(entry).href).default
-}
+  const site = (await import(url.pathToFileURL(entry).href)).default
 
-export const clearRequireCache = (require: NodeJS.Require, entry: string) => {
-  const fullPath = path.resolve(process.cwd(), entry)
-  const folder = path.dirname(fullPath)
+  await fs.rename(entryTs, entry)
 
-  for (const key in require.cache) {
-    if (key.startsWith(folder)) {
-      delete require.cache[key]
-    }
-  }
+  return site
 }

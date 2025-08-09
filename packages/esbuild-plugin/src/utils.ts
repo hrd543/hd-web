@@ -2,6 +2,18 @@ import { type BuiltFile } from '@hd-web/build'
 import * as esbuild from 'esbuild'
 import path from 'path'
 
+const getFileType = (end: string): BuiltFile['type'] => {
+  if (end.endsWith('.js') || end.endsWith('.ts')) {
+    return 'js'
+  }
+
+  if (end.endsWith('.css')) {
+    return 'css'
+  }
+
+  return 'file'
+}
+
 export const readMetafile = (
   metafile: esbuild.Metafile,
   out: string
@@ -10,7 +22,7 @@ export const readMetafile = (
     all.push({
       path: file,
       relativePath: path.relative(out, file),
-      type: path.extname(file)
+      type: getFileType(path.extname(file))
     })
 
     return all

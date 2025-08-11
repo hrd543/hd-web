@@ -27,6 +27,11 @@ export const watch = async (
   const watcher = fs.watch(dir, { recursive: true })
 
   for await (const event of watcher) {
-    await handleChange(event.filename)
+    try {
+      await handleChange(event.filename)
+    } catch (e: unknown) {
+      console.error('An error occurred:')
+      console.error(e)
+    }
   }
 }

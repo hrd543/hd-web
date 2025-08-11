@@ -59,6 +59,10 @@ export const writeToHtml = async (
           .map((file) => file.relativePath)
       )
 
+      if (p === '') {
+        console.log(content.body)
+      }
+
       return fs.writeFile(filepath, buildHtml(head, content.body, lang))
     })
   )

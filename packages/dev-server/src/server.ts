@@ -1,12 +1,7 @@
 import http from 'http'
 import path from 'path'
-import { WebSocketServer, type WebSocket } from 'ws'
 import { mimeTypes } from './mimeTypes.js'
-
-type FileSystem = {
-  exists: (file: string) => boolean | Promise<boolean>
-  read: (file: string) => any | Promise<any>
-}
+import { FileSystem } from './filesystem.js'
 
 const getFilename = async (pathname: string, filesystem: FileSystem) => {
   // If the path represents a flie, return it
@@ -36,7 +31,7 @@ export const createDevServer = (
   port: number,
   filesystem: FileSystem,
   filename404 = '404.html'
-): (() => WebSocket | null) => {
+): http.Server => {
   const server = http.createServer(async (req, res) => {
     if (!req.url) {
       return
@@ -71,14 +66,9 @@ export const createDevServer = (
     }
   })
 
-  const wsServer = new WebSocketServer({ server })
-  let ws: WebSocket | null = null
-
-  wsServer.on('connection', (_ws) => {
-    ws = _ws
-  })
-
   server.listen(port)
 
-  return () => ws
+  process.on('SIGINT', () => server.close())
+
+  return server
 }

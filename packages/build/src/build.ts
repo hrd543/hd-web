@@ -2,7 +2,7 @@ import { BuildSiteConfig } from './config.js'
 import fs from 'fs/promises'
 import { buildPages } from './pages.js'
 import { BuiltFile, writeToHtml } from './html.js'
-import { transformBuiltJs } from './removeDecorators.js'
+import { removeUnneededJs } from './removeDecorators.js'
 import { importSite } from './importSite.js'
 import { getClientCode } from './client.js'
 
@@ -57,9 +57,7 @@ export const end = async (
 
   await fs.writeFile(
     entry,
-    await processJs(
-      transformBuiltJs(code, config.dev) + ';' + getClientCode(pages)
-    )
+    await processJs(removeUnneededJs(code) + ';' + getClientCode(pages))
   )
 
   console.log('Done')

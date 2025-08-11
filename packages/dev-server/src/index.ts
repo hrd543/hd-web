@@ -1,2 +1,3 @@
 export { watch } from './watch.js'
 export { createDevServer } from './server.js'
+export * from './filesystem.js'

@@ -2,18 +2,10 @@ import ts from 'typescript'
 
 // If I support more than esbuild, might need to change this file.
 
-export const transformBuiltJs = (code: string, dev: boolean) => {
-  if (dev) {
-    return code
-  }
-
-  return removeUnneededJs(code)
-}
-
 /**
  * Removes all decorators and exports from the input code.
  */
-const removeUnneededJs = (input: string) => {
+export const removeUnneededJs = (input: string) => {
   return ts.transpileModule(input, {
     transformers: { before: [transformer] },
     compilerOptions: {

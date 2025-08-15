@@ -1,9 +1,4 @@
-import {
-  BaseProps,
-  ClientProps,
-  DomElement,
-  IComponentInstance
-} from '../../types.js'
+import { BaseProps, ClientProps, DomElement } from '../../types.js'
 import { getPropsFromScript } from '../shared/getPropsFromScript.js'
 import { parseListeners } from '../shared/listeners.js'
 import { traverse } from './traverse.js'
@@ -11,8 +6,7 @@ import { traverse } from './traverse.js'
 export abstract class Component<
   T extends BaseProps = BaseProps,
   E extends DomElement = DomElement
-> implements IComponentInstance<T>
-{
+> {
   protected readonly props: ClientProps<T>
   // TODO this is a strong reference, check if memory issues.
   // I should probably add some way of deleting this class
@@ -43,11 +37,6 @@ export abstract class Component<
         })
       }
     })
-  }
-
-  /** DO NOT USE - INTERNAL ONLY */
-  get __props(): T {
-    throw "Don't use __props"
   }
 
   // I could add a dispatch / listen method to each component class.

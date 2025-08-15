@@ -4,6 +4,7 @@ import { stringifyComponent } from './component/stringifyComponent.js'
 import { stringifyFragment } from './fragment/fragment.js'
 import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
 import {
+  ComponentInfo,
   RenderStackEntry,
   RenderToStringOutput,
   StringifyFunction
@@ -11,7 +12,7 @@ import {
 import { isNode } from './utils.js'
 
 export const renderToString = (root: Node): RenderToStringOutput => {
-  const components = new Map<string, string>()
+  const components: ComponentInfo[] = []
 
   let fullHtml = ''
   const stack: RenderStackEntry[] = [[root, null]]

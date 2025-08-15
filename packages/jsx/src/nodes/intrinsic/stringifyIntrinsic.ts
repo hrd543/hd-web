@@ -14,7 +14,7 @@ export const stringifyIntrinsic: StringifyFunction<Node & { tag: string }> = (
 
   const script = addPropsScript(clientProps)
 
-  processListener(modifiedProps, component)
+  processListener(modifiedProps, component?.client)
   processRef(modifiedProps)
 
   return {
@@ -47,7 +47,10 @@ const addPropsScript = (
   }
 }
 
-const processListener = (props: BaseProps, component: IComponent | null) => {
+const processListener = (
+  props: BaseProps,
+  component: IComponent | undefined
+) => {
   const listeners: ComponentListener[] = []
   for (const propKey in props) {
     if (propKey.startsWith('$')) {

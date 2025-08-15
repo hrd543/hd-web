@@ -1,4 +1,4 @@
-import { BaseProps, Child, IComponent } from '../types.js'
+import { BaseProps, Child, FuncComponent } from '../types.js'
 
 type StringifyResult = {
   entries?: RenderStackEntry[]
@@ -8,11 +8,16 @@ type StringifyResult = {
 export type RenderStackEntry<
   T extends Child = Child,
   P extends BaseProps = BaseProps
-> = [element: T, component: IComponent<P> | null, props?: P | null]
+> = [element: T, component: FuncComponent<P> | null, props?: P | null]
+
+export type ComponentInfo = {
+  filename: string
+  key: string
+}
 
 export type StringifyFunction<T extends Child = Child> = (
   entry: RenderStackEntry<T>,
-  components: Map<string, string>
+  components: ComponentInfo[]
 ) => StringifyResult
 
 export type RenderToStringOutput = {
@@ -21,7 +26,7 @@ export type RenderToStringOutput = {
    *
    * Keyed by its id
    */
-  components: Map<string, string>
+  components: ComponentInfo[]
   /**
    * The html to be rendered in the body
    */

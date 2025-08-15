@@ -1,9 +1,9 @@
 // This currently only works if the refs are within the component, so
+// they can't be passed down to stateful children.
 
 import { DomElement } from '../../types.js'
 import { idAttribute } from '../shared/constants.js'
 
-// they can't be passed down to stateful children.
 export const traverse = (
   root: Element | null,
   process: (element: DomElement) => void

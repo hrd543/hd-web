@@ -5,28 +5,20 @@ export type ComponentListener = [event: string, method: string]
 
 export type DomElement = SVGElement | HTMLElement
 
-export interface IComponentInstance<T extends BaseProps = BaseProps> {
-  /** DO NOT USE - INTERNAL ONLY */
-  __props: T
+export interface IComponent<E extends DomElement = DomElement> {
+  new (element: E): object
+  key: string
 }
-
-export interface IComponent<
-  T extends BaseProps = BaseProps,
-  E extends DomElement = DomElement
-> {
-  new (element: E): IComponentInstance<T>
-}
-
-export type ComponentRenderFunction<T extends BaseProps = BaseProps> =
-  FuncComponent<T>
 
 /**
  * Internal representation of an element
  */
 export type Node<T extends BaseProps = BaseProps> = {
-  tag: string | IComponent<T>
+  tag: string | FuncComponent<T>
   props: T | null
   children?: Children
+  // only used in dev
+  filename?: string
 }
 
 export type Primitive = string | null
@@ -78,9 +70,10 @@ export type BaseProps = {
 
 export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
 
-export type FuncComponent<T extends BaseProps = BaseProps> = (
-  props: Props<T>
-) => Children
+export interface FuncComponent<T extends BaseProps = BaseProps> {
+  (props: Props<T>): Children
+  client?: IComponent
+}
 
 // Only props which start with _ are sent to the client.
 export type ClientPropKey = `_${string}`
@@ -105,11 +98,6 @@ export interface ElementChildrenAttribute {
   children: object
 }
 
-// Used for class components to declare the props type
-export interface ElementAttributesProperty {
-  __props: unknown
-}
-
 export type Element = Node
 
-export type ElementType = string | FuncComponent<any> | IComponent<any>
+export type ElementType = string | FuncComponent<any>

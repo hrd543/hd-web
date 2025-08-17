@@ -1,5 +1,5 @@
 {
-  "name": "@hd-web/build",
+  "name": "henry",
   "version": "0.2.0",
   "description": "Build your hd-web site or start a dev server",
   "scripts": {
@@ -12,9 +12,13 @@
     "/dist"
   ],
   "dependencies": {
+    "express": "^5.1.0",
+    "vite": "^7.1.2",
     "@hd-web/jsx": "^0.2.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.0.0",
     "@hd-web/build-package": "^0.1.0"
   },
   "sideEffects": false,

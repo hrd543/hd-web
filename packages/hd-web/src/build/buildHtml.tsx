@@ -1,8 +1,7 @@
 import { JSX, renderToString, RenderToStringOutput } from '@hd-web/jsx'
 import path from 'path'
 import fs from 'fs/promises'
-import { BuildSiteConfig } from '@hd-web/build'
-import { BuiltFile, BuiltPage } from './types.js'
+import { BuildSiteConfig, BuiltFile, BuiltPage } from './types.js'
 
 export const getFileType = (end: string): BuiltFile['type'] => {
   if (end.endsWith('.js') || end.endsWith('.ts')) {

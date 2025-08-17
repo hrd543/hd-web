@@ -1,4 +1,4 @@
-import type { DomElement, ClientProps, BaseProps } from '../../jsx/index.js'
+import type { ClientProps, BaseProps } from '../../jsx/index.js'
 
 export const serialiseProps = <T extends BaseProps>(
   props?: T | null
@@ -18,7 +18,9 @@ export const serialiseProps = <T extends BaseProps>(
   return Object.keys(newProps).length ? JSON.stringify(newProps) : null
 }
 
-export const parseProps = <T>(element: DomElement): ClientProps<T> => {
+export const parseProps = <T>(
+  element: SVGElement | HTMLElement
+): ClientProps<T> => {
   if (element.firstElementChild?.tagName === 'SCRIPT') {
     return JSON.parse(element.firstElementChild.textContent ?? '')
   }

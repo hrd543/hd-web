@@ -1,10 +1,10 @@
-import { BaseProps, ClientProps, DomElement } from '../jsx/index.js'
+import { BaseProps, ClientProps } from '../jsx/index.js'
 import { parseListeners, parseProps } from '../stringify/index.js'
 import { traverse } from './traverse.js'
 
 export abstract class Component<
   T extends BaseProps = BaseProps,
-  E extends DomElement = DomElement
+  E extends SVGElement | HTMLElement = SVGElement | HTMLElement
 > {
   protected readonly props: ClientProps<T>
   // TODO this is a strong reference, check if memory issues.

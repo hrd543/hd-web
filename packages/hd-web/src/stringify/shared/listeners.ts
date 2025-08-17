@@ -1,4 +1,4 @@
-import { ComponentListener } from '../../jsx/index.js'
+import { ComponentListener } from '../types.js'
 
 export const parseListeners = (attr: string): ComponentListener[] => {
   return attr.split('|').map((entry) => entry.split('.')) as ComponentListener[]

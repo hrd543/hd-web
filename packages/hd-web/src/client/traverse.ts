@@ -1,12 +1,11 @@
 // This currently only works if the refs are within the component, so
 // they can't be passed down to stateful children.
 
-import { DomElement } from '../jsx/index.js'
 import { idAttribute } from '../stringify/constants.js'
 
 export const traverse = (
   root: Element | null,
-  process: (element: DomElement) => void
+  process: (element: SVGElement | HTMLElement) => void
 ) => {
   const stack = [root?.firstElementChild]
 
@@ -23,7 +22,7 @@ export const traverse = (
       continue
     }
 
-    process(element as DomElement)
+    process(element as SVGElement | HTMLElement)
     stack.push(element.firstElementChild)
   }
 }

@@ -1,11 +1,9 @@
 import type * as Html from '@michijs/htmltype'
 import type * as Css from 'csstype'
 
-export type ComponentListener = [event: string, method: string]
-
-export type DomElement = SVGElement | HTMLElement
-
-export interface IComponent<E extends DomElement = DomElement> {
+export interface IComponent<
+  E extends SVGElement | HTMLElement = SVGElement | HTMLElement
+> {
   new (element: E): object
   key: string
 }

@@ -1,4 +1,4 @@
-import { Site, SiteFunction, SubPageFunction } from '@hd-web/build'
+import { Site, SiteFunction, SubPageFunction } from '../types/index.js'
 import path from 'path'
 import type { JSX } from '@hd-web/jsx'
 import { BuiltPage } from './types.js'

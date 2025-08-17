@@ -1,4 +1,4 @@
-import { Site, SubPage } from '@hd-web/build'
+import { Site, SubPage } from '../types/index.js'
 
 export const getPage = async (url: string, site: Site | undefined) => {
   const paths = url.slice(1).split('/')

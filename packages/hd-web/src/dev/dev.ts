@@ -1,6 +1,6 @@
 import express from 'express'
 import { createServer } from 'vite'
-import { Site } from '@hd-web/build'
+import { Site } from '../types/index.js'
 import { renderToString } from '@hd-web/jsx'
 import { isPage } from './isPage.js'
 import { getPage } from './getPage.js'

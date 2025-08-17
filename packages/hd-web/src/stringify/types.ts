@@ -26,3 +26,5 @@ export type StringifyNodeOutput = {
   /** The stringified html */
   html: string
 }
+
+export type ComponentListener = [event: string, method: string]

@@ -1,4 +1,5 @@
 import { BaseProps, ClientProps } from '../jsx/index.js'
+// TODO should I move these into this package so that it has 0 dependencies?
 import { parseListeners, parseProps } from '../stringify/index.js'
 import { traverse } from './traverse.js'
 

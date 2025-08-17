@@ -1,4 +1,5 @@
 import { ModuleGraph } from 'vite'
+import { clientFileRegex } from '../stringify/index.js'
 
 const getModules = (
   moduleGraph: ModuleGraph,
@@ -38,7 +39,7 @@ export const findClientFiles = (
     visited.add(m.url)
 
     for (const node of m.importedModules) {
-      if (/.+\.client\.[^.\\/]+$/.test(node.url)) {
+      if (clientFileRegex.test(node.url)) {
         files.push(node.url)
       } else {
         modules.push(node)

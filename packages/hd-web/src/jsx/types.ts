@@ -6,6 +6,8 @@ export interface IComponent<
 > {
   new (element: E): object
   key: string
+  /** Only used internally in build */
+  __file?: string
 }
 
 /**

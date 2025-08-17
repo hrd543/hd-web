@@ -1,50 +1,31 @@
-import { JSX, renderToString, RenderToStringOutput } from '@hd-web/jsx'
+import { stringifyNode, ComponentInfo } from '../stringify/index.js'
 import path from 'path'
 import fs from 'fs/promises'
-import { BuildSiteConfig, BuiltFile, BuiltPage } from './types.js'
-
-export const getFileType = (end: string): BuiltFile['type'] => {
-  if (end.endsWith('.js') || end.endsWith('.ts')) {
-    return 'js'
-  }
-
-  if (end.endsWith('.css')) {
-    return 'css'
-  }
-
-  return 'file'
-}
+import { BuiltFile, BuiltPage } from './types.js'
+import { BuildSiteConfig } from './config.js'
+import { Element } from '../jsx/index.js'
 
 /**
- * Create all necessary html files for the build pages, including
+ * Create the html file for the page, including
  * the styles, js and assets needed for the site.
  */
 export const writeToHtml = async (
   [p, content, hasChildren]: BuiltPage,
   { lang, out }: BuildSiteConfig,
   built: BuiltFile[]
-): Promise<RenderToStringOutput['components']> => {
-  // Create directories for each page which needs it
+): Promise<ComponentInfo[]> => {
+  // Create a directory for each page which needs it
   if (hasChildren) {
     await fs.mkdir(path.join(out, p), { recursive: true })
   }
 
-  // Create the index.html files by replacing the template with the necessary
-  // content and script locations
-  const filepath = getHtmlFilepath(path.join(out, p), hasChildren)
-  console.log(content.head)
-
-  const head = addMetaToHead(
-    content.head(),
-    content.title,
-    content.description,
-    built.filter((file) => file.type === 'js').map((file) => file.relativePath),
-    built.filter((file) => file.type === 'css').map((file) => file.relativePath)
+  const { html, components } = buildHtml(
+    addMetaToHead(content, built),
+    content.body(),
+    lang
   )
 
-  const { html: body, components } = renderToString(content.body())
-
-  await fs.writeFile(filepath, buildHtml(head, body, lang))
+  await fs.writeFile(getHtmlFilepath(path.join(out, p), hasChildren), html)
 
   return components
 }
@@ -53,18 +34,22 @@ export const writeToHtml = async (
  * Add the script and style files to the html head element, as well
  * as meta tags for its title / description
  */
-export const addMetaToHead = (
-  head: JSX.Element,
-  title: string,
-  description: string | undefined,
-  scripts: string[],
-  styles: string[]
-): string => {
-  const main = (
-    <head>
+const addMetaToHead = (
+  { title, description, head }: BuiltPage[1],
+  files: BuiltFile[]
+): Element => {
+  const scripts = files
+    .filter((file) => file.type === 'js')
+    .map((file) => file.relativePath)
+  const styles = files
+    .filter((file) => file.type === 'css')
+    .map((file) => file.relativePath)
+
+  return (
+    <>
       <title>{title}</title>
       {description ? <meta name="description" content={description} /> : null}
-      {head}
+      {head()}
       <>
         {scripts.map((script) => (
           <script type="module" src={`/${script}`} />
@@ -75,24 +60,27 @@ export const addMetaToHead = (
           <link rel="stylesheet" href={`/${style}`} />
         ))}
       </>
-    </head>
+    </>
   )
-
-  return renderToString(main).html
 }
 
 /**
  * Build the full html content from its head and body
  */
-export const buildHtml = (head: string, body: string, lang: string) => {
-  const html = (
+const buildHtml = (head: Element, body: Element, lang: string) => {
+  const htmlElement = (
     <html lang={lang}>
-      {head}
+      <head>{head}</head>
       <body>{body}</body>
     </html>
   )
 
-  return `<!DOCTYPE html>${renderToString(html).html}`
+  const { html, components } = stringifyNode(htmlElement)
+
+  return {
+    html: `<!DOCTYPE html>${html}`,
+    components
+  }
 }
 
 /**

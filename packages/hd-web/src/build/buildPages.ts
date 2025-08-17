@@ -46,7 +46,7 @@ export const buildPages = async (
   const contents: BuiltPage[] = []
   // TODO This always defaults to the root, not its parent for example.
   // TODO fix this
-  let entryHead: () => JSX.Element
+  let entryHead: () => JSX.Element = () => ''
 
   while (stack.length) {
     const [p, pageFn, titleSuffix] = stack.pop()!

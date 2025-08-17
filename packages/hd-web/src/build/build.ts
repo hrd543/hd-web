@@ -5,6 +5,8 @@ import { getClientJs } from '../client/index.js'
 import { plugin } from './plugin.js'
 import { getFileLoaders, readMetafile } from './utils.js'
 import { BuildSiteConfig, validateConfig } from './config.js'
+import path from 'path'
+import url from 'url'
 
 export const build = async (config: Partial<BuildSiteConfig> = {}) => {
   const fullConfig = validateConfig(config)
@@ -20,9 +22,18 @@ export const build = async (config: Partial<BuildSiteConfig> = {}) => {
 
   // doesn't support splitting yet
   const files = readMetafile(built.metafile, fullConfig.out)
-  const outfile = files.find((f) => f.type === 'js')!.path
+  // TODO work this out
+  const outfile = path.resolve(
+    process.cwd(),
+    files.find((f) => f.type === 'js')!.path
+  )
 
-  const pages = await buildPages((await import(outfile)).default, true)
+  console.log(outfile)
+
+  const pages = await buildPages(
+    (await import(url.pathToFileURL(outfile).href)).default,
+    true
+  )
 
   const components = (
     await Promise.all(pages.map((page) => writeToHtml(page, fullConfig, files)))
@@ -48,5 +59,7 @@ const getSharedEsbuildOptions = (
   format: 'esm',
   target: config.target,
   publicPath: '/',
-  loader: getFileLoaders(config.fileTypes)
+  loader: getFileLoaders(config.fileTypes),
+  // This doesn't work, TODO work it out
+  pure: ['registerClient']
 })

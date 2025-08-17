@@ -4,6 +4,7 @@ import { Element } from '../jsx/index.js'
  * The return type of the SubPage function.
  */
 export type SubPage = Partial<Site> & Pick<Site, 'body' | 'title'>
+
 /**
  * A subpage of your site.
  *
@@ -11,6 +12,7 @@ export type SubPage = Partial<Site> & Pick<Site, 'body' | 'title'>
  * overwritten by the main Site function.
  */
 export type SubPageFunction = () => SubPage | Promise<SubPage>
+
 /**
  * The return type of the SiteFunction.
  */
@@ -24,6 +26,7 @@ export type Site = {
    */
   routes?: Record<string, SubPageFunction>
 }
+
 /**
  * The entry point for your hd-web app.
  *

@@ -1,11 +1,10 @@
-import {
-  BaseProps,
-  ComponentListener,
-  IComponent,
-  Node
-} from '../../jsx/index.js'
+import { BaseProps, IComponent, Node } from '../../jsx/index.js'
 import { listenerAttribute, refAttribute } from '../constants.js'
-import { RenderStackEntry, StringifyFunction } from '../types.js'
+import {
+  ComponentListener,
+  RenderStackEntry,
+  StringifyFunction
+} from '../types.js'
 import { closeIntrinsic, openIntrinsic } from './openAndCloseTag.js'
 import { serialiseListeners } from '../shared/listeners.js'
 import { flattenChildren } from '../shared/flattenChildren.js'

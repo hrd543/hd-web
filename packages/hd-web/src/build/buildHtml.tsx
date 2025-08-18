@@ -50,16 +50,12 @@ const addMetaToHead = (
       <title>{title}</title>
       {description ? <meta name="description" content={description} /> : null}
       {head()}
-      <>
-        {scripts.map((script) => (
-          <script type="module" src={`/${script}`} />
-        ))}
-      </>
-      <>
-        {styles.map((style) => (
-          <link rel="stylesheet" href={`/${style}`} />
-        ))}
-      </>
+      {scripts.map((script) => (
+        <script type="module" src={`/${script}`} />
+      ))}
+      {styles.map((style) => (
+        <link rel="stylesheet" href={`/${style}`} />
+      ))}
     </>
   )
 }

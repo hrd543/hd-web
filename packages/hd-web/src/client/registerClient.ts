@@ -1,6 +1,4 @@
-// TODO where should this go?
-
-import { BaseProps, FuncComponent, IComponent } from './types.js'
+import type { BaseProps, FuncComponent, IComponent } from '@hd-web/jsx'
 
 // could add a pure comment here for esbuild?
 export const registerClient = <P extends BaseProps>(

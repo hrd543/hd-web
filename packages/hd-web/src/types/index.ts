@@ -1,4 +1,4 @@
-import { Element } from '../jsx/index.js'
+import { HdNode } from '@hd-web/jsx'
 
 /**
  * The return type of the SubPage function.
@@ -19,9 +19,9 @@ export type SubPageFunction = () => SubPage | Promise<SubPage>
 export type Site = {
   title: string
   description?: string
-  body: () => Element
-  head: () => Element
-  /**
+  body: () => HdNode
+  head: () => HdNode
+  /**w
    * Specify the subpages of this particular page.
    */
   routes?: Record<string, SubPageFunction>

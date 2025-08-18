@@ -1,8 +1,9 @@
-import { Child, Children } from '../../jsx/index.js'
+import { HdNode } from '@hd-web/jsx'
+import { FlatHdNode } from '../types.js'
 
 export const flattenChildren = (
-  children: Children | undefined
-): Child[] | undefined => {
+  children: HdNode | undefined
+): FlatHdNode[] | undefined => {
   if (!children) {
     return
   }

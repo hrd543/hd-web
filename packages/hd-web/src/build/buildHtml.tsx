@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs/promises'
 import { BuiltFile, BuiltPage } from './types.js'
 import { BuildSiteConfig } from './config.js'
-import { Element } from '../jsx/index.js'
+import { HdNode } from '@hd-web/jsx'
 
 /**
  * Create the html file for the page, including
@@ -37,7 +37,7 @@ export const writeToHtml = async (
 const addMetaToHead = (
   { title, description, head }: BuiltPage[1],
   files: BuiltFile[]
-): Element => {
+): HdNode => {
   const scripts = files
     .filter((file) => file.type === 'js')
     .map((file) => file.relativePath)
@@ -67,7 +67,7 @@ const addMetaToHead = (
 /**
  * Build the full html content from its head and body
  */
-const buildHtml = (head: Element, body: Element, lang: string) => {
+const buildHtml = (head: HdNode, body: HdNode, lang: string) => {
   const htmlElement = (
     <html lang={lang}>
       <head>{head}</head>

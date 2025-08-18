@@ -1,4 +1,4 @@
-import { Fragment, Node } from '../jsx/index.js'
+import { Fragment, HdElement } from '@hd-web/jsx'
 import { stringifyComponent } from './component/stringifyComponent.js'
 import { stringifyFragment } from './fragment/fragment.js'
 import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
@@ -10,7 +10,7 @@ import {
 } from './types.js'
 import { isNode } from './utils.js'
 
-export const stringifyNode = (root: Node): StringifyNodeOutput => {
+export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
   const components: ComponentInfo[] = []
 
   let fullHtml = ''
@@ -39,7 +39,7 @@ export const stringifyNode = (root: Node): StringifyNodeOutput => {
   }
 }
 
-const getStringifyNodeFunction = (tag: Node['tag']): StringifyFunction => {
+const getStringifyNodeFunction = (tag: HdElement['tag']): StringifyFunction => {
   if (typeof tag === 'function') {
     return stringifyComponent as StringifyFunction
   }

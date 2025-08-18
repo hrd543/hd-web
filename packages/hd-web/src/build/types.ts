@@ -1,4 +1,4 @@
-import { Element } from '../jsx/index.js'
+import { HdNode } from '@hd-web/jsx'
 
 export type BuiltFile = {
   path: string
@@ -19,10 +19,10 @@ export type BuiltFile = {
 export type BuiltPage = [
   path: string,
   content: {
-    head: () => Element
+    head: () => HdNode
     title: string
     description?: string
-    body: () => Element
+    body: () => HdNode
   },
   hasChildren: boolean
 ]

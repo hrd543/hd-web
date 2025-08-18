@@ -1,4 +1,4 @@
-import { BaseProps, IComponent, Node } from '../../jsx/index.js'
+import { BaseProps, IComponent, HdElement } from '@hd-web/jsx'
 import { listenerAttribute, refAttribute } from '../constants.js'
 import {
   ComponentListener,
@@ -10,9 +10,9 @@ import { serialiseListeners } from '../shared/listeners.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { serialiseProps } from '../shared/props.js'
 
-export const stringifyIntrinsic: StringifyFunction<Node & { tag: string }> = (
-  entry
-) => {
+export const stringifyIntrinsic: StringifyFunction<
+  HdElement & { tag: string }
+> = (entry) => {
   const [{ tag, children, props }, component, clientProps] = entry
   const modifiedProps = { ...props }
 

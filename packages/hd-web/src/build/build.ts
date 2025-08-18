@@ -22,13 +22,10 @@ export const build = async (config: Partial<BuildSiteConfig> = {}) => {
 
   // doesn't support splitting yet
   const files = readMetafile(built.metafile, fullConfig.out)
-  // TODO work this out
   const outfile = path.resolve(
     process.cwd(),
     files.find((f) => f.type === 'js')!.path
   )
-
-  console.log(outfile)
 
   const pages = await buildPages(
     (await import(url.pathToFileURL(outfile).href)).default,

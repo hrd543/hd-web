@@ -1,9 +1,9 @@
-import type { CssProperties, HtmlAttributes } from '../../jsx/index.js'
+import type { Html } from '@hd-web/jsx'
 
-export const stringifyStyle = (style: CssProperties): string => {
+export const stringifyStyle = (style: Html.CssProperties): string => {
   let styleString = ' style="'
   for (const key in style) {
-    const v = style[key as keyof CssProperties]
+    const v = style[key as keyof Html.CssProperties]
     if (v !== undefined) {
       styleString += `${key}:${v};`
     }
@@ -37,7 +37,7 @@ export const stringifyAttribute = (
 }
 
 export const stringifyAttributes = (
-  attributes: Omit<HtmlAttributes, 'children'>
+  attributes: Omit<Html.AllAttributes, 'children'>
 ): string => {
   if (Object.keys(attributes).length === 0) {
     return ''

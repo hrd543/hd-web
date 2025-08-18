@@ -1,4 +1,4 @@
-import { FuncComponent, registerClient } from '../jsx/index.js'
+import { FuncComponent, registerClient } from '@hd-web/jsx'
 import HenryClient from './Henry.client.js'
 
 export const Henry: FuncComponent = () => {

@@ -1,4 +1,4 @@
-import type { ClientProps, BaseProps } from '../../jsx/index.js'
+import type { ClientProps, BaseProps } from '@hd-web/jsx'
 
 export const serialiseProps = <T extends BaseProps>(
   props?: T | null

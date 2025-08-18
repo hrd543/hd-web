@@ -1,10 +1,10 @@
-import { FuncComponent, IComponent, Node } from '../../jsx/index.js'
+import { FuncComponent, IComponent, HdElement } from '@hd-web/jsx'
 import { idAttribute } from '../constants.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
 
 export const stringifyComponent: StringifyFunction<
-  Node & { tag: FuncComponent & { client: IComponent } }
+  HdElement & { tag: FuncComponent & { client: IComponent } }
 > = (entry, components) => {
   const [{ tag, props, children }] = entry
   const flatChildren = flattenChildren(children)

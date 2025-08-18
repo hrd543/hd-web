@@ -1,12 +1,16 @@
-import { BaseProps, Child, FuncComponent } from '../jsx/index.js'
+import { BaseProps, FuncComponent, HdNode } from '@hd-web/jsx'
 
 type StringifyResult = {
   entries?: RenderStackEntry[]
   html?: string
 }
 
+type Flattened<T> = T extends Array<unknown> ? never : T
+
+export type FlatHdNode = Flattened<HdNode>
+
 export type RenderStackEntry<
-  T extends Child = Child,
+  T extends FlatHdNode = FlatHdNode,
   P extends BaseProps = BaseProps
 > = [element: T, component: FuncComponent<P> | null, props?: P | null]
 
@@ -15,7 +19,7 @@ export type ComponentInfo = {
   key: string
 }
 
-export type StringifyFunction<T extends Child = Child> = (
+export type StringifyFunction<T extends FlatHdNode = FlatHdNode> = (
   entry: RenderStackEntry<T>,
   components: ComponentInfo[]
 ) => StringifyResult

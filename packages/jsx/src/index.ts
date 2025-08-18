@@ -1,3 +1,5 @@
-export type * as JSX from './types.js'
+export type * from './types.js'
+export type * as Html from './html.js'
 export * from './jsx.js'
-export * from './nodes/index.js'
+export { registerClient } from './registerClient.js'
+export type * as JSX from './jsx-runtime.js'

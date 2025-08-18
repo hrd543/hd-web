@@ -1,7 +1,7 @@
 import { Site, SiteFunction, SubPageFunction } from '../types/index.js'
 import path from 'path'
-import type { JSX } from '@hd-web/jsx'
 import { BuiltPage } from './types.js'
+import { HdNode } from '@hd-web/jsx'
 
 type PageStack = [
   path: string,
@@ -46,7 +46,7 @@ export const buildPages = async (
   const contents: BuiltPage[] = []
   // TODO This always defaults to the root, not its parent for example.
   // TODO fix this
-  let entryHead: () => JSX.Element = () => ''
+  const entryHead: () => HdNode = () => ''
 
   while (stack.length) {
     const [p, pageFn, titleSuffix] = stack.pop()!

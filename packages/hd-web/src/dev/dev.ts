@@ -1,12 +1,12 @@
 import express from 'express'
 import { createServer } from 'vite'
 import { Site } from '../types/index.js'
-import { renderToString } from '@hd-web/jsx'
 import { isPage } from './isPage.js'
 import { getPage } from './getPage.js'
 import { serveHtmlFiles } from './serveHtmlFiles.js'
 import { getClientJs } from '../client/index.js'
 import { findClientFiles } from './findClientFiles.js'
+import { stringifyNode } from '../stringify/index.js'
 
 export const dev = async () => {
   const app = express()
@@ -50,7 +50,7 @@ export const dev = async () => {
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')
-    const { html, components } = renderToString(page.body())
+    const { html, components } = stringifyNode(page.body())
 
     res.end(
       await server.transformIndexHtml(

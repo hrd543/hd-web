@@ -4,7 +4,7 @@ import {
   SharedConfig
 } from '../config/index.js'
 
-export type BuildSiteConfig = SharedConfig & {
+export type BuildConfig = SharedConfig & {
   /** The folder containing any static files, like a favicon */
   staticFolder?: string
   /** The folder in which to place the built files */
@@ -13,7 +13,7 @@ export type BuildSiteConfig = SharedConfig & {
   target: string
 }
 
-const defaultBuildSiteConfig: BuildSiteConfig = {
+const defaultBuildSiteConfig: BuildConfig = {
   ...defaultSharedConfig,
   out: 'build',
   target: 'ES6'
@@ -23,7 +23,7 @@ const defaultBuildSiteConfig: BuildSiteConfig = {
  * Replace all missing / undefined keys with the defaults, and validate
  * the config for any potential issues.
  */
-export const validateConfig = (rawConfig: Partial<BuildSiteConfig>) => {
+export const validateConfig = (rawConfig: Partial<BuildConfig>) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
   return config

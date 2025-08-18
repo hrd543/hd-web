@@ -8,10 +8,7 @@ import { getClientJs } from '../client/index.js'
 import { findClientFiles } from './findClientFiles.js'
 import { DevConfig, validateConfig } from './config.js'
 import { buildHtml, createMeta } from '../shared/index.js'
-import {
-  addJsToEmptyScript,
-  buildEmptyScript
-} from '../client/buildInlineScript.js'
+import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 
 export const dev = async (config: Partial<DevConfig> = {}) => {
   const fullConfig = validateConfig(config)

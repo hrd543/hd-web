@@ -2,7 +2,7 @@ import { ComponentInfo } from '../stringify/index.js'
 import path from 'path'
 import fs from 'fs/promises'
 import { BuiltFile, BuiltPage } from './types.js'
-import { BuildSiteConfig } from './config.js'
+import { BuildConfig } from './config.js'
 import { HdNode } from '@hd-web/jsx'
 import { buildHtml, createMeta } from '../shared/index.js'
 
@@ -12,7 +12,7 @@ import { buildHtml, createMeta } from '../shared/index.js'
  */
 export const writeToHtml = async (
   [p, { title, description, head, body }, hasChildren]: BuiltPage,
-  { lang, out }: BuildSiteConfig,
+  { lang, out }: BuildConfig,
   built: BuiltFile[]
 ): Promise<ComponentInfo[]> => {
   // Create a directory for each page which needs it

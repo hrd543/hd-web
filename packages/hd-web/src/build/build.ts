@@ -4,11 +4,11 @@ import { writeToHtml } from './buildHtml.jsx'
 import { getClientJs } from '../client/index.js'
 import { plugin } from './plugin.js'
 import { getFileLoaders, readMetafile } from './utils.js'
-import { BuildSiteConfig, validateConfig } from './config.js'
+import { BuildConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
 
-export const build = async (config: Partial<BuildSiteConfig> = {}) => {
+export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)
 
   const built = await esbuild.build({
@@ -48,7 +48,7 @@ export const build = async (config: Partial<BuildSiteConfig> = {}) => {
 }
 
 const getSharedEsbuildOptions = (
-  config: BuildSiteConfig
+  config: BuildConfig
 ): esbuild.BuildOptions => ({
   minify: true,
   bundle: true,

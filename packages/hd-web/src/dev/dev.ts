@@ -6,15 +6,21 @@ import { getPage } from './getPage.js'
 import { serveHtmlFiles } from './serveHtmlFiles.js'
 import { getClientJs } from '../client/index.js'
 import { findClientFiles } from './findClientFiles.js'
-import { stringifyNode } from '../stringify/index.js'
+import { DevConfig, validateConfig } from './config.js'
+import { buildHtml, createMeta } from '../shared/index.js'
+import {
+  addJsToEmptyScript,
+  buildEmptyScript
+} from '../client/buildInlineScript.js'
 
-export const dev = async () => {
+export const dev = async (config: Partial<DevConfig> = {}) => {
+  const fullConfig = validateConfig(config)
   const app = express()
 
   const server = await createServer({
-    root: process.cwd(), // optional, defaults to CWD
+    root: process.cwd(),
     server: {
-      port: 3000, // you can set any port here,
+      port: fullConfig.port,
       middlewareMode: true
     },
     appType: 'custom'
@@ -24,7 +30,7 @@ export const dev = async () => {
 
   // TODO Make sure this is debounced properly.
   const updateSite = async () => {
-    site = (await server.ssrLoadModule('./App.tsx')).default()
+    site = (await server.ssrLoadModule(fullConfig.entry)).default()
   }
 
   await updateSite()
@@ -50,20 +56,27 @@ export const dev = async () => {
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')
-    const { html, components } = stringifyNode(page.body())
-
-    res.end(
-      await server.transformIndexHtml(
-        req.originalUrl,
-        `<html>
-            <script type="module">${getClientJs(findClientFiles(server.moduleGraph, components))}</script>
-            ${html}
-          </html>`
-      )
+    // TODO fix the head being undefined here and title joins.
+    const { html, components } = buildHtml(
+      createMeta(
+        page.title,
+        page.description,
+        page.head?.() ?? null,
+        buildEmptyScript()
+      ),
+      page.body(),
+      fullConfig.lang
     )
+
+    const withJs = addJsToEmptyScript(
+      html,
+      getClientJs(findClientFiles(server.moduleGraph, components))
+    )
+
+    res.end(await server.transformIndexHtml(req.originalUrl, withJs))
   })
 
-  app.listen(3000)
+  app.listen(fullConfig.port)
 
-  console.log('Vite dev server running at:', server.resolvedUrls?.local?.[0])
+  console.log('Vite dev server running at:', fullConfig.port)
 }

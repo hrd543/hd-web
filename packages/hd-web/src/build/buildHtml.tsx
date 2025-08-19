@@ -1,10 +1,10 @@
 import { ComponentInfo } from '../stringify/index.js'
 import path from 'path'
 import fs from 'fs/promises'
-import { BuiltFile, BuiltPage } from './types.js'
+import { BuiltFile } from './types.js'
 import { BuildConfig } from './config.js'
 import { HdNode } from '@hd-web/jsx'
-import { buildHtml, createMeta } from '../shared/index.js'
+import { buildHtml, createMeta, BuiltPage } from '../shared/index.js'
 
 /**
  * Create the html file for the page, including

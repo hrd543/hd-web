@@ -1,4 +1,4 @@
-import { SiteFunction } from '../types/index.js'
+import { SiteFunction } from '../shared/index.js'
 import { Henry } from './Henry.js'
 
 const wait = (timeout = 10_000) => {
@@ -15,7 +15,7 @@ const App: SiteFunction = async () => {
   return {
     head: () => <meta />,
     body: () => <div>hiya</div>,
-    title: 'app7',
+    title: 'app10',
     routes: {
       contact: () => ({
         title: 'contact',

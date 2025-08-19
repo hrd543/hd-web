@@ -1,6 +1,5 @@
-import { Site, SiteFunction, SubPageFunction } from '../types/index.js'
+import { Site, SiteFunction, SubPageFunction, BuiltPage } from './types.js'
 import path from 'path'
-import { BuiltPage } from './types.js'
 import { HdNode } from '@hd-web/jsx'
 
 type PageStack = [

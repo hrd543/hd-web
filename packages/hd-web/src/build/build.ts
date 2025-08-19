@@ -1,5 +1,5 @@
 import * as esbuild from 'esbuild'
-import { buildPages } from './buildPages.js'
+import { buildPages } from '../shared/index.js'
 import { writeToHtml } from './buildHtml.jsx'
 import { getClientJs } from '../client/index.js'
 import { plugin } from './plugin.js'

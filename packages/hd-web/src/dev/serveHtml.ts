@@ -1,4 +1,4 @@
-import { Site } from '../types/index.js'
+import { buildPages, BuiltPage } from '../shared/index.js'
 import { isPage } from './isPage.js'
 import { getPage } from './getPage.js'
 import { getClientJs } from '../client/index.js'
@@ -14,10 +14,12 @@ export const getServeHtml = (
   config: DevConfig,
   server: ViteDevServer
 ): RequestHandler => {
-  const [getSite, updateSite] = throttle<Site>(async () => {
+  const [getSite, updateSite] = throttle<BuiltPage[]>(async () => {
     // server.ws.send({ type: 'full-reload' })
 
-    return (await server.ssrLoadModule(config.entry)).default()
+    const siteFn = (await server.ssrLoadModule(config.entry)).default
+
+    return buildPages(siteFn, config.joinTitles)
   })
 
   server.watcher.on('change', updateSite)
@@ -36,25 +38,22 @@ export const getServeHtml = (
       return res.end('Waiting for data')
     }
 
-    // TODO make this sync as site should actually be BuiltSite
-    const page = await getPage(req.url, site)
+    const page = getPage(req.url, site)
 
     if (!page) {
       res.statusCode = 404
       return res.end('Not found')
     }
 
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/html')
-    // TODO fix the head being undefined here and title joins.
+    const content = page[1]
     const { html, components } = buildHtml(
       createMeta(
-        page.title,
-        page.description,
-        page.head?.() ?? null,
+        content.title,
+        content.description,
+        content.head?.() ?? null,
         buildEmptyScript()
       ),
-      page.body(),
+      content.body(),
       config.lang
     )
 
@@ -63,6 +62,8 @@ export const getServeHtml = (
       getClientJs(findClientFiles(server.moduleGraph, components))
     )
 
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/html')
     res.end(await server.transformIndexHtml(req.originalUrl, withJs))
   }
 }

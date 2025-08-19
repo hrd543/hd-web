@@ -1,18 +1,7 @@
-import { Site, SubPage } from '../types/index.js'
+import { BuiltPage } from '../shared/index.js'
 
-export const getPage = async (url: string, site: Site) => {
-  const paths = url.slice(1).split('/')
+export const getPage = (url: string, pages: BuiltPage[]) => {
+  const formattedUrl = url.slice(1)
 
-  let found: Site | SubPage | undefined = site
-
-  while (found && paths.length) {
-    const route = paths.shift()
-    if (!route) {
-      break
-    }
-
-    found = await found.routes?.[route]?.()
-  }
-
-  return found
+  return pages.find((p) => p[0] === formattedUrl)
 }

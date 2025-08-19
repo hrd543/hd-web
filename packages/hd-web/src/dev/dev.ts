@@ -20,7 +20,7 @@ export const dev = async (config: Partial<DevConfig> = {}) => {
   app.use(
     server.middlewares,
     formatHtmlRoutes,
-    await getServeHtml(fullConfig, server)
+    getServeHtml(fullConfig, server)
   )
 
   app.listen(fullConfig.port)

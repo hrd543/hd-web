@@ -8,18 +8,17 @@ import { buildHtml, createMeta } from '../shared/index.js'
 import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { ViteDevServer } from 'vite'
 import { RequestHandler } from 'express'
+import { throttle } from './throttle.js'
 
-export const getServeHtml = async (
+export const getServeHtml = (
   config: DevConfig,
   server: ViteDevServer
-): Promise<RequestHandler> => {
-  let site: Site | undefined
+): RequestHandler => {
+  const [getSite, updateSite] = throttle<Site>(async () => {
+    // server.ws.send({ type: 'full-reload' })
 
-  const updateSite = async () => {
-    site = (await server.ssrLoadModule(config.entry)).default()
-  }
-
-  await updateSite()
+    return (await server.ssrLoadModule(config.entry)).default()
+  })
 
   server.watcher.on('change', updateSite)
   // Don't need remove / add listeners since that wouldn't change the routing.
@@ -29,6 +28,15 @@ export const getServeHtml = async (
       next()
     }
 
+    const site = await getSite()
+
+    if (site === null) {
+      res.statusCode = 202
+
+      return res.end('Waiting for data')
+    }
+
+    // TODO make this sync as site should actually be BuiltSite
     const page = await getPage(req.url, site)
 
     if (!page) {

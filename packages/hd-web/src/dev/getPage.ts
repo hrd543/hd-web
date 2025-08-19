@@ -1,6 +1,6 @@
 import { Site, SubPage } from '../types/index.js'
 
-export const getPage = async (url: string, site: Site | undefined) => {
+export const getPage = async (url: string, site: Site) => {
   const paths = url.slice(1).split('/')
 
   let found: Site | SubPage | undefined = site

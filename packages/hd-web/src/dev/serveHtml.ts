@@ -1,6 +1,6 @@
 import { buildPages, BuiltPage } from '../shared/index.js'
 import { isPage } from './isPage.js'
-import { getPage } from './getPage.js'
+import { getPageContent } from './getPageContent.js'
 import { getClientJs } from '../client/index.js'
 import { findClientFiles } from './findClientFiles.js'
 import { DevConfig } from './config.js'
@@ -30,22 +30,18 @@ export const getServeHtml = (
       next()
     }
 
-    const site = await getSite()
+    const content = await getPageContent(req.url, getSite)
 
-    if (site === null) {
+    if (content === null) {
       res.statusCode = 202
-
       return res.end('Waiting for data')
     }
 
-    const page = getPage(req.url, site)
-
-    if (!page) {
+    if (content === undefined) {
       res.statusCode = 404
       return res.end('Not found')
     }
 
-    const content = page[1]
     const { html, components } = buildHtml(
       createMeta(
         content.title,

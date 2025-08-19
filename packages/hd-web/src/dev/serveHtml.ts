@@ -50,7 +50,7 @@ export const getServeHtml = (
       createMeta(
         content.title,
         content.description,
-        content.head?.() ?? null,
+        content.head(),
         buildEmptyScript()
       ),
       content.body(),

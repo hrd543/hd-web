@@ -1,8 +1,8 @@
-import { type JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 import { type ImageProps } from './types.js'
 import { getImageSrc, getImageStyle } from './helpers.js'
 
-export const Image: JSX.FuncComponent<ImageProps> = ({
+export const Image: FuncComponent<ImageProps> = ({
   alt,
   src,
   srcMobile,

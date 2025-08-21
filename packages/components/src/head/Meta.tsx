@@ -1,9 +1,9 @@
-import type { JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 
 /**
  * Add information like the charset and viewport to the html head element
  */
-export const Meta: JSX.FuncComponent = () => {
+export const Meta: FuncComponent = () => {
   return (
     <>
       <meta charset="utf-8" />

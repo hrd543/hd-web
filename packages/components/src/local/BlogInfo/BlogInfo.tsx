@@ -1,7 +1,7 @@
 import { formatLongDate, formatShortDate } from '../../shared/formatDate.js'
 import './BlogInfo.css'
 
-import { type JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 
 export type BlogInfoProps = {
   author: string
@@ -9,7 +9,7 @@ export type BlogInfoProps = {
   format?: 'short' | 'long'
 }
 
-export const BlogInfo: JSX.FuncComponent<BlogInfoProps> = ({
+export const BlogInfo: FuncComponent<BlogInfoProps> = ({
   author,
   date,
   format = 'short'

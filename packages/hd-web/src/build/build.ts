@@ -7,9 +7,18 @@ import { getFileLoaders, readMetafile } from './utils.js'
 import { BuildConfig, validateConfig } from './config.js'
 import path from 'path'
 import url from 'url'
+import fs from 'fs/promises'
 
 export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)
+
+  // Delete the build folder
+  await fs.rm(fullConfig.out, { recursive: true, force: true })
+
+  // Copy over any static assets
+  if (fullConfig.staticFolder) {
+    await fs.cp(fullConfig.staticFolder, fullConfig.out, { recursive: true })
+  }
 
   const built = await esbuild.build({
     ...getSharedEsbuildOptions(fullConfig),
@@ -56,7 +65,5 @@ const getSharedEsbuildOptions = (
   format: 'esm',
   target: config.target,
   publicPath: '/',
-  loader: getFileLoaders(config.fileTypes),
-  // This doesn't work, TODO work it out
-  pure: ['registerClient']
+  loader: getFileLoaders(config.fileTypes)
 })

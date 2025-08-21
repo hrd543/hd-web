@@ -9,6 +9,7 @@ import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { ViteDevServer } from 'vite'
 import { RequestHandler } from 'express'
 import { throttle } from './throttle.js'
+import { getCssImports } from './getCssImports.js'
 
 export const getServeHtml = (
   config: DevConfig,
@@ -53,10 +54,11 @@ export const getServeHtml = (
       config.lang
     )
 
-    const withJs = addJsToEmptyScript(
-      html,
-      getClientJs(findClientFiles(server.moduleGraph, components))
-    )
+    const { css, js } = findClientFiles(server.moduleGraph, components)
+    const componentJs = getClientJs(js)
+    const cssImports = getCssImports(css)
+
+    const withJs = addJsToEmptyScript(html, cssImports + componentJs)
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

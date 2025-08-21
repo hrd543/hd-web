@@ -1,5 +1,5 @@
 import { ModuleGraph } from 'vite'
-import { clientFileRegex } from '../stringify/index.js'
+import { clientFileRegex, cssFileRegex } from '../stringify/index.js'
 
 const getModules = (
   moduleGraph: ModuleGraph,
@@ -17,15 +17,12 @@ const getModules = (
 }
 
 export const findClientFiles = (
-  moduleGraph: ModuleGraph | undefined,
+  moduleGraph: ModuleGraph,
   components: Array<{ filename: string; key: string }>
-) => {
-  if (!moduleGraph) {
-    return components.map(({ filename }) => filename)
-  }
-
+): { js: string[]; css: string[] } => {
   const visited = new Set<string>()
-  const files: string[] = []
+  const js: string[] = []
+  const css: string[] = []
 
   const modules = getModules(moduleGraph, components)
 
@@ -38,14 +35,14 @@ export const findClientFiles = (
 
     visited.add(m.url)
 
-    for (const node of m.importedModules) {
-      if (clientFileRegex.test(node.url)) {
-        files.push(node.url)
-      } else {
-        modules.push(node)
-      }
+    if (clientFileRegex.test(m.url)) {
+      js.push(m.url)
+    } else if (cssFileRegex.test(m.url)) {
+      css.push(m.url)
     }
+
+    modules.push(...m.importedModules)
   }
 
-  return files
+  return { js, css }
 }

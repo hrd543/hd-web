@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild'
 import { buildPages } from '../shared/index.js'
-import { writeToHtml } from './buildHtml.jsx'
+import { writeToHtml } from './buildHtml.js'
 import { getClientJs } from '../client/index.js'
 import { plugin } from './plugin.js'
 import { getFileLoaders, readMetafile } from './utils.js'
@@ -26,7 +26,9 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
     platform: 'node',
     entryPoints: [fullConfig.entry],
     outdir: fullConfig.out,
-    metafile: true
+    metafile: true,
+    // Ignore any hd-web dependencies.
+    external: ['vite', 'esbuild', 'express']
   })
 
   // doesn't support splitting yet
@@ -37,7 +39,7 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
   )
 
   const pages = await buildPages(
-    (await import(url.pathToFileURL(outfile).href)).default,
+    (await import(/* @vite-ignore */ url.pathToFileURL(outfile).href)).default,
     true
   )
 

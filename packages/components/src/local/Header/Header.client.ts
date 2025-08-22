@@ -1,7 +1,9 @@
 import { Component, Html } from 'hd-web'
 import { HeaderProps } from './types.js'
 
-export class HeaderClient extends Component<HeaderProps> {
+export default class HeaderClient extends Component<HeaderProps> {
+  static key = 'hd-header'
+
   private toggleMenu() {
     const links = this.refs.get('links')!
     const menu = this.refs.get('menu')!

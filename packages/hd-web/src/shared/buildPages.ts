@@ -18,7 +18,7 @@ const getRoutes = (
   }
 
   return Object.entries(routes).map<PageStack>(([route, subPage]) => [
-    path.join(currentPath, route),
+    path.posix.join(currentPath, route),
     subPage,
     title
   ])

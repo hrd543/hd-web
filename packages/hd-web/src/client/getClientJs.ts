@@ -23,8 +23,11 @@ const getMapInit = (count: number) => {
 }
 
 export const getClientJs = (clientFiles: string[]) => {
-  const imports = clientFiles.map((file, i) => `import _${i} from "${file}";`)
-  const mapInit = getMapInit(imports.length)
+  const uniqueFiles = Array.from(new Set(clientFiles))
+  const imports = uniqueFiles
+    .map((file, i) => `import _${i} from "${file}";`)
+    .join('')
+  const mapInit = getMapInit(uniqueFiles.length)
 
   return imports + getInitialiseCode(mapInit)
 }

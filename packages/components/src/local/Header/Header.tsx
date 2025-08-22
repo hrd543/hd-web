@@ -1,7 +1,8 @@
 import './Header.css'
 import { MenuButton } from './MenuButton.js'
-import { FuncComponent } from 'hd-web'
+import { FuncComponent, registerClient } from 'hd-web'
 import { HeaderProps } from './types.js'
+import HeaderClient from './Header.client.js'
 
 export const Header: FuncComponent<HeaderProps> = ({
   items,
@@ -36,3 +37,5 @@ export const Header: FuncComponent<HeaderProps> = ({
     </nav>
   )
 }
+
+registerClient(Header, HeaderClient)

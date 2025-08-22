@@ -54,9 +54,10 @@ export const getServeHtml = (
       config.lang
     )
 
-    const { css, js } = findClientFiles(server.moduleGraph, components)
+    const js = findClientFiles(server.moduleGraph, components)
     const componentJs = getClientJs(js)
-    const cssImports = getCssImports(css)
+    // TODO move this outside as it's not needed on every request
+    const cssImports = getCssImports(server.moduleGraph)
 
     const withJs = addJsToEmptyScript(html, cssImports + componentJs)
 

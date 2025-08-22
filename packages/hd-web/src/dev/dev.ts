@@ -3,6 +3,7 @@ import { createServer } from 'vite'
 import { formatHtmlRoutes } from './formatHtmlRoutes.js'
 import { DevConfig, validateConfig } from './config.js'
 import { getServeHtml } from './serveHtml.js'
+import { jsxFilePlugin } from './jsxFilePlugin.js'
 
 export const dev = async (config: Partial<DevConfig> = {}) => {
   const fullConfig = validateConfig(config)
@@ -14,6 +15,18 @@ export const dev = async (config: Partial<DevConfig> = {}) => {
       port: fullConfig.port,
       middlewareMode: true
     },
+
+    // We need to build the jsx ourselves since dev mode
+    // relies on jsxDev to get the filenames.
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'hd-web'
+    },
+    optimizeDeps: {
+      include: ['@hd-web/components']
+    },
+
+    plugins: [jsxFilePlugin()],
     appType: 'custom'
   })
 

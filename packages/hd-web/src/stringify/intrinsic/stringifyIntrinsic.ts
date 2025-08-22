@@ -62,8 +62,10 @@ const processListener = (
       const method = props[propKey] as string
 
       if (!component) {
+        // TODO improve this error message
         throw new Error(
-          `You can't specify listeners without a parent component.`
+          `You can't specify listeners without a parent component.
+          Did you forget to registerClient()?`
         )
       }
 

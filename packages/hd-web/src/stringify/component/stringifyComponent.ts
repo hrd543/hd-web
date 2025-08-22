@@ -2,6 +2,7 @@ import { FuncComponent, IComponent, HdElement } from '@hd-web/jsx'
 import { idAttribute } from '../constants.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
+import url from 'url'
 
 export const stringifyComponent: StringifyFunction<
   HdElement & { tag: FuncComponent & { client: IComponent } }
@@ -21,7 +22,12 @@ export const stringifyComponent: StringifyFunction<
 
   // TODO Make sure component name is unique here
   components.push({
-    filename: child.filename ?? tag.client.__file!,
+    // Try the client component's file prop which will only be valid
+    // in prod or external packages.
+    filename: (tag.client.__file
+      ? url.fileURLToPath(tag.client.__file)
+      : child.filename!
+    ).replaceAll('\\', '/'),
     key: tag.client.key
   })
 

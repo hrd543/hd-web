@@ -10,7 +10,7 @@
     "sourceMap": true,
     "target": "esnext",
     "declaration": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "jsxImportSource": "@hd-web/jsx",
     "skipLibCheck": true,
     "noImplicitOverride": true

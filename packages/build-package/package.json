@@ -1,12 +1,12 @@
 {
   "name": "@hd-web/build-package",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build a package within the hd-web monorepo",
   "bin": {
     "@hd-web/build-package": "dist/build.js"
   },
   "scripts": {
-    "build": "tsx src/build.ts && tsc",
+    "build": "tsx src/build.ts",
     "test": "echo \"test\""
   },
   "main": "dist/index.js",

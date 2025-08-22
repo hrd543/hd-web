@@ -3,7 +3,12 @@ export interface IComponent<
 > {
   new (element: E): object
   key: string
-  /** Only used internally in build */
+  // TODO Remove this here so people don't accidentally write it
+  /**
+   * Injected automatically at build time.
+   *
+   * Represents the defining file path
+   */
   __file?: string
 }
 
@@ -14,7 +19,7 @@ export type HdElement<T extends BaseProps = BaseProps> = {
   tag: string | FuncComponent<T>
   props: T | null
   children?: HdNode
-  // only used in dev
+  // In dev mode, we can quickly get the file path using jsxDEV
   filename?: string
 }
 

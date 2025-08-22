@@ -49,6 +49,7 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
 
   const js = getClientJs(components.map(({ filename }) => filename))
 
+  // TODO I should remove the `__file` prop here if it exists?
   await esbuild.build({
     ...getSharedEsbuildOptions(fullConfig),
     stdin: { contents: js, loader: 'js', resolveDir: '.' },

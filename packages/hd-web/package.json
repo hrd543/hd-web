@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Build your hd-web site or start a dev server",
   "bin": {
-    "hd:pkg": "/dist/build-package/index.js"
+    "hd": "/dist/scripts/script.js"
   },
   "scripts": {
     "build": "tsc",

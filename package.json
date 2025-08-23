@@ -1,5 +1,5 @@
 {
-  "name": "hd-web",
+  "name": "hd-web-repo",
   "version": "0.0.1",
   "description": "A set of open source packages to help you quickly create static websites with a splash of interactivity using the html, css and js you already know.",
   "scripts": {
@@ -15,7 +15,6 @@
     "@eslint/js": "^9.9.1",
     "@types/node": "^22.13.5",
     "eslint": "^9.21.0",
-    "memfs": "^4.17.0",
     "prettier": "^3.5.2",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",

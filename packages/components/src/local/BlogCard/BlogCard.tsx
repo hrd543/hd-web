@@ -2,7 +2,7 @@ import { Image } from '../../global/index.js'
 import { BlogInfo } from '../BlogInfo/BlogInfo.js'
 import './BlogCard.css'
 
-import { type JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 
 export type BlogCardProps = {
   thumbnail: {
@@ -16,7 +16,7 @@ export type BlogCardProps = {
   date: Date
 }
 
-export const BlogCard: JSX.FuncComponent<BlogCardProps> = ({
+export const BlogCard: FuncComponent<BlogCardProps> = ({
   thumbnail,
   title,
   link,

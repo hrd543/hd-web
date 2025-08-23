@@ -1,5 +1,5 @@
-import { JSX } from '@hd-web/jsx'
 import { ButtonType } from './types.js'
+import { FuncComponent } from 'hd-web'
 import './Button.css'
 import './LinkButton.css'
 
@@ -9,7 +9,7 @@ export type LinkButtonProps = {
   type: ButtonType
 }
 
-export const LinkButton: JSX.FuncComponent<LinkButtonProps> = ({
+export const LinkButton: FuncComponent<LinkButtonProps> = ({
   link,
   title,
   type

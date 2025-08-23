@@ -1,4 +1,4 @@
-import { JSX } from '@hd-web/jsx'
+import { HdNode } from 'hd-web'
 
 type HeaderItem = {
   link: string
@@ -6,7 +6,7 @@ type HeaderItem = {
 }
 
 export type HeaderProps = {
-  logo: JSX.Element
+  logo: HdNode
   items: HeaderItem[]
   bgColour: string
   fontColour: string

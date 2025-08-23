@@ -1,4 +1,4 @@
-import type { JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 
 export type GoogleFont = {
   name: string
@@ -12,7 +12,7 @@ export type GoogleFontsProps = {
 const getQueryString = (font: GoogleFont) =>
   `family=${font.name}:wght@${font.weights.join(';')}`
 
-export const GoogleFonts: JSX.FuncComponent<GoogleFontsProps> = ({ fonts }) => {
+export const GoogleFonts: FuncComponent<GoogleFontsProps> = ({ fonts }) => {
   if (fonts.length === 0) {
     return null
   }

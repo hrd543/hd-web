@@ -1,3 +1,4 @@
 export * as ButtonUtils from './utils.js'
-export { type ButtonProps, Button } from './Button.js'
+export { Button } from './Button.js'
 export { LinkButton, type LinkButtonProps } from './LinkButton.js'
+export type * from './types.js'

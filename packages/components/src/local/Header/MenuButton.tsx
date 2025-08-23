@@ -1,4 +1,4 @@
-import { JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 import './MenuButton.css'
 
 type MenuButtonProps = {
@@ -6,7 +6,7 @@ type MenuButtonProps = {
   className?: string
 }
 
-export const MenuButton: JSX.FuncComponent<MenuButtonProps> = ({
+export const MenuButton: FuncComponent<MenuButtonProps> = ({
   height,
   className
 }) => {

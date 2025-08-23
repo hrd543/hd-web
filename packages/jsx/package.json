@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "Provides jsx for building sites with hd-web",
   "scripts": {
-    "build": "npx @hd-web/build-package && tsc",
+    "build": "tsc",
     "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "exports": {
@@ -23,9 +23,6 @@
   "dependencies": {
     "@michijs/htmltype": "^0.4.2",
     "csstype": "^3.1.3"
-  },
-  "devDependencies": {
-    "@hd-web/build-package": "^0.1.0"
   },
   "files": [
     "/dist"

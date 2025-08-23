@@ -30,7 +30,6 @@
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^22.0.0",
-    "@hd-web/build-package": "^0.1.0",
     "@hd-web/jsx": "^0.3.0",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",

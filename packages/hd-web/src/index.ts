@@ -1,3 +1,7 @@
+import type { HdBuildConfig } from './build/index.js'
+import type { SharedConfig } from './config/index.js'
+import type { HdDevConfig } from './dev/index.js'
+
 export { build, type HdBuildConfig } from './build/index.js'
 export { Component, registerClient } from './client/index.js'
 export { dev, type HdDevConfig } from './dev/index.js'
@@ -17,3 +21,9 @@ export {
   type ClientProps,
   type Html
 } from '@hd-web/jsx'
+
+export type HdConfig = {
+  shared: SharedConfig
+  build: HdBuildConfig
+  dev: HdDevConfig
+}

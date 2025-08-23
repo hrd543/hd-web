@@ -1,5 +1,5 @@
 import { SharedConfig } from './sharedConfig.js'
-import fs from 'fs/promises'
+import url from 'url'
 import path from 'path'
 
 export const readConfigFile = async <Dev, Build>(): Promise<{
@@ -7,10 +7,9 @@ export const readConfigFile = async <Dev, Build>(): Promise<{
   dev: Dev
   build: Build
 }> => {
-  const configRaw = await fs.readFile(
-    path.join(process.cwd(), 'hd.config.json'),
-    { encoding: 'utf-8' }
-  )
-
-  return JSON.parse(configRaw)
+  return (
+    await import(
+      url.pathToFileURL(path.join(process.cwd(), 'hd.config.js')).href
+    )
+  ).default()
 }

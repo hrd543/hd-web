@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild'
 import fs from 'fs/promises'
-import { addFileToClass } from './addFileToClass.js'
 import { clientFileRegex } from '../stringify/index.js'
+import { addFileToClass } from '../utils/index.js'
 
 export const plugin = (): esbuild.Plugin => ({
   name: 'hd-web-plugin',

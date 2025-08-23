@@ -2,8 +2,11 @@
   "name": "hd-web",
   "version": "0.1.0",
   "description": "Build your hd-web site or start a dev server",
+  "bin": {
+    "hd:pkg": "/dist/build-package/index.js"
+  },
   "scripts": {
-    "build": "npx @hd-web/build-package && tsc",
+    "build": "tsc",
     "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "exports": {

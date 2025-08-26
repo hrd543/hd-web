@@ -1,3 +1,5 @@
+import type { HdConfig } from 'hd-web'
+
 export default (): HdConfig => ({
   shared: {
     entry: 'src/index.tsx'

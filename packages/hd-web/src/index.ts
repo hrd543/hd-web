@@ -23,7 +23,7 @@ export {
 } from '@hd-web/jsx'
 
 export type HdConfig = {
-  shared: SharedConfig
-  build: HdBuildConfig
-  dev: HdDevConfig
+  shared?: Partial<SharedConfig>
+  build?: Partial<HdBuildConfig>
+  dev?: Partial<HdDevConfig>
 }

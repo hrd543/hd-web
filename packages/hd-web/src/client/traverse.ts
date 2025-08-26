@@ -7,7 +7,7 @@ export const traverse = (
   root: Element | null,
   process: (element: SVGElement | HTMLElement) => void
 ) => {
-  const stack = [root?.firstElementChild]
+  const stack = [root]
 
   while (stack.length > 0) {
     const element = stack.pop()
@@ -18,7 +18,7 @@ export const traverse = (
 
     stack.push(element.nextElementSibling)
 
-    if (element.hasAttribute(idAttribute)) {
+    if (element !== root && element.hasAttribute(idAttribute)) {
       continue
     }
 

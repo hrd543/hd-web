@@ -3,7 +3,6 @@ export interface IComponent<
 > {
   new (element: E): object
   key: string
-  // TODO Remove this here so people don't accidentally write it
   /**
    * Injected automatically at build time.
    *

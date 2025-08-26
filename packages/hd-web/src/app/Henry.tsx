@@ -6,11 +6,9 @@ import HenryClient from './Henry.client.js'
 
 export const Henry: FuncComponent = () => {
   return (
-    <div>
-      <button class="Henry" $click="handleClick">
-        click
-      </button>
-    </div>
+    <button class="Henry" $click="handleClick">
+      click
+    </button>
   )
 }
 

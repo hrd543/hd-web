@@ -1,5 +1,4 @@
-import { BaseProps, ClientProps } from '@hd-web/jsx'
-// TODO should I move these into this package so that it has 0 dependencies?
+import type { BaseProps, ClientProps } from '@hd-web/jsx'
 import { parseListeners } from '../stringify/shared/listeners.js'
 import { traverse } from './traverse.js'
 import { parseProps } from '../stringify/shared/props.js'
@@ -39,9 +38,4 @@ export abstract class Component<
       }
     })
   }
-
-  // I could add a dispatch / listen method to each component class.
-  // I would need to pass in a map of all components with their id, and
-  // pass this component's id to it.
-  // Then you could dispatch custom events between components.
 }

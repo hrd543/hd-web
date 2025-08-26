@@ -1,15 +1,25 @@
-import type { ComponentWithRender } from './nodes/index.js'
-import type { FuncComponent, Element, Props } from './types.js'
+import type { FuncComponent, HdElement, Props } from './types.js'
 
 export const jsx = (
-  tag: string | ComponentWithRender | FuncComponent,
-  props: Props
-  // Don't support key for now
-): Element => {
+  tag: string | FuncComponent,
+  props: Props,
+  key?: string,
+  x?: boolean,
+  source?: { fileName: string }
+): HdElement => {
   const { children, ...rest } = props
+  const isFunction = typeof tag === 'function'
 
-  // If this is a functional component, treat it as a fragment
-  if (typeof tag === 'function' && !('__render' in tag)) {
+  if (isFunction && tag.client) {
+    return {
+      tag,
+      props: rest,
+      children: tag(props)
+    }
+  }
+
+  // If this is a standard functional component, treat it as a fragment
+  if (isFunction) {
     return {
       tag: Fragment,
       props: rest,
@@ -20,7 +30,8 @@ export const jsx = (
   return {
     tag,
     props: rest,
-    children: typeof tag === 'string' ? children : tag.__render(props)
+    children,
+    filename: source?.fileName
   }
 }
 

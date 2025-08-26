@@ -1,73 +1,32 @@
-import type * as Html from '@michijs/htmltype'
-import type * as Css from 'csstype'
-
-export type ComponentListener = [event: string, method: string]
-
-export type DomElement = SVGElement | HTMLElement
-
-export interface IComponentInstance<T extends BaseProps = BaseProps> {
-  /** DO NOT USE - INTERNAL ONLY */
-  __props: T
-}
-
 export interface IComponent<
-  T extends BaseProps = BaseProps,
-  E extends DomElement = DomElement
+  E extends SVGElement | HTMLElement = SVGElement | HTMLElement
 > {
-  new (element: E): IComponentInstance<T>
+  new (element: E): object
+  key: string
+  /**
+   * Injected automatically at build time.
+   *
+   * Represents the defining file path
+   */
+  __file?: string
 }
-
-export type ComponentRenderFunction<T extends BaseProps = BaseProps> =
-  FuncComponent<T>
 
 /**
  * Internal representation of an element
  */
-export type Node<T extends BaseProps = BaseProps> = {
-  tag: string | IComponent<T>
+export type HdElement<T extends BaseProps = BaseProps> = {
+  tag: string | FuncComponent<T>
   props: T | null
-  children?: Children
+  children?: HdNode
+  // In dev mode, we can quickly get the file path using jsxDEV
+  filename?: string
 }
 
 export type Primitive = string | null
-export type Child = Node | Primitive
-export type Children = Child | Child[]
+export type HdNode = HdElement | Primitive | Array<HdNode>
 
 export type WithChildren<T = object> = T & {
-  children?: Children
-}
-
-export type HtmlAttributes = Html.AllAttributes & {
-  style?: CssProperties
-}
-
-export type CssProperties = Css.PropertiesHyphen & {
-  // allow css variables
-  [x: `--${string}`]: string
-}
-
-type IntrinsicElementsMap = HtmlIntrinsicElementsMap & SvgIntrinsicElementsMap
-
-type ListenerKey = `$${string}`
-
-type HtmlIntrinsicElementsMap = {
-  [K in keyof HTMLElementTagNameMap]: WithChildren<
-    Omit<Html.HTMLElements[K], 'style'> & {
-      [key: ListenerKey]: string
-      ref?: string
-      style?: CssProperties
-    }
-  >
-}
-
-type SvgIntrinsicElementsMap = {
-  [K in keyof SVGElementTagNameMap]: WithChildren<
-    Omit<Html.SVGElements[K], 'style'> & {
-      [key: ListenerKey]: string
-      ref?: string
-      style?: CssProperties
-    }
-  >
+  children?: HdNode
 }
 
 export type BaseProps = {
@@ -78,9 +37,10 @@ export type BaseProps = {
 
 export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
 
-export type FuncComponent<T extends BaseProps = BaseProps> = (
-  props: Props<T>
-) => Children
+export interface FuncComponent<T extends BaseProps = BaseProps> {
+  (props: Props<T>): HdNode
+  client?: IComponent
+}
 
 // Only props which start with _ are sent to the client.
 export type ClientPropKey = `_${string}`
@@ -92,24 +52,3 @@ type ClientKeys<T> = {
 export type ClientProps<T> = {
   [K in ClientKeys<T>]: string
 }
-
-export type * from '@michijs/htmltype'
-
-// These are TS specific types within the JSX namespace to make
-// the typing work properly.
-
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IntrinsicElements extends IntrinsicElementsMap {}
-
-export interface ElementChildrenAttribute {
-  children: object
-}
-
-// Used for class components to declare the props type
-export interface ElementAttributesProperty {
-  __props: unknown
-}
-
-export type Element = Node
-
-export type ElementType = string | FuncComponent<any> | IComponent<any>

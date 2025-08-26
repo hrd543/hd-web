@@ -1,7 +1,7 @@
 import { type ImageProps, Image } from '../../global/index.js'
 import './CircleImage.css'
 
-import type { JSX } from '@hd-web/jsx'
+import { FuncComponent } from 'hd-web'
 
 export type CircleImageProps = {
   img: ImageProps
@@ -10,6 +10,6 @@ export type CircleImageProps = {
 /**
  * An image with a circle clip path and a circle border.
  */
-export const CircleImage: JSX.FuncComponent<CircleImageProps> = ({ img }) => {
+export const CircleImage: FuncComponent<CircleImageProps> = ({ img }) => {
   return <Image {...img} clazz="CircleImage" />
 }

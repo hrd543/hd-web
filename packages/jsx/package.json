@@ -1,9 +1,9 @@
 {
   "name": "@hd-web/jsx",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Provides jsx for building sites with hd-web",
   "scripts": {
-    "build": "npx @hd-web/build-package && tsc",
+    "build": "tsc",
     "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "exports": {
@@ -14,10 +14,13 @@
     "./jsx-runtime": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
-  "devDependencies": {
-    "@hd-web/build-package": "^0.1.0",
+  "dependencies": {
     "@michijs/htmltype": "^0.4.2",
     "csstype": "^3.1.3"
   },

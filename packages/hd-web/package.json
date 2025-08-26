@@ -1,0 +1,44 @@
+{
+  "name": "hd-web",
+  "version": "0.1.0",
+  "description": "Build your hd-web site or start a dev server",
+  "bin": {
+    "hd": "/dist/scripts/script.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --import tsx --test \"src/**/*.test.ts\""
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/client/index.js",
+      "default": "./dist/index.js"
+    },
+    "./jsx-runtime": {
+      "types": "./dist/jsx-runtime.d.ts",
+      "default": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/jsx-runtime.d.ts",
+      "default": "./dist/jsx-runtime.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.0.0",
+    "@hd-web/jsx": "^0.3.0",
+    "esbuild": "^0.25.9",
+    "express": "^5.1.0",
+    "vite": "^7.1.2"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hrd543/hd-web"
+  }
+}

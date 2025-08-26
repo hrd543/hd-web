@@ -3,26 +3,22 @@
 
 import { idAttribute } from '../stringify/constants.js'
 
-export const traverse = (
-  root: Element | null,
-  process: (element: SVGElement | HTMLElement) => void
-) => {
-  const stack = [root]
+const getWalker = (root: Element) => {
+  return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, (node) =>
+    (node as Element).hasAttribute(idAttribute)
+      ? NodeFilter.FILTER_REJECT
+      : NodeFilter.FILTER_ACCEPT
+  )
+}
 
-  while (stack.length > 0) {
-    const element = stack.pop()
+export function* traverse(root: Element) {
+  const walker = getWalker(root)
 
-    if (!element) {
-      continue
-    }
-
-    stack.push(element.nextElementSibling)
-
-    if (element !== root && element.hasAttribute(idAttribute)) {
-      continue
-    }
-
-    process(element as SVGElement | HTMLElement)
-    stack.push(element.firstElementChild)
+  for (
+    let element = walker.currentNode as Element | null;
+    element !== null;
+    element = walker.nextNode() as Element | null
+  ) {
+    yield element
   }
 }

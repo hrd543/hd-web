@@ -5,5 +5,6 @@ export default class HenryClient extends Component {
 
   handleClick() {
     console.log('hh')
+    console.log(this.ref('span'))
   }
 }

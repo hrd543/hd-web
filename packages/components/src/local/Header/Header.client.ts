@@ -4,9 +4,8 @@ import { HeaderProps } from './types.js'
 export default class HeaderClient extends Component<HeaderProps> {
   static key = 'hd-header'
 
-  private toggleMenu() {
-    const links = this.refs.get('links')!
-    const menu = this.refs.get('menu')!
+  private toggleMenu(menu: Element) {
+    const links = this.ref('links')!
 
     links.classList.toggle('hd-header_links--show')
     menu.classList.toggle('MenuButton--open')
@@ -18,14 +17,16 @@ export default class HeaderClient extends Component<HeaderProps> {
       return
     }
 
+    const menu = this.ref('menu')!
+
     // Need to check what we clicked on. If it was a link,
     // then hide the menu
     if (e.target.tagName === 'A' || e.target.tagName === 'LI') {
-      this.toggleMenu()
+      this.toggleMenu(menu)
     }
 
-    if (this.refs.get('menu')?.contains(e.target)) {
-      this.toggleMenu()
+    if (menu.contains(e.target)) {
+      this.toggleMenu(menu)
     }
   }
 }

@@ -8,3 +8,4 @@ export type {
   BuiltPage
 } from './types.js'
 export { buildPages } from './buildPages.js'
+export { cleanPath } from './validatePath.js'

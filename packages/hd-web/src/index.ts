@@ -11,6 +11,7 @@ export type {
   SubPage,
   SubPageFunction
 } from './shared/index.js'
+export { cleanPath } from './shared/index.js'
 export {
   type IComponent,
   type HdElement,

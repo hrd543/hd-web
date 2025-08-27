@@ -1,6 +1,7 @@
 import type { HdNode } from '@hd-web/jsx/jsx-runtime'
 import { Site, SiteFunction, SubPageFunction, BuiltPage } from './types.js'
 import path from 'path'
+import { validatePath } from './validatePath.js'
 
 type PageStack = [
   head: () => HdNode,
@@ -50,6 +51,13 @@ export const buildPages = async (
 
   while (stack.length) {
     const [parentHead, p, pageFn, titleSuffix] = stack.pop()!
+
+    if (!validatePath(p)) {
+      throw new Error(
+        `Path ${p} contains invalid characters. Try using the cleanPath function`
+      )
+    }
+
     const page = await pageFn()
     const title = getTitle(titleSuffix, page.title, joinTitles)
     const head = page.head ?? parentHead

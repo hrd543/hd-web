@@ -1,8 +1,9 @@
+import type { HdNode } from '@hd-web/jsx/jsx-runtime'
 import { Site, SiteFunction, SubPageFunction, BuiltPage } from './types.js'
 import path from 'path'
-import { HdNode } from '@hd-web/jsx'
 
 type PageStack = [
+  head: () => HdNode,
   path: string,
   pageFn: SubPageFunction | SiteFunction,
   title: string
@@ -10,6 +11,7 @@ type PageStack = [
 
 const getRoutes = (
   routes: Site['routes'],
+  head: () => HdNode,
   currentPath: string,
   title: string
 ) => {
@@ -18,6 +20,7 @@ const getRoutes = (
   }
 
   return Object.entries(routes).map<PageStack>(([route, subPage]) => [
+    head,
     path.posix.join(currentPath, route),
     subPage,
     title
@@ -41,21 +44,20 @@ export const buildPages = async (
   root: SiteFunction,
   joinTitles: boolean
 ): Promise<BuiltPage[]> => {
-  const stack: PageStack[] = [['', root, '']]
-  const contents: BuiltPage[] = []
-  // TODO This always defaults to the root, not its parent for example.
-  // TODO fix this
-  const entryHead: () => HdNode = () => ''
+  const { routes, ...site } = await root()
+  const contents: BuiltPage[] = [['', site, false]]
+  const stack: PageStack[] = getRoutes(routes, site.head, '', site.title)
 
   while (stack.length) {
-    const [p, pageFn, titleSuffix] = stack.pop()!
+    const [parentHead, p, pageFn, titleSuffix] = stack.pop()!
     const page = await pageFn()
     const title = getTitle(titleSuffix, page.title, joinTitles)
+    const head = page.head ?? parentHead
 
     contents.push([
       p,
       {
-        head: page.head ?? entryHead!,
+        head,
         body: page.body,
         title,
         description: page.description
@@ -63,7 +65,7 @@ export const buildPages = async (
       page.routes !== undefined
     ])
 
-    stack.push(...getRoutes(page.routes, p, title))
+    stack.push(...getRoutes(page.routes, head, p, title))
   }
 
   return contents

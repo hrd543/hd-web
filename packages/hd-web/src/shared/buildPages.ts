@@ -46,7 +46,7 @@ export const buildPages = async (
   joinTitles: boolean
 ): Promise<BuiltPage[]> => {
   const { routes, ...site } = await root()
-  const contents: BuiltPage[] = [['', site, false]]
+  const contents: BuiltPage[] = [['', site, true]]
   const stack: PageStack[] = getRoutes(routes, site.head, '', site.title)
 
   while (stack.length) {

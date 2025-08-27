@@ -22,8 +22,8 @@ export {
   type Html
 } from '@hd-web/jsx'
 
-export type HdConfig = {
+export const defineHdConfig = (config?: {
   shared?: Partial<SharedConfig>
   build?: Partial<HdBuildConfig>
   dev?: Partial<HdDevConfig>
-}
+}) => config

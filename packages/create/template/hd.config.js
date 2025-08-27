@@ -1,6 +1,6 @@
-import type { HdConfig } from 'hd-web'
+import { defineHdConfig } from 'hd-web'
 
-export default (): HdConfig => ({
+export default defineHdConfig({
   shared: {
     entry: 'src/index.tsx'
   },

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import * as url from 'url'
-import * as path from 'path'
 import * as fs from 'fs'
+import * as path from 'path'
+import * as url from 'url'
 
 const currentDirectory = process.cwd()
 const template = path.resolve(

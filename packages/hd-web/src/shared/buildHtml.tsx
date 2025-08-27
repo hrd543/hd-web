@@ -1,4 +1,5 @@
 import { HdNode } from '@hd-web/jsx'
+
 import { stringifyNode } from '../stringify/index.js'
 
 /**

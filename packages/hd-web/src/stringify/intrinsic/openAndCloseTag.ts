@@ -1,4 +1,5 @@
 import { Html } from '@hd-web/jsx'
+
 import { stringifyAttributes } from './stringifyAttributes.js'
 
 const voidElements = new Set([

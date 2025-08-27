@@ -1,4 +1,5 @@
 import { Component, Html } from 'hd-web'
+
 import { HeaderProps } from './types.js'
 
 export default class HeaderClient extends Component<HeaderProps> {

@@ -1,5 +1,5 @@
-import { FuncComponent, HdElement, WithChildren } from './types.js'
 import type * as Html from './html.js'
+import { FuncComponent, HdElement, WithChildren } from './types.js'
 
 type HtmlIntrinsicElementsMap = {
   [K in keyof HTMLElementTagNameMap]: WithChildren<Html.HTMLElements[K]>

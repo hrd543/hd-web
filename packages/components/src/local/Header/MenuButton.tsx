@@ -1,5 +1,6 @@
-import { FuncComponent } from 'hd-web'
 import './MenuButton.css'
+
+import { FuncComponent } from 'hd-web'
 
 type MenuButtonProps = {
   height: number

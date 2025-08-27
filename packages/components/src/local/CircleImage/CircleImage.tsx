@@ -1,7 +1,8 @@
-import { type ImageProps, Image } from '../../global/index.js'
 import './CircleImage.css'
 
 import { FuncComponent } from 'hd-web'
+
+import { Image, type ImageProps } from '../../global/index.js'
 
 export type CircleImageProps = {
   img: ImageProps

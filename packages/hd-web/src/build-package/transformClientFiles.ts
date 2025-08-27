@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
+
 import { addFileToClass } from '../utils/index.js'
 
 export const transformClientFiles = async (folder: string) => {

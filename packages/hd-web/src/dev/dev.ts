@@ -1,7 +1,8 @@
 import express from 'express'
 import { createServer } from 'vite'
-import { formatHtmlRoutes } from './formatHtmlRoutes.js'
+
 import { DevConfig, validateConfig } from './config.js'
+import { formatHtmlRoutes } from './formatHtmlRoutes.js'
 import { getServeHtml } from './serveHtml.js'
 
 export const dev = async (config: Partial<DevConfig> = {}) => {

@@ -1,4 +1,5 @@
 import { HdNode } from '@hd-web/jsx'
+
 import { FlatHdNode } from '../types.js'
 
 export const flattenChildren = (

@@ -1,8 +1,9 @@
 import type { BaseProps, ClientProps } from '@hd-web/jsx'
-import { parseListeners } from '../stringify/shared/listeners.js'
-import { traverse } from './traverse.js'
-import { parseProps } from '../stringify/shared/props.js'
+
 import { listenerAttribute, refAttribute } from '../stringify/constants.js'
+import { parseListeners } from '../stringify/shared/listeners.js'
+import { parseProps } from '../stringify/shared/props.js'
+import { traverse } from './traverse.js'
 
 export abstract class Component<
   T extends BaseProps = BaseProps,

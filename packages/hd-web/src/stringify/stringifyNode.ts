@@ -1,12 +1,13 @@
 import { Fragment, HdElement } from '@hd-web/jsx'
+
 import { stringifyComponent } from './component/stringifyComponent.js'
 import { stringifyFragment } from './fragment/fragment.js'
 import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
 import {
   ComponentInfo,
   RenderStackEntry,
-  StringifyNodeOutput,
-  StringifyFunction
+  StringifyFunction,
+  StringifyNodeOutput
 } from './types.js'
 import { isNode } from './utils.js'
 

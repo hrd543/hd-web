@@ -1,11 +1,11 @@
-export * from './createMeta.js'
 export * from './buildHtml.js'
+export { buildPages } from './buildPages.js'
+export * from './createMeta.js'
 export type {
+  BuiltPage,
   Site,
   SiteFunction,
   SubPage,
-  SubPageFunction,
-  BuiltPage
+  SubPageFunction
 } from './types.js'
-export { buildPages } from './buildPages.js'
 export { cleanPath } from './validatePath.js'

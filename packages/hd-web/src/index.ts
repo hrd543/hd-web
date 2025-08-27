@@ -13,14 +13,14 @@ export type {
 } from './shared/index.js'
 export { cleanPath } from './shared/index.js'
 export {
-  type IComponent,
+  type BaseProps,
+  type ClientProps,
+  type FuncComponent,
   type HdElement,
   type HdNode,
-  type BaseProps,
-  type Props,
-  type FuncComponent,
-  type ClientProps,
-  type Html
+  type Html,
+  type IComponent,
+  type Props
 } from '@hd-web/jsx'
 
 export const defineHdConfig = (config?: {

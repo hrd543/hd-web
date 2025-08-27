@@ -1,4 +1,5 @@
 import { exec } from 'child_process'
+
 import { copyStaticFiles } from './copyStaticFiles.js'
 import { deleteBuildFolder } from './deleteBuildFolder.js'
 import { transformClientFiles } from './transformClientFiles.js'

@@ -24,8 +24,6 @@ export default tseslint.config(
   },
   {
     rules: {
-      // This is used to type custom elements with jsx
-      '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'import/order': 'off',
       'sort-imports': 'off'

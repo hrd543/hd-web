@@ -1,6 +1,7 @@
 import { FuncComponent, registerClient } from 'hd-web'
-import { ButtonProps } from './types.js'
+
 import ButtonClient from './Button.client.js'
+import { ButtonProps } from './types.js'
 
 export const Button: FuncComponent<ButtonProps> = ({
   type,

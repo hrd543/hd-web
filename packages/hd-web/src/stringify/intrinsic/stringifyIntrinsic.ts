@@ -1,14 +1,15 @@
-import { BaseProps, IComponent, HdElement } from '@hd-web/jsx'
+import { BaseProps, HdElement, IComponent } from '@hd-web/jsx'
+
 import { listenerAttribute, refAttribute } from '../constants.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
+import { serialiseListeners } from '../shared/listeners.js'
+import { serialiseProps } from '../shared/props.js'
 import {
   ComponentListener,
   RenderStackEntry,
   StringifyFunction
 } from '../types.js'
 import { closeIntrinsic, openIntrinsic } from './openAndCloseTag.js'
-import { serialiseListeners } from '../shared/listeners.js'
-import { flattenChildren } from '../shared/flattenChildren.js'
-import { serialiseProps } from '../shared/props.js'
 
 export const stringifyIntrinsic: StringifyFunction<
   HdElement & { tag: string }

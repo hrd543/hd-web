@@ -1,7 +1,8 @@
-import { formatLongDate, formatShortDate } from '../../shared/formatDate.js'
 import './BlogInfo.css'
 
 import { FuncComponent } from 'hd-web'
+
+import { formatLongDate, formatShortDate } from '../../shared/formatDate.js'
 
 export type BlogInfoProps = {
   author: string

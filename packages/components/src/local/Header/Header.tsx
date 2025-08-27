@@ -1,8 +1,10 @@
 import './Header.css'
-import { MenuButton } from './MenuButton.js'
+
 import { FuncComponent, registerClient } from 'hd-web'
-import { HeaderProps } from './types.js'
+
 import HeaderClient from './Header.client.js'
+import { MenuButton } from './MenuButton.js'
+import { HeaderProps } from './types.js'
 
 export const Header: FuncComponent<HeaderProps> = ({
   items,

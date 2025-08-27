@@ -1,6 +1,7 @@
 import { FuncComponent } from 'hd-web'
-import { type ImageProps } from './types.js'
+
 import { getImageSrc, getImageStyle } from './helpers.js'
+import { type ImageProps } from './types.js'
 
 export const Image: FuncComponent<ImageProps> = ({
   alt,

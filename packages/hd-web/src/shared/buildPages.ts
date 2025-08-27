@@ -1,6 +1,7 @@
 import type { HdNode } from '@hd-web/jsx/jsx-runtime'
-import { Site, SiteFunction, SubPageFunction, BuiltPage } from './types.js'
 import path from 'path'
+
+import { BuiltPage, Site, SiteFunction, SubPageFunction } from './types.js'
 import { validatePath } from './validatePath.js'
 
 type PageStack = [

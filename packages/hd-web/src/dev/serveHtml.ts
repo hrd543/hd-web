@@ -1,15 +1,16 @@
-import { buildPages, BuiltPage } from '../shared/index.js'
-import { isPage } from './isPage.js'
-import { getPageContent } from './getPageContent.js'
+import { RequestHandler } from 'express'
+import { ViteDevServer } from 'vite'
+
 import { getClientJs } from '../client/index.js'
-import { findClientFiles } from './findClientFiles.js'
-import { DevConfig } from './config.js'
+import { buildPages, BuiltPage } from '../shared/index.js'
 import { buildHtml, createMeta } from '../shared/index.js'
 import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
-import { ViteDevServer } from 'vite'
-import { RequestHandler } from 'express'
-import { throttle } from './throttle.js'
+import { DevConfig } from './config.js'
+import { findClientFiles } from './findClientFiles.js'
 import { getCssImports } from './getCssImports.js'
+import { getPageContent } from './getPageContent.js'
+import { isPage } from './isPage.js'
+import { throttle } from './throttle.js'
 
 export const getServeHtml = (
   config: DevConfig,

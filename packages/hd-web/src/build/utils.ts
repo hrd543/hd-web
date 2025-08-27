@@ -1,5 +1,6 @@
-import path from 'path'
 import * as esbuild from 'esbuild'
+import path from 'path'
+
 import { BuiltFile } from './types.js'
 
 const getFileType = (end: string): BuiltFile['type'] => {

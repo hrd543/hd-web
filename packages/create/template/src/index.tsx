@@ -2,9 +2,10 @@ import './defaults.css'
 import './variables.css'
 import './utils.css'
 import './fonts.css'
-import { SiteFunction } from 'hd-web'
-import { Meta } from '@hd-web/components/head'
+
 import { NotFound } from '@hd-web/components/global'
+import { Meta } from '@hd-web/components/head'
+import { SiteFunction } from 'hd-web'
 
 // This is your page's html
 const App: SiteFunction = () => ({

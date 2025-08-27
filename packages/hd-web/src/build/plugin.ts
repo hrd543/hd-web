@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild'
 import fs from 'fs/promises'
+
 import { clientFileRegex } from '../stringify/index.js'
 import { addFileToClass } from '../utils/index.js'
 

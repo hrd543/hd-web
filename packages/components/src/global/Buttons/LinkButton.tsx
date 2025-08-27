@@ -1,7 +1,9 @@
-import { ButtonType } from './types.js'
-import { FuncComponent } from 'hd-web'
 import './Button.css'
 import './LinkButton.css'
+
+import { FuncComponent } from 'hd-web'
+
+import { ButtonType } from './types.js'
 
 export type LinkButtonProps = {
   link: string

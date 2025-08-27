@@ -1,13 +1,14 @@
 import * as esbuild from 'esbuild'
-import { buildPages } from '../shared/index.js'
-import { writeToHtml } from './buildHtml.js'
-import { getClientJs } from '../client/index.js'
-import { plugin } from './plugin.js'
-import { getFileLoaders, readMetafile } from './utils.js'
-import { BuildConfig, validateConfig } from './config.js'
+import fs from 'fs/promises'
 import path from 'path'
 import url from 'url'
-import fs from 'fs/promises'
+
+import { getClientJs } from '../client/index.js'
+import { buildPages } from '../shared/index.js'
+import { writeToHtml } from './buildHtml.js'
+import { BuildConfig, validateConfig } from './config.js'
+import { plugin } from './plugin.js'
+import { getFileLoaders, readMetafile } from './utils.js'
 
 export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)

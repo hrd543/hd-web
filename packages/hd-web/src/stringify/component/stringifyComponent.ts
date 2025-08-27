@@ -1,8 +1,9 @@
-import { FuncComponent, IComponent, HdElement } from '@hd-web/jsx'
+import { FuncComponent, HdElement, IComponent } from '@hd-web/jsx'
+import url from 'url'
+
 import { idAttribute } from '../constants.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
-import url from 'url'
 
 export const stringifyComponent: StringifyFunction<
   HdElement & { tag: FuncComponent & { client: IComponent } }

@@ -1,4 +1,5 @@
 import { HdElement } from '@hd-web/jsx'
+
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
 

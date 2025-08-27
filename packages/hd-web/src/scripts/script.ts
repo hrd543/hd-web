@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { buildPackage } from '../build-package/index.js'
 import { buildScript } from '../build/index.js'
+import { buildPackage } from '../build-package/index.js'
 import { devScript } from '../dev/index.js'
 
 const allArgs = process.argv.slice(2)

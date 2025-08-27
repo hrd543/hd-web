@@ -1,6 +1,7 @@
-import { SharedConfig } from './sharedConfig.js'
-import url from 'url'
 import path from 'path'
+import url from 'url'
+
+import { SharedConfig } from './sharedConfig.js'
 
 export const readConfigFile = async <Dev, Build>(): Promise<{
   shared: SharedConfig

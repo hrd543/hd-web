@@ -1,5 +1,7 @@
-import assert from 'assert/strict'
 import { describe, it } from 'node:test'
+
+import assert from 'assert/strict'
+
 import { stringifyAttribute, stringifyStyle } from './stringifyAttributes.js'
 
 describe('stringifyAttribute', () => {

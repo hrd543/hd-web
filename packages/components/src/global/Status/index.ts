@@ -1,1 +1,1 @@
-export { type StatusProps, Status } from './Status.js'
+export { Status, type StatusProps } from './Status.js'

@@ -1,5 +1,4 @@
 import * as esbuild from 'esbuild'
-import fs from 'fs/promises'
 import path from 'path'
 
 import { getClientJs } from '../client/index.js'
@@ -9,18 +8,14 @@ import { BuildConfig, validateConfig } from './config.js'
 import { getSiteFunction } from './getSiteFunction.js'
 import { buildHtmlFiles, getHtmlFilepath, getScriptElements } from './html.js'
 import { plugin } from './plugin.js'
+import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { getFileLoaders, readMetafile } from './utils.js'
 
 export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)
 
-  // Delete the build folder
-  await fs.rm(fullConfig.out, { recursive: true, force: true })
-
-  // Copy over any static assets
-  if (fullConfig.staticFolder) {
-    await fs.cp(fullConfig.staticFolder, fullConfig.out, { recursive: true })
-  }
+  await deleteBuildFolder(fullConfig)
+  const staticFiles = await copyStaticFolder(fullConfig)
 
   const first = await esbuild.build({
     ...getSharedEsbuildOptions(fullConfig),
@@ -68,7 +63,14 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
     return
   }
 
-  return buildReturnResult(outfile, first, final, html)
+  return buildReturnResult(
+    fullConfig.out,
+    outfile,
+    first,
+    final,
+    html,
+    staticFiles
+  )
 }
 
 const getSharedEsbuildOptions = ({

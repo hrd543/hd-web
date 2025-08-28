@@ -3,12 +3,12 @@ import path from 'path'
 
 import { BuiltFile } from './types.js'
 
-const getFileType = (end: string): BuiltFile['type'] => {
-  if (end.endsWith('.js') || end.endsWith('.ts')) {
+export const getFileType = (file: string): BuiltFile['type'] => {
+  if (file.endsWith('.js') || file.endsWith('.ts')) {
     return 'js'
   }
 
-  if (end.endsWith('.css')) {
+  if (file.endsWith('.css')) {
     return 'css'
   }
 
@@ -28,6 +28,21 @@ export const readMetafile = (
 
     return all
   }, [] as BuiltFile[])
+}
+
+export const readBuildResultFile = (
+  file: esbuild.OutputFile,
+  out: string
+): BuiltFile => {
+  const type = getFileType(file.path)
+  const contents = type === 'file' ? undefined : file.text
+
+  return {
+    type,
+    path: file.path,
+    relativePath: path.relative(path.join(process.cwd(), out), file.path),
+    contents
+  }
 }
 
 const supportedFileTypes = ['.png', '.webp', '.woff2', '.jpg', '.jpeg']

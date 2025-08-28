@@ -1,5 +1,4 @@
 import { HdNode } from '@hd-web/jsx'
-import { OutputFile } from 'esbuild'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -7,6 +6,7 @@ import { buildHtml, BuiltPage, createMeta } from '../shared/index.js'
 import { ComponentInfo } from '../stringify/index.js'
 import { BuildConfig } from './config.js'
 import { BuiltFile } from './types.js'
+import { getFileType } from './utils.js'
 
 /**
  * Create the html file for the page, including
@@ -17,10 +17,10 @@ export const buildHtmlFiles = async (
   { lang, write, out }: BuildConfig,
   scripts: HdNode
 ): Promise<{
-  html: OutputFile[]
+  html: BuiltFile[]
   components: ComponentInfo[]
 }> => {
-  const html: OutputFile[] = []
+  const html: BuiltFile[] = []
   const components: ComponentInfo[] = []
 
   pages.forEach(([p, { title, description, head, body }]) => {
@@ -32,8 +32,9 @@ export const buildHtmlFiles = async (
 
     html.push({
       path: path.join(out, p),
-      text: built.html,
-      hash: ''
+      relativePath: p,
+      type: getFileType(p),
+      contents: built.html
     })
     components.push(...built.components)
   })
@@ -43,7 +44,7 @@ export const buildHtmlFiles = async (
       html.map(async (h) => {
         const dirname = path.dirname(h.path)
         await fs.mkdir(dirname, { recursive: true })
-        await fs.writeFile(h.path, h.text)
+        await fs.writeFile(h.path, h.contents!)
       })
     )
   }

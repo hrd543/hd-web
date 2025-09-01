@@ -1,0 +1,16 @@
+- basic options like entry and out - make sure a basic page actually creates the files
+- join titles
+- language
+- static folder
+- fileTypes
+- Sub routes actually create the files
+- Sub routes contain the right head information
+- JS included is correct for components
+- Components not used are not included in the bundle
+- Error if multiple components with the same name
+- Error if invalid route name (:, /, £ in url for example)
+- Error if component definition not in a client js file?
+- static files import correctly and are bundled
+- css
+- bundle size check - special case for no components added.
+- Maybe a check for components which live in a separate test package?

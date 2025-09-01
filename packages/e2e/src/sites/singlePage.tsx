@@ -1,4 +1,4 @@
-import { SiteFunction } from '../../shared/types.js'
+import { SiteFunction } from 'hd-web'
 
 const singlePage: SiteFunction = () => ({
   title: 'Single page site',

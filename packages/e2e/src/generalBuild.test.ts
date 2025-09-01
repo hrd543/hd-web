@@ -3,14 +3,14 @@ import { describe, it } from 'node:test'
 
 import assert from 'assert/strict'
 import * as cheerio from 'cheerio'
+import { build } from 'hd-web'
 
-import { build } from '../build/index.js'
 import { assertArrayEqual } from './utils/arrayEqual.js'
 
 describe('General build', async () => {
   const built = (await build({
     write: false,
-    entry: 'src/tests/sites/singlePage.tsx',
+    entry: 'sites/singlePage.tsx',
     out: 'out'
   }))!
 

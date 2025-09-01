@@ -1,4 +1,5 @@
-import { SiteFunction } from '../../shared/types.js'
+import { SiteFunction } from 'hd-web'
+
 import hd from '../assets/img.hd'
 import jpg from '../assets/img.jpg'
 import png from '../assets/img.png'

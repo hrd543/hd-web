@@ -2,16 +2,15 @@ import { describe, it } from 'node:test'
 
 import assert from 'assert/strict'
 import * as cheerio from 'cheerio'
-
-import { build } from '../build/index.js'
+import { build } from 'hd-web'
 
 const getImgRegex = (fileType: string, imgSrc = false) =>
   new RegExp(`${imgSrc ? '\\/' : ''}img-[^.]+\\.${fileType}`)
 
-describe('General build', async () => {
+describe('Images', async () => {
   const built = (await build({
     write: false,
-    entry: 'src/tests/sites/images.tsx',
+    entry: 'sites/images.tsx',
     out: 'out',
     fileTypes: ['.hd']
   }))!

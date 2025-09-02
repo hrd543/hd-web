@@ -11,27 +11,36 @@ export const deleteBuildFolder = async (config: BuildConfig) => {
   }
 }
 
-export const copyStaticFolder = async (
-  config: BuildConfig
-): Promise<BuiltFile[] | undefined> => {
-  if (!config.staticFolder) {
+export const copyStaticFolder = async ({
+  staticFolder,
+  out,
+  write
+}: BuildConfig): Promise<BuiltFile[] | undefined> => {
+  if (!staticFolder) {
     return
   }
 
-  if (config.write) {
-    await fs.cp(config.staticFolder, config.out, { recursive: true })
+  if (write) {
+    await fs.cp(staticFolder, out, { recursive: true })
   }
 
-  const contents = await fs.readdir(config.staticFolder, {
+  const contents = await fs.readdir(staticFolder, {
     recursive: true,
     withFileTypes: true
   })
 
   return contents
     .filter((dirent) => dirent.isFile())
-    .map((dirent) => ({
-      path: path.join(config.out, dirent.parentPath),
-      relativePath: dirent.parentPath,
-      type: getFileType(dirent.parentPath)
-    }))
+    .map((dirent) => {
+      const filepath = path.relative(
+        staticFolder,
+        path.join(dirent.parentPath, dirent.name)
+      )
+
+      return {
+        path: path.join(out, filepath),
+        relativePath: filepath,
+        type: getFileType(filepath)
+      }
+    })
 }

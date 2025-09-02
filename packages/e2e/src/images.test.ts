@@ -10,7 +10,7 @@ const getImgRegex = (fileType: string, imgSrc = false) =>
 describe('Images', async () => {
   const built = (await build({
     write: false,
-    entry: 'sites/images.tsx',
+    entry: 'src/sites/images.tsx',
     out: 'out',
     fileTypes: ['.hd']
   }))!

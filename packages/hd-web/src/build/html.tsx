@@ -79,7 +79,7 @@ export const getHtmlFilepath = (page: BuiltPage): BuiltPage => {
   const [pagePath, content, createFolder] = page
 
   const newPath = createFolder
-    ? path.join(pagePath, 'index.html')
+    ? path.posix.join(pagePath, 'index.html')
     : pagePath.replace(/[\\/]$/, '') + '.html'
 
   return [newPath, content, createFolder]

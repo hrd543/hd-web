@@ -10,7 +10,7 @@ import { assertArrayEqual } from './utils/arrayEqual.js'
 describe('General build', async () => {
   const built = (await build({
     write: false,
-    entry: 'sites/singlePage.tsx',
+    entry: 'src/sites/singlePage.tsx',
     out: 'out'
   }))!
 

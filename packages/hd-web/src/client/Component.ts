@@ -21,7 +21,7 @@ export abstract class Component<
 
       if (listen) {
         parseListeners(listen).forEach(([event, method]) => {
-          element.addEventListener(
+          e.addEventListener(
             event,
             (this[method as keyof this] as () => void).bind(this)
           )

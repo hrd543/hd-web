@@ -7,7 +7,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "node --import tsx --test \"src/**/*.test.ts\""
+    "test": "npm run test:file \"src/**/*.test.ts\"",
+    "test:file": "node --import tsx --test"
   },
   "exports": {
     ".": {
@@ -33,6 +34,7 @@
     "@hd-web/jsx": "^0.3.0",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",
+    "happy-dom": "^18.0.1",
     "vite": "^7.1.2"
   },
   "sideEffects": false,

@@ -23,6 +23,10 @@ const getMapInit = (count: number) => {
 }
 
 export const getClientJs = (clientFiles: string[]) => {
+  if (clientFiles.length === 0) {
+    return
+  }
+
   const uniqueFiles = Array.from(new Set(clientFiles))
   const imports = uniqueFiles
     .map((file, i) => `import _${i} from "${file}";`)

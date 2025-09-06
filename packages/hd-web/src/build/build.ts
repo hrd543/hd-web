@@ -1,73 +1,96 @@
 import * as esbuild from 'esbuild'
 import fs from 'fs/promises'
 import path from 'path'
-import url from 'url'
 
 import { getClientJs } from '../client/index.js'
 import { buildPages } from '../shared/index.js'
-import { writeToHtml } from './buildHtml.js'
+import { buildReturnResult } from './builReturnResult.js'
 import { BuildConfig, validateConfig } from './config.js'
+import { getSiteFunction } from './getSiteFunction.js'
+import { buildHtmlFiles, getHtmlFilepath, getScriptElements } from './html.js'
 import { plugin } from './plugin.js'
+import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { getFileLoaders, readMetafile } from './utils.js'
 
 export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)
 
-  // Delete the build folder
-  await fs.rm(fullConfig.out, { recursive: true, force: true })
+  await deleteBuildFolder(fullConfig)
+  const staticFiles = await copyStaticFolder(fullConfig)
 
-  // Copy over any static assets
-  if (fullConfig.staticFolder) {
-    await fs.cp(fullConfig.staticFolder, fullConfig.out, { recursive: true })
-  }
-
-  const built = await esbuild.build({
+  const first = await esbuild.build({
     ...getSharedEsbuildOptions(fullConfig),
     plugins: [plugin()],
     platform: 'node',
     entryPoints: [fullConfig.entry],
     outdir: fullConfig.out,
     metafile: true,
+    format: fullConfig.write ? 'esm' : 'iife',
     // Ignore any hd-web dependencies.
     external: ['vite', 'esbuild', 'express']
   })
 
   // doesn't support splitting yet
-  const files = readMetafile(built.metafile, fullConfig.out)
+  const files = readMetafile(first.metafile, fullConfig.out)
   const outfile = path.resolve(
     process.cwd(),
     files.find((f) => f.type === 'js')!.path
   )
 
   const pages = await buildPages(
-    (await import(/* @vite-ignore */ url.pathToFileURL(outfile).href)).default,
-    true
+    await getSiteFunction(outfile, first.outputFiles),
+    fullConfig.joinTitles
   )
 
-  const components = (
-    await Promise.all(pages.map((page) => writeToHtml(page, fullConfig, files)))
-  ).flat()
+  const { html, components } = await buildHtmlFiles(
+    pages.map(getHtmlFilepath),
+    fullConfig,
+    getScriptElements(files)
+  )
 
   const js = getClientJs(components.map(({ filename }) => filename))
 
   // TODO I should remove the `__file` prop here if it exists?
-  await esbuild.build({
-    ...getSharedEsbuildOptions(fullConfig),
-    stdin: { contents: js, loader: 'js', resolveDir: '.' },
+  const final = js
+    ? await esbuild.build({
+        ...getSharedEsbuildOptions(fullConfig),
+        stdin: { contents: js, loader: 'js', resolveDir: '.' },
+        outfile,
+        platform: 'browser',
+        allowOverwrite: true,
+        format: 'esm'
+      })
+    : undefined
+
+  if (fullConfig.write) {
+    if (!js) {
+      await fs.rm(outfile)
+    }
+
+    return
+  }
+
+  return buildReturnResult(
+    fullConfig.out,
     outfile,
-    platform: 'browser',
-    allowOverwrite: true
-  })
+    first,
+    final,
+    html,
+    staticFiles
+  )
 }
 
-const getSharedEsbuildOptions = (
-  config: BuildConfig
-): esbuild.BuildOptions => ({
+const getSharedEsbuildOptions = ({
+  target,
+  fileTypes,
+  write
+}: BuildConfig): esbuild.BuildOptions => ({
   minify: true,
   bundle: true,
   treeShaking: true,
-  format: 'esm',
-  target: config.target,
+  globalName: 'site',
+  target,
+  write,
   publicPath: '/',
-  loader: getFileLoaders(config.fileTypes)
+  loader: getFileLoaders(fileTypes)
 })

@@ -1,3 +1,3 @@
 import { build } from '../build/build.js'
 
-await build({ out: 'dist', entry: './main.tsx' })
+await build({ out: 'dist', entry: './main.tsx', write: true })

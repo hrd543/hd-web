@@ -1,0 +1,19 @@
+import { SiteFunction } from 'hd-web'
+
+import { Component } from './components/Component.js'
+import { Unused } from './components/Unused.js'
+
+const components: SiteFunction = () => ({
+  title: 'Components',
+  body: () => (
+    <div>
+      <Component _client="client1" id={1} />
+      <Component _client="client2" id={2} />
+      {/* The component is being imported but not actually rendered. */}
+      {Unused.name}
+    </div>
+  ),
+  head: () => <meta id="head" name="test" />
+})
+
+export default components

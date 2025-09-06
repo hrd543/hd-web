@@ -7,11 +7,14 @@ export type SharedConfig = {
   entry: string
   /** Extra file types (including .) which should be included */
   fileTypes: string[]
+  /** Should it write to the filesystem? Useful for tests; defaults to true */
+  write: boolean
 }
 
 export const defaultSharedConfig: SharedConfig = {
   lang: 'en-GB',
   joinTitles: true,
   entry: 'src/index.tsx',
-  fileTypes: []
+  fileTypes: [],
+  write: true
 }

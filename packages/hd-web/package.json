@@ -1,6 +1,6 @@
 {
   "name": "hd-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build your hd-web site or start a dev server",
   "bin": {
     "hd": "/dist/scripts/script.js"
@@ -28,14 +28,15 @@
   "files": [
     "/dist"
   ],
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/node": "^22.0.0",
+  "dependencies": {
     "@hd-web/jsx": "^0.3.0",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",
-    "happy-dom": "^18.0.1",
     "vite": "^7.1.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.0.0"
   },
   "sideEffects": false,
   "type": "module",

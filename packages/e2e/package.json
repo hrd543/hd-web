@@ -1,15 +1,16 @@
 {
   "name": "e2e",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "build": "tsc",
     "test": "npm run test:file \"src/**/*.test.ts\"",
     "test:file": "node --import tsx --test"
   },
-  "devDependencies": {
-    "hd-web": "0.1.0",
-    "cheerio": "^1.1.2"
+  "dependencies": {
+    "hd-web": "0.1.1",
+    "cheerio": "^1.1.2",
+    "happy-dom": "^18.0.1"
   },
   "sideEffects": false,
   "type": "module"

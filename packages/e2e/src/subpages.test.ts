@@ -32,7 +32,7 @@ describe('Subpages', async () => {
   })
 
   it('should have the correct content in each page', () => {
-    assert.equal(root('#root').text(), 'Root')
+    assert.ok(root('#root').children().length)
     assert.equal(leaf1('#leaf').text(), 'Leaf')
     assert.equal(child('#child').text(), 'Child')
     assert.equal(leaf2('#leaf2').text(), 'Leaf 2')

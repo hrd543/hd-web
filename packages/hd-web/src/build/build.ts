@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild'
+import fs from 'fs/promises'
 import path from 'path'
 
 import { getClientJs } from '../client/index.js'
@@ -50,16 +51,22 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
   const js = getClientJs(components.map(({ filename }) => filename))
 
   // TODO I should remove the `__file` prop here if it exists?
-  const final = await esbuild.build({
-    ...getSharedEsbuildOptions(fullConfig),
-    stdin: { contents: js, loader: 'js', resolveDir: '.' },
-    outfile,
-    platform: 'browser',
-    allowOverwrite: true,
-    format: 'esm'
-  })
+  const final = js
+    ? await esbuild.build({
+        ...getSharedEsbuildOptions(fullConfig),
+        stdin: { contents: js, loader: 'js', resolveDir: '.' },
+        outfile,
+        platform: 'browser',
+        allowOverwrite: true,
+        format: 'esm'
+      })
+    : undefined
 
   if (fullConfig.write) {
+    if (!js) {
+      await fs.rm(outfile)
+    }
+
     return
   }
 

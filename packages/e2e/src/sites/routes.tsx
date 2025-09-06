@@ -1,8 +1,15 @@
 import { SiteFunction } from 'hd-web'
 
+import { Component } from './components/Component.js'
+
 const routes: SiteFunction = () => ({
   title: 'Root',
-  body: () => <div id="root">Root</div>,
+  body: () => (
+    <div id="root">
+      {/* Adding this to trigger the js file */}
+      <Component id={1} />
+    </div>
+  ),
   head: () => <meta id="head-root" name="test" />,
   routes: {
     leaf: () => ({

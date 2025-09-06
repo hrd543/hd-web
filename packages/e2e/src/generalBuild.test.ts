@@ -21,7 +21,8 @@ describe('General build', async () => {
   it('should create necessary files on build', () => {
     assertArrayEqual(
       built.map((file) => file.relativePath),
-      ['index.html', 'singlePage.js']
+      // NB no js file since no components.
+      ['index.html']
     )
   })
 
@@ -36,13 +37,5 @@ describe('General build', async () => {
   it('should render the head correctly', () => {
     const head = $('#head')
     assert.equal(head.attr('name'), 'test')
-  })
-
-  it('should include one script element for the js', () => {
-    const scripts = $('script')
-
-    assert.ok(
-      scripts.length === 1 && scripts[0]!.attribs.src === '/singlePage.js'
-    )
   })
 })

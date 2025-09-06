@@ -7,8 +7,8 @@ const components: SiteFunction = () => ({
   title: 'Components',
   body: () => (
     <div>
-      <Component id={1} />
-      <Component id={2} />
+      <Component _client="client1" id={1} />
+      <Component _client="client2" id={2} />
       {/* The component is being imported but not actually rendered. */}
       {Unused.name}
     </div>

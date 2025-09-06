@@ -57,4 +57,14 @@ describe('General build', async () => {
     assert.equal(messages.length, 1)
     assert.equal(messages[0], 'ref-1')
   })
+
+  it('should work with client props', () => {
+    messages = []
+
+    const root = document.getElementById('props-1')!
+    root.dispatchEvent(new window.CustomEvent('props'))
+    assert.equal(messages.length, 2)
+    assert.equal(messages[0], 'client1')
+    assert.equal(messages[1], undefined)
+  })
 })

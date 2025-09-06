@@ -7,7 +7,7 @@ const routes: SiteFunction = () => ({
   body: () => (
     <div id="root">
       {/* Adding this to trigger the js file */}
-      <Component id={1} />
+      <Component _client="" id={1} />
     </div>
   ),
   head: () => <meta id="head-root" name="test" />,

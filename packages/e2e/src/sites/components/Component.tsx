@@ -1,8 +1,8 @@
 import { type FuncComponent, registerClient } from 'hd-web'
 
-import ComponentClient from './Component.client.js'
+import ComponentClient, { type ComponentProps } from './Component.client.js'
 
-export const Component: FuncComponent<{ id: number }> = ({ id }) => {
+export const Component: FuncComponent<ComponentProps> = ({ id }) => {
   return (
     <div id={`component-${id}`} $click="handleClick">
       <div id={`ref-${id}`} ref="element">
@@ -10,6 +10,9 @@ export const Component: FuncComponent<{ id: number }> = ({ id }) => {
       </div>
       <div id={`event-${id}`} $newEvent="handleEvent">
         Event
+      </div>
+      <div id={`props-${id}`} $props="handleProps">
+        Props
       </div>
     </div>
   )

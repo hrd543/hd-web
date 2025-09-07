@@ -1,4 +1,5 @@
-import { SiteFunction } from '../shared/index.js'
+import { SiteFunction } from 'hd-web'
+
 import { Henry } from './Henry.js'
 
 const App: SiteFunction = async () => {

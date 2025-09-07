@@ -5,5 +5,5 @@ import { dev } from './dev.js'
 export const devScript = async () => {
   const config = await readConfigFile<DevConfig, unknown>()
 
-  return dev({ ...config.shared, ...config.dev })
+  return dev({ ...config.dev, ...config.shared })
 }

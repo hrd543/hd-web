@@ -1,4 +1,4 @@
-import { Component } from '../client/index.js'
+import { Component } from 'hd-web'
 
 export default class HenryClient extends Component {
   static key = 'Henry'

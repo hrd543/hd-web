@@ -5,5 +5,5 @@ import { BuildConfig } from './config.js'
 export const buildScript = async () => {
   const config = await readConfigFile<unknown, BuildConfig>()
 
-  return build({ ...config.shared, ...config.build })
+  return build({ ...config.build, ...config.shared })
 }

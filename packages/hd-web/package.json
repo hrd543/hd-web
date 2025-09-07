@@ -1,6 +1,6 @@
 {
   "name": "hd-web",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Build your hd-web site or start a dev server",
   "bin": {
     "hd": "/dist/scripts/script.js"

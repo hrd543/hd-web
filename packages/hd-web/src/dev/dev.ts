@@ -15,7 +15,11 @@ export const dev = async (config: Partial<DevConfig> = {}) => {
       port: fullConfig.port,
       middlewareMode: true
     },
-    appType: 'custom'
+    appType: 'custom',
+    ssr: {
+      // This makes sure these node_modules are transformed by vite
+      noExternal: ['@hd-web/components', ...fullConfig.dependenciesToTransform]
+    }
   })
 
   app.use(

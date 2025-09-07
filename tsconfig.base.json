@@ -7,7 +7,7 @@
     "moduleResolution": "nodenext",
     "lib": ["dom", "esnext"],
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "esnext",
     "declaration": true,
     "jsx": "react-jsx",

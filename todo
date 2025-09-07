@@ -1,0 +1,8 @@
+- Stop css flicker in dev mode
+- Flesh out examples
+- Put hd config inside each example folder
+- Make hd config more streamline by removing shared distinction
+- Move css creation outside of request in dev mode
+- Make sure component name is unique
+- Add errors for common scenarios
+- Flesh out documentation

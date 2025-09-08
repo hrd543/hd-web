@@ -21,7 +21,8 @@ export type ComponentInfo = {
 
 export type StringifyFunction<T extends FlatHdNode = FlatHdNode> = (
   entry: RenderStackEntry<T>,
-  components: ComponentInfo[]
+  /** Component key => filename */
+  components: Map<string, string>
 ) => StringifyResult
 
 export type StringifyNodeOutput = {

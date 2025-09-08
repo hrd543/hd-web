@@ -7,7 +7,7 @@ import { build } from 'hd-web'
 
 import { getFileByPath } from './utils/getFileByPath.js'
 
-describe('General build', async () => {
+describe('Components', async () => {
   let messages: any[] = []
 
   const window = new Window({

@@ -4,7 +4,6 @@ import { stringifyComponent } from './component/stringifyComponent.js'
 import { stringifyFragment } from './fragment/fragment.js'
 import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
 import {
-  ComponentInfo,
   RenderStackEntry,
   StringifyFunction,
   StringifyNodeOutput
@@ -12,7 +11,7 @@ import {
 import { isNode } from './utils.js'
 
 export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
-  const components: ComponentInfo[] = []
+  const components = new Map<string, string>()
 
   let fullHtml = ''
   const stack: RenderStackEntry[] = [[root, null]]
@@ -35,7 +34,10 @@ export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
   }
 
   return {
-    components,
+    components: components
+      .entries()
+      .map(([key, filename]) => ({ key, filename }))
+      .toArray(),
     html: fullHtml
   }
 }

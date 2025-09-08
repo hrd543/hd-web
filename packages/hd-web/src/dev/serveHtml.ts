@@ -14,7 +14,7 @@ import { isPage } from './isPage.js'
 
 type RebuildResult = {
   pages: BuiltPage[]
-  cssImports: string
+  cssImports: string[]
 }
 
 type UpdateType = 'update' | 'delete' | 'add'
@@ -73,7 +73,7 @@ export const getServeHtml = (
         content.title,
         content.description,
         content.head(),
-        buildEmptyScript()
+        buildEmptyScript(rebuilt.cssImports)
       ),
       content.body(),
       config.lang
@@ -81,7 +81,7 @@ export const getServeHtml = (
 
     const js = findClientFiles(server.moduleGraph, components)
     const componentJs = getClientJs(js)
-    const withJs = addJsToEmptyScript(html, rebuilt.cssImports + componentJs)
+    const withJs = addJsToEmptyScript(html, componentJs)
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

@@ -6,17 +6,8 @@ const findPage = (url: string, pages: BuiltPage[]) => {
   return pages.find((p) => p[0] === formattedUrl)
 }
 
-export const getPageContent = async (
-  url: string,
-  getSite: () => Promise<BuiltPage[] | null>
-) => {
-  const site = await getSite()
-
-  if (site === null) {
-    return null
-  }
-
-  const page = findPage(url, site)
+export const getPageContent = (url: string, pages: BuiltPage[]) => {
+  const page = findPage(url, pages)
 
   if (!page) {
     return undefined

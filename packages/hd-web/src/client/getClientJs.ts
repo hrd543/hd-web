@@ -24,7 +24,7 @@ const getMapInit = (count: number) => {
 
 export const getClientJs = (clientFiles: string[]) => {
   if (clientFiles.length === 0) {
-    return
+    return ''
   }
 
   const uniqueFiles = Array.from(new Set(clientFiles))

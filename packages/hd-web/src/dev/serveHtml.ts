@@ -12,32 +12,40 @@ import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
 import { throttle } from './throttle.js'
 
+type RebuildResult = {
+  pages: BuiltPage[]
+  cssImports: string
+}
+
 export const getServeHtml = (
   config: DevConfig,
   server: ViteDevServer
 ): RequestHandler => {
-  const [getSite, updateSite] = throttle<BuiltPage[]>(async () => {
-    // server.ws.send({ type: 'full-reload' })
-
+  const [getRebuilt, rebuild] = throttle<RebuildResult>(async () => {
     const siteFn = (await server.ssrLoadModule(config.entry)).default
 
-    return buildPages(siteFn, config.joinTitles)
+    return {
+      pages: await buildPages(siteFn, config.joinTitles),
+      cssImports: getCssImports(server.moduleGraph)
+    }
   })
 
-  server.watcher.on('change', updateSite)
   // Don't need remove / add listeners since that wouldn't change the routing.
+  server.watcher.on('change', rebuild)
 
   return async (req, res, next) => {
     if (!isPage(req.url)) {
       next()
     }
 
-    const content = await getPageContent(req.url, getSite)
+    const rebuilt = await getRebuilt()
 
-    if (content === null) {
+    if (rebuilt === null) {
       res.statusCode = 202
       return res.end('Waiting for data')
     }
+
+    const content = await getPageContent(req.url, rebuilt.pages)
 
     if (content === undefined) {
       res.statusCode = 404
@@ -57,10 +65,7 @@ export const getServeHtml = (
 
     const js = findClientFiles(server.moduleGraph, components)
     const componentJs = getClientJs(js)
-    // TODO move this outside as it's not needed on every request
-    const cssImports = getCssImports(server.moduleGraph)
-
-    const withJs = addJsToEmptyScript(html, cssImports + componentJs)
+    const withJs = addJsToEmptyScript(html, rebuilt.cssImports + componentJs)
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

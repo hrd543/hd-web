@@ -8,30 +8,46 @@ import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { DevConfig } from './config.js'
 import { findClientFiles } from './findClientFiles.js'
 import { getCssImports } from './getCssImports.js'
+import { getLatest } from './getLatest.js'
 import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
-import { throttle } from './throttle.js'
 
 type RebuildResult = {
   pages: BuiltPage[]
   cssImports: string
 }
 
+type UpdateType = 'update' | 'delete' | 'add'
+
 export const getServeHtml = (
   config: DevConfig,
   server: ViteDevServer
 ): RequestHandler => {
-  const [getRebuilt, rebuild] = throttle<RebuildResult>(async () => {
-    const siteFn = (await server.ssrLoadModule(config.entry)).default
+  const [getRebuilt, rebuild] = getLatest<RebuildResult, UpdateType>(
+    async (old, type) => {
+      const siteFn = (await server.ssrLoadModule(config.entry)).default
+      const cssImports = getCssImports(server.moduleGraph)
 
-    return {
-      pages: await buildPages(siteFn, config.joinTitles),
-      cssImports: getCssImports(server.moduleGraph)
+      // We only need to rebuild the pages on update (or initial load)
+      if (type === 'update' || old === null) {
+        return {
+          pages: await buildPages(siteFn, config.joinTitles),
+          cssImports
+        }
+      }
+
+      // But we need to update the css imports all the time
+      return {
+        ...old,
+        cssImports
+      }
     }
-  })
+  )
 
-  // Don't need remove / add listeners since that wouldn't change the routing.
-  server.watcher.on('change', rebuild)
+  rebuild('update')()
+  server.watcher.on('change', rebuild('update'))
+  server.watcher.on('add', rebuild('add'))
+  server.watcher.on('unlink', rebuild('delete'))
 
   return async (req, res, next) => {
     if (!isPage(req.url)) {

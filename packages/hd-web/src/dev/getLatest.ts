@@ -1,6 +1,16 @@
-export const throttle = <Res>(
-  callback: () => Promise<Res>
-): [getResult: () => Promise<Res | null>, update: () => void] => {
+/**
+ * Stores the latest result of callback and makes it
+ * retrievable and updateable.
+ *
+ * Ensures only the latest run of callback is returned when
+ * calling `getResult`
+ */
+export const getLatest = <Res, Args>(
+  callback: (old: Res | null, args: Args) => Promise<Res>
+): [
+  getResult: () => Promise<Res | null>,
+  update: (args: Args) => () => void
+] => {
   let promise: Promise<Res> | null
   let resolve: ((r: Res | null) => void) | undefined
   // Once done, we store the result here
@@ -18,9 +28,9 @@ export const throttle = <Res>(
     })
   }
 
-  const update = () => {
+  const update = (args: Args) => () => {
+    const thisResult = callback(result, args)
     result = null
-    const thisResult = callback()
     promise = thisResult
 
     thisResult.then((r) => {
@@ -32,8 +42,6 @@ export const throttle = <Res>(
       }
     })
   }
-
-  update()
 
   return [getResult, update]
 }

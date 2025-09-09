@@ -51,6 +51,8 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
   const js = getClientJs(components.map(({ filename }) => filename))
 
   // TODO I should remove the `__file` prop here if it exists?
+  // ERROR: Errors here are likely due to the client component not being the default export.
+  // Expose the esdbuild error as well as this suggestion.
   const final = js
     ? await esbuild.build({
         ...getSharedEsbuildOptions(fullConfig),

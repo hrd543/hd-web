@@ -1,6 +1,7 @@
 import path from 'path'
 import url from 'url'
 
+import { HdError } from '../errors/index.js'
 import { SharedConfig } from './sharedConfig.js'
 
 export const readConfigFile = async <Dev, Build>(): Promise<
@@ -19,8 +20,6 @@ export const readConfigFile = async <Dev, Build>(): Promise<
 
     return file.default
   } catch {
-    console.warn(`No config file found at ${configFile}. Using default options`)
-
-    return {}
+    throw new HdError('fs.missingConfig')
   }
 }

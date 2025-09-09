@@ -10,19 +10,20 @@ export const stringifyComponent: StringifyFunction<
   HdElement & { tag: FuncComponent & { client: IComponent } }
 > = (entry, components) => {
   const [{ tag, props, children }] = entry
+  const componentKey = tag.client.key
   const flatChildren = flattenChildren(children)
 
   if (!flatChildren || flatChildren.length !== 1) {
-    throw new Error(`Component ${tag.name} must have one child`)
+    throw new HdError('comp.oneChild', componentKey)
   }
 
   const child = flatChildren[0]!
 
   if (typeof child === 'string' || typeof child.tag !== 'string') {
-    throw new Error(`Component ${tag.name} must have an intrinsic child`)
+    throw new HdError('comp.intrinsicChild', componentKey)
   }
 
-  const existing = components.get(tag.client.key)
+  const existing = components.get(componentKey)
   // Try the client component's file prop which will only be valid
   // in prod or external packages.
   const filename = (
@@ -30,21 +31,19 @@ export const stringifyComponent: StringifyFunction<
   )?.replaceAll('\\', '/')
 
   if (!filename) {
-    throw new HdError('comp.filename', tag.client.key)
+    throw new HdError('comp.filename', componentKey)
   }
 
   if (existing && existing !== filename) {
-    throw new Error(
-      `The key "${tag.client.key}" is used by multiple client components.\nThese keys must be unique.`
-    )
+    throw new HdError('comp.unique', componentKey)
   }
 
-  components.set(tag.client.key, filename)
+  components.set(componentKey, filename)
 
   return {
     entries: [
       [
-        { ...child, props: { ...child.props, [idAttribute]: tag.client.key } },
+        { ...child, props: { ...child.props, [idAttribute]: componentKey } },
         tag,
         props
       ]

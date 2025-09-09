@@ -1,5 +1,6 @@
 import { ModuleGraph } from 'vite'
 
+import { HdError } from '../errors/index.js'
 import { clientFileRegex } from '../stringify/index.js'
 
 const getModules = (
@@ -10,7 +11,7 @@ const getModules = (
     const imports = moduleGraph.getModulesByFile(filename)
 
     if (!imports) {
-      throw new Error(`Module not found at ${filename} for component ${key}`)
+      throw new HdError('comp.notFound', key, filename)
     }
 
     return Array.from(imports)

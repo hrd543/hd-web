@@ -1,5 +1,6 @@
 import { BaseProps, HdElement, IComponent } from '@hd-web/jsx'
 
+import { HdError } from '../../errors/index.js'
 import { listenerAttribute, refAttribute } from '../constants.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { serialiseListeners } from '../shared/listeners.js'
@@ -63,15 +64,11 @@ const processListener = (
       const method = props[propKey] as string
 
       if (!component) {
-        // TODO improve this error message
-        throw new Error(
-          `You can't specify listeners without a parent component.
-          Did you forget to registerClient()?`
-        )
+        throw new HdError('comp.parent')
       }
 
       if (!Object.hasOwn(component.prototype, method)) {
-        throw new Error(`Component ${component.name} has no method ${method}`)
+        throw new HdError('comp.missingListener', component.key, method)
       }
 
       delete props[propKey]

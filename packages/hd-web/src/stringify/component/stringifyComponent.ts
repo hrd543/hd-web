@@ -1,6 +1,7 @@
 import { FuncComponent, HdElement, IComponent } from '@hd-web/jsx'
 import url from 'url'
 
+import { HdError } from '../../errors/index.js'
 import { idAttribute } from '../constants.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
@@ -25,12 +26,12 @@ export const stringifyComponent: StringifyFunction<
   // Try the client component's file prop which will only be valid
   // in prod or external packages.
   const filename = (
-    tag.client.__file ? url.fileURLToPath(tag.client.__file) : child.filename!
-  ).replaceAll('\\', '/')
+    tag.client.__file ? url.fileURLToPath(tag.client.__file) : child.filename
+  )?.replaceAll('\\', '/')
 
-  // ERROR check here to make sure filename is defined. If it's not then it means
-  // that the component wasn't defined in a .client.ts file
-  // This is because we have a plugin to add it for those files. (Might work in dev mode)
+  if (!filename) {
+    throw new HdError('comp.filename', tag.client.key)
+  }
 
   if (existing && existing !== filename) {
     throw new Error(

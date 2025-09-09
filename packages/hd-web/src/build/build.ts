@@ -1,4 +1,3 @@
-import * as esbuild from 'esbuild'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -8,9 +7,9 @@ import { buildReturnResult } from './builReturnResult.js'
 import { BuildConfig, validateConfig } from './config.js'
 import { getSiteFunction } from './getSiteFunction.js'
 import { buildHtmlFiles, getHtmlFilepath, getScriptElements } from './html.js'
-import { plugin } from './plugin.js'
 import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
-import { getFileLoaders, readMetafile } from './utils.js'
+import { runEsbuildFirst, runEsbuildLast } from './runEsbuild.js'
+import { readMetafile } from './utils.js'
 
 export const build = async (config: Partial<BuildConfig> = {}) => {
   const fullConfig = validateConfig(config)
@@ -18,17 +17,7 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
   await deleteBuildFolder(fullConfig)
   const staticFiles = await copyStaticFolder(fullConfig)
 
-  const first = await esbuild.build({
-    ...getSharedEsbuildOptions(fullConfig),
-    plugins: [plugin()],
-    platform: 'node',
-    entryPoints: [fullConfig.entry],
-    outdir: fullConfig.out,
-    metafile: true,
-    format: fullConfig.write ? 'esm' : 'iife',
-    // Ignore any hd-web dependencies.
-    external: ['vite', 'esbuild', 'express']
-  })
+  const first = await runEsbuildFirst(fullConfig)
 
   // doesn't support splitting yet
   const files = readMetafile(first.metafile, fullConfig.out)
@@ -51,18 +40,7 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
   const js = getClientJs(components.map(({ filename }) => filename))
 
   // TODO I should remove the `__file` prop here if it exists?
-  // ERROR: Errors here are likely due to the client component not being the default export.
-  // Expose the esdbuild error as well as this suggestion.
-  const final = js
-    ? await esbuild.build({
-        ...getSharedEsbuildOptions(fullConfig),
-        stdin: { contents: js, loader: 'js', resolveDir: '.' },
-        outfile,
-        platform: 'browser',
-        allowOverwrite: true,
-        format: 'esm'
-      })
-    : undefined
+  const final = await runEsbuildLast(fullConfig, outfile, js)
 
   if (fullConfig.write) {
     if (!js) {
@@ -81,18 +59,3 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
     staticFiles
   )
 }
-
-const getSharedEsbuildOptions = ({
-  target,
-  fileTypes,
-  write
-}: BuildConfig): esbuild.BuildOptions => ({
-  minify: true,
-  bundle: true,
-  treeShaking: true,
-  globalName: 'site',
-  target,
-  write,
-  publicPath: '/',
-  loader: getFileLoaders(fileTypes)
-})

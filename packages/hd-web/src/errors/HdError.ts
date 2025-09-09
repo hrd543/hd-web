@@ -16,4 +16,8 @@ export class HdError<T extends HdErrorKey> extends Error {
 
     return e.key
   }
+
+  override toString() {
+    return `\n❌ Hd build error!\n\n${this.message}`
+  }
 }

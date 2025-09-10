@@ -1,7 +1,7 @@
 - Flesh out examples
 - Put hd config inside each example folder
 - Make hd config more streamline by removing shared distinction
-- Add errors for common scenarios
+- Improve errors in dev mode
 - Flesh out documentation
 - Improve readme files
 - Get actualy 404 pages in dev mode

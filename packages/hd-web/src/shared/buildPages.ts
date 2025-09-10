@@ -1,6 +1,7 @@
 import type { HdNode } from '@hd-web/jsx/jsx-runtime'
 import path from 'path'
 
+import { HdError } from '../errors/index.js'
 import { BuiltPage, Site, SiteFunction, SubPageFunction } from './types.js'
 import { validatePath } from './validatePath.js'
 
@@ -54,9 +55,7 @@ export const buildPages = async (
     const [parentHead, p, pageFn, titleSuffix] = stack.pop()!
 
     if (!validatePath(p)) {
-      throw new Error(
-        `Path ${p} contains invalid characters. Try using the cleanPath function`
-      )
+      throw new HdError('site.invalidUrl', p)
     }
 
     const page = await pageFn()

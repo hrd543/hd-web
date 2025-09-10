@@ -4,7 +4,8 @@ export class HdError<T extends HdErrorKey> extends Error {
   key: T
 
   constructor(key: T, ...args: Parameters<HdErrors[T]>) {
-    const message = errors[key](...(args as [any]))
+    // @ts-expect-error This is typed correctly when calling constructor()
+    const message = errors[key](...args)
     super(message)
     this.key = key
   }

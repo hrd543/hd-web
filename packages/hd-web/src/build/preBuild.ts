@@ -1,6 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 
+import { HdError } from '../errors/index.js'
 import { BuildConfig } from './config.js'
 import { BuiltFile } from './types.js'
 import { getFileType } from './utils.js'
@@ -20,27 +21,31 @@ export const copyStaticFolder = async ({
     return
   }
 
-  if (write) {
-    await fs.cp(staticFolder, out, { recursive: true })
-  }
+  try {
+    if (write) {
+      await fs.cp(staticFolder, out, { recursive: true })
+    }
 
-  const contents = await fs.readdir(staticFolder, {
-    recursive: true,
-    withFileTypes: true
-  })
-
-  return contents
-    .filter((dirent) => dirent.isFile())
-    .map((dirent) => {
-      const filepath = path.relative(
-        staticFolder,
-        path.join(dirent.parentPath, dirent.name)
-      )
-
-      return {
-        path: path.join(out, filepath),
-        relativePath: filepath,
-        type: getFileType(filepath)
-      }
+    const contents = await fs.readdir(staticFolder, {
+      recursive: true,
+      withFileTypes: true
     })
+
+    return contents
+      .filter((dirent) => dirent.isFile())
+      .map((dirent) => {
+        const filepath = path.relative(
+          staticFolder,
+          path.join(dirent.parentPath, dirent.name)
+        )
+
+        return {
+          path: path.join(out, filepath),
+          relativePath: filepath,
+          type: getFileType(filepath)
+        }
+      })
+  } catch {
+    throw new HdError('fs.noStaticFolder', staticFolder)
+  }
 }

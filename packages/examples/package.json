@@ -6,7 +6,8 @@
     "build": "tsc",
     "test": "echo \"test\"",
     "example:build": "tsx ./src/script.ts build",
-    "example:dev": "tsx ./src/script.ts dev"
+    "example:dev": "tsx ./src/script.ts dev",
+    "henry": "cd src/basic && hd dev"
   },
   "dependencies": {
     "hd-web": "^0.1.2",

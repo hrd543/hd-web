@@ -1,0 +1,83 @@
+/* 
+  Change these css variables to customise your site!
+  Or add your own.
+*/
+:root {
+  /* Font sizes */
+  --fs-0: 12px;
+  --fs-100: 14px;
+  --fs-200: 16px;
+  --fs-300: 18px;
+  --fs-400: 20px;
+  --fs-500: 24px;
+  --fs-600: 30px;
+  --fs-700: 36px;
+  --fs-800: 48px;
+  --fs-900: 60px;
+  --fs-1000: 72px;
+
+  /* Spacing */
+  --sp-0: 4px;
+  --sp-100: 8px;
+  --sp-200: 12px;
+  --sp-300: 16px;
+  --sp-400: 24px;
+  --sp-500: 32px;
+  --sp-600: 48px;
+  --sp-700: 64px;
+  --sp-800: 96px;
+  --sp-900: 128px;
+
+  /* Colours */
+  --primary-100: #000c1c;
+  --primary-200: #061830;
+  --primary-300: #0a244a;
+  --primary-400: #18355d;
+  --primary-500: #1848af;
+  --primary-600: #3467ad;
+  --primary-700: #5e90d6;
+  --primary-800: #7fb0f5;
+  --primary-900: #9bbff2;
+
+  --secondary-100: #1f0304;
+  --secondary-200: #36080a;
+  --secondary-300: #541113;
+  --secondary-400: #7a1f22;
+  --secondary-500: #ad363a;
+  --secondary-600: #cc4e52;
+  --secondary-700: #de6666;
+  --secondary-800: #ff8c8c;
+  --secondary-900: #ffbaba;
+
+  --grey-100: #11161c;
+  --grey-200: #1c2129;
+  --grey-300: #2a2f36;
+  --grey-400: #323a45;
+  --grey-500: #475261;
+  --grey-600: #5e6d80;
+  --grey-700: #7c8a9c;
+  --grey-800: #9fb3cc;
+  --grey-900: #dce6f4;
+
+  /* Site padding / width */
+  --page-max-width: 800px;
+  --page-min-padding: var(--sp-500);
+  /* width + 2 * (x + padding) = 100vw */
+  --page-padding: max(
+    calc(50vw - var(--page-max-width) / 2),
+    var(--page-min-padding)
+  );
+  --header-height: var(--sp-800);
+
+  --success-light: #b9e9c4;
+  --success-dark: #10421c;
+
+  --error-light: #edc9ce;
+  --error-dark: #620e16;
+}
+
+@media (max-width: 500px) {
+  :root {
+    --page-min-padding: var(--sp-300);
+  }
+}

@@ -5,7 +5,7 @@ import { SiteFunction } from 'hd-web'
 
 import { getBlogs } from '../../blogs/index.js'
 import { PageLayout } from '../../shared/PageLayout.js'
-import { Blog } from '../Blog/Blog.js'
+import { BlogPage } from '../Blog/BlogPage.js'
 import { Contact } from '../Contact/Contact.js'
 
 export const Home: SiteFunction = async () => {
@@ -21,7 +21,7 @@ export const Home: SiteFunction = async () => {
     ),
     routes: {
       contact: Contact,
-      blog: Blog(blogs)
+      blog: BlogPage(blogs)
     }
   }
 }

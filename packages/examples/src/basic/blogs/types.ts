@@ -1,6 +1,6 @@
 import { type HdNode } from 'hd-web'
 
-export type BlogPost = {
+export type Blog = {
   title: string
   content: () => HdNode
 }

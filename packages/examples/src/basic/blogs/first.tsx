@@ -1,6 +1,6 @@
-import { BlogPost } from './types.js'
+import { Blog } from './types.js'
 
-export const first: BlogPost = {
+export const first: Blog = {
   title: 'My first blog',
   content: () => (
     <>

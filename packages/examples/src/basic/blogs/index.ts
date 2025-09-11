@@ -8,4 +8,4 @@ const blogs = [first, second]
 export const getBlogs = async () => [...blogs]
 
 export { buildBlogUrl } from './buildBlogUrl.js'
-export { type BlogPost } from './types.js'
+export { type Blog } from './types.js'

@@ -56,7 +56,8 @@ export const buildPages = <T>(
     const built = buildPage(entry, data, joinTitles)
     done.push(built)
 
-    stack.push(...getRoutes(entry))
+    const [path, { routes }] = entry
+    stack.push(...getRoutes(path, routes, built[1].title))
   }
 
   return done

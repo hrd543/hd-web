@@ -43,7 +43,7 @@ describe('Subpages', async () => {
     assert.equal(root('#head-root').attr('name'), 'test')
     assert.equal(leaf1('#head-root').attr('name'), 'test')
     assert.equal(child('#head-child').attr('name'), 'test')
-    assert.equal(leaf2('#head-child').attr('name'), 'test')
+    assert.equal(leaf2('#head-root').attr('name'), 'test')
     assert.equal(grandchild('#head-grandchild').attr('name'), 'test')
   })
 

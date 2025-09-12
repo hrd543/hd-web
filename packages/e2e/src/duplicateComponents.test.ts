@@ -5,13 +5,14 @@ import { build } from 'hd-web'
 
 describe('Duplicate components', async () => {
   it('should throw an error when building', () => {
+    // TODO make error assertion easier in tests
     assert.rejects(
       build({
         write: false,
         entry: 'src/sites/duplicateComponents.tsx',
         out: 'out'
       }),
-      /The key "_componentKey" is used by multiple client components/
+      /Found multiple with key "_componentKey"/
     )
   })
 })

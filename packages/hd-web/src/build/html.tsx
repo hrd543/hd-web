@@ -29,7 +29,7 @@ export const buildHtmlFiles = async (
   const html: BuiltFile[] = []
   const components: ComponentInfo[] = []
 
-  site.pages.forEach(([p, page]) => {
+  site.pages.map(getHtmlFilepath).forEach(([p, page]) => {
     const { body, head } = renderPage(site, page)
     const built = buildHtml(
       createMeta(page.title, page.description, head, scripts),
@@ -79,15 +79,17 @@ export const getScriptElements = (files: BuiltFile[]): HdNode => {
 /**
  * Get the filepath for the html file created for pagePath.
  *
- * If createFolder is true, then uses `path/index.html`, otherwise,
+ * If a folder needs to be created, then uses `path/index.html`, otherwise,
  * use path.html
  */
 export const getHtmlFilepath = (page: BuiltPage): BuiltPage => {
-  const [pagePath, content, createFolder] = page
+  const [pagePath, content, hasChildren] = page
 
-  const newPath = createFolder
-    ? path.posix.join(pagePath, 'index.html')
-    : pagePath.replace(/[\\/]$/, '') + '.html'
+  // The root page always needs to be index.html
+  const newPath =
+    hasChildren || pagePath === ''
+      ? path.posix.join(pagePath, 'index.html')
+      : pagePath.replace(/[\\/]$/, '') + '.html'
 
-  return [newPath, content, createFolder]
+  return [newPath, content, hasChildren]
 }

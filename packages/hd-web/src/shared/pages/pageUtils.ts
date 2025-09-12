@@ -3,9 +3,11 @@ import path from 'path'
 
 import { BuiltPage, BuiltSite, PageStack } from './types.js'
 
-export const getRoutes = <T>(entry: PageStack<T>): Array<PageStack<T>> => {
-  const [currentPath, { routes }, titleSuffix] = entry
-
+export const getRoutes = <T>(
+  currentPath: string,
+  routes: PageStack<T>[1]['routes'],
+  title: string
+): Array<PageStack<T>> => {
   if (!routes) {
     return []
   }
@@ -13,7 +15,7 @@ export const getRoutes = <T>(entry: PageStack<T>): Array<PageStack<T>> => {
   return Object.entries(routes).map<PageStack<T>>(([route, subPage]) => [
     path.posix.join(currentPath, route),
     subPage,
-    titleSuffix
+    title
   ])
 }
 

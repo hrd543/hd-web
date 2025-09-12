@@ -16,8 +16,6 @@ describe('Subpages', async () => {
 
   const fileByPath = getFileByPath(built)
 
-  // console.log(fileByPath)
-
   const root = cheerio.load(fileByPath['index.html']?.contents ?? '')
   const one = cheerio.load(fileByPath['0.html']?.contents ?? '')
   const two = cheerio.load(fileByPath['1.html']?.contents ?? '')

@@ -18,8 +18,6 @@ export type Page<Data = unknown, Props = undefined> = {
   routes?:
     | Record<string, Page<Data, any>>
     | ((data: Data) => Record<string, Page<Data, any>>)
-  // // maybe?
-  // wrapper?: FuncComponent
 } & (Props extends undefined
   ? {
       props?: undefined
@@ -59,3 +57,9 @@ export type BuiltPage<T = unknown> = [
   },
   hasChildren: boolean
 ]
+
+export type BuiltSite<T = unknown> = {
+  data: T
+  head: HtmlFunction<T>
+  pages: Array<BuiltPage<T>>
+}

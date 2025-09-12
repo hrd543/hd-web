@@ -43,11 +43,11 @@ const buildPage = <T>(
 /**
  * Given a page as the root, build out the page and all its subpages
  */
-export const buildPages = async <T>(
+export const buildPages = <T>(
   root: Page<T, any>,
   data: T,
   joinTitles: boolean
-): Promise<Array<BuiltPage<T>>> => {
+): Array<BuiltPage<T>> => {
   const done: Array<BuiltPage<T>> = []
   const stack: Array<PageStack<T>> = [['', root, '']]
 

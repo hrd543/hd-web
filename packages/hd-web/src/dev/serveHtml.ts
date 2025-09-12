@@ -2,7 +2,7 @@ import { RequestHandler } from 'express'
 import { ViteDevServer } from 'vite'
 
 import { getClientJs } from '../client/index.js'
-import { buildPages, BuiltPage } from '../shared/index.js'
+import { buildSite, BuiltSite, renderPage } from '../shared/index.js'
 import { buildHtml, createMeta } from '../shared/index.js'
 import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { DevConfig } from './config.js'
@@ -13,7 +13,7 @@ import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
 
 type RebuildResult = {
-  pages: BuiltPage[]
+  site: BuiltSite
   cssImports: string[]
 }
 
@@ -25,13 +25,13 @@ export const getServeHtml = (
 ): RequestHandler => {
   const [getRebuilt, rebuild] = getLatest<RebuildResult, UpdateType>(
     async (old, type) => {
-      const siteFn = (await server.ssrLoadModule(config.entry)).default
+      const site = (await server.ssrLoadModule(config.entry)).default
       const cssImports = getCssImports(server.moduleGraph)
 
       // We only need to rebuild the pages on update (or initial load)
       if (type === 'update' || old === null) {
         return {
-          pages: await buildPages(siteFn, config.joinTitles),
+          site: await buildSite(site, config),
           cssImports
         }
       }
@@ -61,21 +61,22 @@ export const getServeHtml = (
       return res.end('Waiting for data')
     }
 
-    const content = await getPageContent(req.url, rebuilt.pages)
+    const page = await getPageContent(req.url, rebuilt.site.pages)
 
-    if (content === undefined) {
+    if (page === undefined) {
       res.statusCode = 404
       return res.end('Not found')
     }
 
+    const { head, body } = renderPage(rebuilt.site, page)
     const { html, components } = buildHtml(
       createMeta(
-        content.title,
-        content.description,
-        content.head(),
+        page.title,
+        page.description,
+        head,
         buildEmptyScript(rebuilt.cssImports)
       ),
-      content.body(),
+      body,
       config.lang
     )
 

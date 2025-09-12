@@ -1,6 +1,7 @@
+import { HdNode } from '@hd-web/jsx'
 import path from 'path'
 
-import { PageStack } from './types.js'
+import { BuiltPage, BuiltSite, PageStack } from './types.js'
 
 export const getRoutes = <T>(entry: PageStack<T>): Array<PageStack<T>> => {
   const [currentPath, { routes }, titleSuffix] = entry
@@ -44,3 +45,21 @@ export const getJoinedTitle = (
 }
 
 export const getPathArray = (p: string) => p.split('/').filter((x) => x)
+
+export const renderPage = (
+  site: BuiltSite,
+  pageContent: BuiltPage[1]
+): {
+  body: HdNode
+  head: HdNode
+} => {
+  const props = { props: pageContent.props, data: site.data }
+
+  const head = pageContent.head ?? site.head
+  const body = pageContent.content
+
+  return {
+    body: body(props),
+    head: head(props)
+  }
+}

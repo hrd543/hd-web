@@ -2,7 +2,13 @@ import { HdNode } from '@hd-web/jsx'
 import fs from 'fs/promises'
 import path from 'path'
 
-import { buildHtml, BuiltPage, createMeta } from '../shared/index.js'
+import {
+  buildHtml,
+  BuiltPage,
+  BuiltSite,
+  createMeta,
+  renderPage
+} from '../shared/index.js'
 import { ComponentInfo } from '../stringify/index.js'
 import { BuildConfig } from './config.js'
 import { BuiltFile } from './types.js'
@@ -13,7 +19,7 @@ import { getFileType } from './utils.js'
  * the styles, js and assets needed for the site.
  */
 export const buildHtmlFiles = async (
-  pages: BuiltPage[],
+  site: BuiltSite,
   { lang, write, out }: BuildConfig,
   scripts: HdNode
 ): Promise<{
@@ -23,10 +29,11 @@ export const buildHtmlFiles = async (
   const html: BuiltFile[] = []
   const components: ComponentInfo[] = []
 
-  pages.forEach(([p, { title, description, head, body }]) => {
+  site.pages.forEach(([p, page]) => {
+    const { body, head } = renderPage(site, page)
     const built = buildHtml(
-      createMeta(title, description, head(), scripts),
-      body(),
+      createMeta(page.title, page.description, head, scripts),
+      body,
       lang
     )
 

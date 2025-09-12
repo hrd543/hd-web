@@ -5,12 +5,15 @@ import { BuiltPage, BuiltSite, PageStack } from './types.js'
 
 export const getRoutes = <T>(
   currentPath: string,
-  routes: PageStack<T>[1]['routes'],
+  routesFn: PageStack<T>[1]['routes'],
+  data: T,
   title: string
 ): Array<PageStack<T>> => {
-  if (!routes) {
+  if (!routesFn) {
     return []
   }
+
+  const routes = typeof routesFn === 'function' ? routesFn(data) : routesFn
 
   return Object.entries(routes).map<PageStack<T>>(([route, subPage]) => [
     path.posix.join(currentPath, route),
@@ -46,7 +49,7 @@ export const getJoinedTitle = (
   return `${title} | ${suffix}`
 }
 
-export const getPathArray = (p: string) => p.split('/').filter((x) => x)
+export const getPathArray = (p: string) => p.split('/').filter((x) => x !== '')
 
 export const renderPage = (
   site: BuiltSite,

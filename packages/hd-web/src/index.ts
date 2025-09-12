@@ -5,12 +5,8 @@ import type { HdDevConfig } from './dev/index.js'
 export { build, type BuiltFile, type HdBuildConfig } from './build/index.js'
 export { Component, registerClient } from './client/index.js'
 export { dev, type HdDevConfig } from './dev/index.js'
-export type {
-  Site,
-  SiteFunction,
-  SubPage,
-  SubPageFunction
-} from './shared/index.js'
+export { HdError, type HdErrorKey } from './errors/index.js'
+export type { Page, Site } from './shared/index.js'
 export { cleanPath } from './shared/index.js'
 export {
   type BaseProps,

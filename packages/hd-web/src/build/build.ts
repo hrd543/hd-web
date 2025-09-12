@@ -2,11 +2,11 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { getClientJs } from '../client/index.js'
-import { buildPages } from '../shared/index.js'
+import { buildSite } from '../shared/index.js'
 import { buildReturnResult } from './builReturnResult.js'
 import { BuildConfig, validateConfig } from './config.js'
-import { getSiteFunction } from './getSiteFunction.js'
-import { buildHtmlFiles, getHtmlFilepath, getScriptElements } from './html.js'
+import { getSite } from './getSite.js'
+import { buildHtmlFiles, getScriptElements } from './html.js'
 import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { runEsbuildFirst, runEsbuildLast } from './runEsbuild.js'
 import { readMetafile } from './utils.js'
@@ -26,13 +26,13 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
     files.find((f) => f.type === 'js')!.path
   )
 
-  const pages = await buildPages(
-    await getSiteFunction(outfile, first.outputFiles),
-    fullConfig.joinTitles
+  const builtSite = await buildSite(
+    await getSite(outfile, first.outputFiles),
+    fullConfig
   )
 
   const { html, components } = await buildHtmlFiles(
-    pages.map(getHtmlFilepath),
+    builtSite,
     fullConfig,
     getScriptElements(files)
   )

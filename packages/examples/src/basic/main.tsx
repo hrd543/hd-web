@@ -1,45 +1,26 @@
-import { SiteFunction } from 'hd-web'
+import './main.css'
+import './variables.css'
 
-import { Henry } from './Henry.js'
+import { Meta } from '@hd-web/components/head'
+import { Site } from 'hd-web'
 
-const App: SiteFunction = async () => {
-  return {
-    head: () => <meta />,
-    body: () => <div>hiya</div>,
-    title: 'app10',
-    routes: {
-      contact: () => ({
-        title: 'contact',
-        body: () => (
-          <div>
-            <Henry />
-          </div>
-        ),
-        routes: {
-          one: () => ({
-            title: 'one',
-            body: () => null,
-            head: () => (
-              <meta>
-                <meta name="hh" />
-              </meta>
-            ),
-            routes: {
-              two: () => ({
-                title: 'two',
-                body: () => null
-              }),
-              three: () => ({
-                title: 'two',
-                body: () => null,
-                head: () => <meta name="three" />
-              })
-            }
-          })
-        }
-      })
-    }
-  }
+import { BlogData, getBlogData } from './blogs/index.js'
+import { Home } from './pages/Home/Home.js'
+
+const site: Site<BlogData> = {
+  root: Home,
+  head: Meta,
+  /*
+  This simulates fetching the blog data from an external api
+  and is a nice way to integrate all blogs into each page.
+
+  You could also just make each page a function which returns
+  the necessary json, taking blogs as a prop.
+  However, this becomes harder to read and test, and will also
+  end up being less performant. Especially since hd-web can cache
+  these data calls.
+  */
+  getData: getBlogData
 }
 
-export default App
+export default site

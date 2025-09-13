@@ -1,5 +1,4 @@
 - Flesh out examples
-- Put hd config inside each example folder
 - Make hd config more streamline by removing shared distinction
 - Improve errors in dev mode
 - Flesh out documentation

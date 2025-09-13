@@ -2,7 +2,13 @@ import { HdNode } from '@hd-web/jsx'
 import fs from 'fs/promises'
 import path from 'path'
 
-import { buildHtml, BuiltPage, createMeta } from '../shared/index.js'
+import {
+  buildHtml,
+  BuiltPage,
+  BuiltSite,
+  createMeta,
+  renderPage
+} from '../shared/index.js'
 import { ComponentInfo } from '../stringify/index.js'
 import { BuildConfig } from './config.js'
 import { BuiltFile } from './types.js'
@@ -13,7 +19,7 @@ import { getFileType } from './utils.js'
  * the styles, js and assets needed for the site.
  */
 export const buildHtmlFiles = async (
-  pages: BuiltPage[],
+  site: BuiltSite,
   { lang, write, out }: BuildConfig,
   scripts: HdNode
 ): Promise<{
@@ -23,10 +29,11 @@ export const buildHtmlFiles = async (
   const html: BuiltFile[] = []
   const components: ComponentInfo[] = []
 
-  pages.forEach(([p, { title, description, head, body }]) => {
+  site.pages.map(getHtmlFilepath).forEach(([p, page]) => {
+    const { body, head } = renderPage(site, page)
     const built = buildHtml(
-      createMeta(title, description, head(), scripts),
-      body(),
+      createMeta(page.title, page.description, head, scripts),
+      body,
       lang
     )
 
@@ -72,15 +79,17 @@ export const getScriptElements = (files: BuiltFile[]): HdNode => {
 /**
  * Get the filepath for the html file created for pagePath.
  *
- * If createFolder is true, then uses `path/index.html`, otherwise,
+ * If a folder needs to be created, then uses `path/index.html`, otherwise,
  * use path.html
  */
 export const getHtmlFilepath = (page: BuiltPage): BuiltPage => {
-  const [pagePath, content, createFolder] = page
+  const [pagePath, content, hasChildren] = page
 
-  const newPath = createFolder
-    ? path.posix.join(pagePath, 'index.html')
-    : pagePath.replace(/[\\/]$/, '') + '.html'
+  // The root page always needs to be index.html
+  const newPath =
+    hasChildren || pagePath === ''
+      ? path.posix.join(pagePath, 'index.html')
+      : pagePath.replace(/[\\/]$/, '') + '.html'
 
-  return [newPath, content, createFolder]
+  return [newPath, content, hasChildren]
 }

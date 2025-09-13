@@ -8,6 +8,7 @@ import { getServeHtml } from './serveHtml.js'
 export const dev = async (config: Partial<DevConfig> = {}) => {
   const fullConfig = validateConfig(config)
   const app = express()
+  console.log('running')
 
   const server = await createServer({
     root: process.cwd(),

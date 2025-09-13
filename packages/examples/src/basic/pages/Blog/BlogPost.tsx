@@ -1,13 +1,23 @@
-import type { FuncComponent } from 'hd-web'
+import type { FuncComponent, Page } from 'hd-web'
 
-import { Blog } from '../../blogs/index.js'
+import { Blog, BlogData } from '../../blogs/index.js'
 import { PageLayout } from '../../shared/index.js'
 
-export const BlogPost: FuncComponent<{ blog: Blog }> = ({ blog }) => {
+const BlogPost: FuncComponent<{ blog: Blog }> = ({ blog }) => {
   return (
     <PageLayout>
       <h1>{blog.title}</h1>
       {blog.content()}
     </PageLayout>
   )
+}
+
+export const BlogPostPage: Page<BlogData, Blog> = {
+  title: (blog) => blog.title,
+  content: ({ props: blog }) => <BlogPost blog={blog} />,
+  props: (data, path) => {
+    const blogId = path.at(-1)!
+
+    return data.blogByLink[blogId]!
+  }
 }

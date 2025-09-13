@@ -1,14 +1,14 @@
-import { SubPageFunction } from 'hd-web'
+import { Page } from 'hd-web'
 
 import { PageLayout } from '../../shared/PageLayout.js'
 import { Form } from './Form.js'
 
-export const Contact: SubPageFunction = () => ({
+export const Contact: Page = {
   title: 'Contact',
-  body: () => (
+  content: () => (
     <PageLayout>
       <h1>Interactive contact page</h1>
       <Form />
     </PageLayout>
   )
-})
+}

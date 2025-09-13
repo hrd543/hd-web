@@ -1,4 +1,4 @@
-import { spawnSync } from 'child_process'
+import { spawn } from 'child_process'
 
 const [method, folder] = process.argv.slice(2)
 
@@ -11,8 +11,10 @@ const run = async () => {
     return
   }
 
-  process.chdir(`src/${folder}`)
-  spawnSync('npm run hd', [method])
+  spawn(`cd src/${folder} && hd ${method}`, {
+    stdio: 'inherit',
+    shell: true
+  })
 }
 
 run()

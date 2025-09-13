@@ -15,6 +15,8 @@ const BlogPost: FuncComponent<{ blog: Blog }> = ({ blog }) => {
 export const BlogPostPage: Page<BlogData, Blog> = {
   title: (blog) => blog.title,
   content: ({ props: blog }) => <BlogPost blog={blog} />,
+  // This means we can pass the exact blog to each page's content
+  // while using the same component for each page
   props: (data, path) => {
     const blogId = path.at(-1)!
 

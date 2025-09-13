@@ -20,6 +20,8 @@ const BlogPageBody: FuncComponent<{ data: BlogData }> = ({
 export const BlogPage: Page<BlogData> = {
   title: 'Blog',
   content: BlogPageBody,
+  // Using a function to define the routes means you can access
+  // the blog data to generate your subroutes.
   routes: ({ blogByLink }) => {
     const pages: Record<string, Page<BlogData, Blog>> = {}
 

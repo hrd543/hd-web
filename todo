@@ -1,6 +1,5 @@
-- Flesh out examples
 - Make hd config more streamline by removing shared distinction
 - Improve errors in dev mode
 - Flesh out documentation
 - Improve readme files
-- Get actualy 404 pages in dev mode
+- Get actual 404 pages in dev mode

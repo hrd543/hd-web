@@ -3,22 +3,15 @@ import './variables.css'
 import './utils.css'
 import './fonts.css'
 
-import { NotFound } from '@hd-web/components/global'
 import { Meta } from '@hd-web/components/head'
-import { SiteFunction } from 'hd-web'
+import { Site } from 'hd-web'
 
-// This is your page's html
-const App: SiteFunction = () => ({
-  body: () => <div>Hello world!</div>,
-  title: 'My new site!',
-  description: 'My awesome new site made with hd-web',
-  head: () => <Meta />,
-  routes: {
-    404: () => ({
-      title: 'Not found',
-      body: () => <NotFound />
-    })
-  }
-})
+import { Home } from './Home.js'
 
-export default App
+// This is your site definition
+const site: Site = {
+  root: Home,
+  head: () => <Meta />
+}
+
+export default site

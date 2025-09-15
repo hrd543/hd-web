@@ -19,8 +19,14 @@ export default tseslint.config(
       '**/node_modules/',
       '**/dist/',
       '**/package-lock.json',
-      '**/playground'
+      '**/playground',
+      'packages/create/template'
     ]
+  },
+  {
+    parserOptions: {
+      tsconfigRootDir: process.cwd()
+    }
   },
   {
     rules: {

@@ -18,6 +18,11 @@ export default tseslint.config(
     ignores: ['**/node_modules/', '**/dist/', '**/package-lock.json']
   },
   {
+    parserOptions: {
+      tsconfigRootDir: process.cwd()
+    }
+  },
+  {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'import/order': 'off',

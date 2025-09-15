@@ -6,7 +6,7 @@ export const buildSite = async <T>(
   site: Site<T>,
   config: SharedConfig
 ): Promise<BuiltSite<T>> => {
-  const data = (await site.getData?.()) as T
+  const data = (await site.getSiteData?.()) as T
 
   return {
     head: site.head,

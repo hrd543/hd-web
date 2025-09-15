@@ -20,7 +20,7 @@ const site: Site<BlogData> = {
   end up being less performant. Especially since hd-web can cache
   these data calls.
   */
-  getData: getBlogData
+  getSiteData: getBlogData
 }
 
 export default site

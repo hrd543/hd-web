@@ -1,12 +1,10 @@
-import { FuncComponent, Page } from 'hd-web'
+import { Page, PageContent } from 'hd-web'
 
 import { type Blog, BlogData, buildBlogUrl } from '../../blogs/index.js'
 import { PageLayout } from '../../shared/PageLayout.js'
 import { BlogPostPage } from './BlogPost.js'
 
-const BlogPageBody: FuncComponent<{ data: BlogData }> = ({
-  data: { blogs }
-}) => (
+const BlogPageBody: PageContent<BlogData> = ({ siteData: { blogs } }) => (
   <PageLayout>
     <h1>Blog posts</h1>
     {blogs.map((b) => (

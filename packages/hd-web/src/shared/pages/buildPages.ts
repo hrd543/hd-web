@@ -19,11 +19,11 @@ const buildPage = <T>(
     throw new HdError('site.invalidUrl', p)
   }
 
-  const props = page.props?.(data, getPathArray(p))
+  const pageData = page.getPageData?.(data, getPathArray(p))
 
   const title = getJoinedTitle(
     titleSuffix,
-    getStringOrFunction(page.title, props),
+    getStringOrFunction(page.title, pageData),
     joinTitles
   )
 
@@ -31,10 +31,10 @@ const buildPage = <T>(
     p,
     {
       title,
-      description: getStringOrFunction(page.description, props),
+      description: getStringOrFunction(page.description, pageData),
       content: page.content,
       head: page.head,
-      props
+      pageData
     },
     page.routes !== undefined
   ]

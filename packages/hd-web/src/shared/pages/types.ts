@@ -2,28 +2,28 @@ import { FuncComponent } from '@hd-web/jsx'
 
 export type PageStack<T> = [path: string, page: Page<T, any>, title: string]
 
-type HtmlFunction<Data = unknown, Props = any> = FuncComponent<{
-  data: Data
-  props: Props
+export type PageContent<SiteData = unknown, PageData = any> = FuncComponent<{
+  siteData: SiteData
+  pageData: PageData
 }>
 
 /**
  * The return type of the SubPage function.
  */
-export type Page<Data = unknown, Props = undefined> = {
-  title: string | ((props: Props) => string)
-  description?: string | ((props: Props) => string)
-  content: HtmlFunction<Data, Props>
-  head?: HtmlFunction<Data, Props>
+export type Page<SiteData = unknown, PageData = undefined> = {
+  title: string | ((pageData: PageData) => string)
+  description?: string | ((pageData: PageData) => string)
+  content: PageContent<SiteData, PageData>
+  head?: PageContent<SiteData, PageData>
   routes?:
-    | Record<string, Page<Data, any>>
-    | ((data: Data) => Record<string, Page<Data, any>>)
-} & (Props extends undefined
+    | Record<string, Page<SiteData, any>>
+    | ((data: SiteData) => Record<string, Page<SiteData, any>>)
+} & (PageData extends undefined
   ? {
-      props?: undefined
+      getPageData?: undefined
     }
   : {
-      props: (data: Data, path: string[]) => Props
+      getPageData: (data: SiteData, path: string[]) => PageData
     })
 
 /**
@@ -31,10 +31,10 @@ export type Page<Data = unknown, Props = undefined> = {
  */
 export type Site<Data = undefined> = {
   root: Page<Data, any>
-  head: HtmlFunction<Data>
+  head: PageContent<Data>
 } & (Data extends undefined
-  ? { getData?: undefined }
-  : { getData: () => Promise<Data> | Data })
+  ? { getSiteData?: undefined }
+  : { getSiteData: () => Promise<Data> | Data })
 
 /**
  * Only to be used internally.
@@ -51,15 +51,15 @@ export type BuiltPage<T = unknown> = [
   content: {
     title: string
     description?: string
-    content: HtmlFunction<T>
-    head?: HtmlFunction<T>
-    props: any
+    content: PageContent<T>
+    head?: PageContent<T>
+    pageData: any
   },
   hasChildren: boolean
 ]
 
 export type BuiltSite<T = unknown> = {
   data: T
-  head: HtmlFunction<T>
+  head: PageContent<T>
   pages: Array<BuiltPage<T>>
 }

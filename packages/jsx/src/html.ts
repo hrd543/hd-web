@@ -29,10 +29,16 @@ export type SVGElements = {
     HdAttributes
 }
 
+// The meta element has an additional property attribute which is not documented
+type MetaElement = Omit<HtmlInternal.HTMLElements['meta'], 'style'> &
+  HdAttributes & { property?: string }
+
 export type HTMLElements = {
   [K in keyof HtmlInternal.HTMLElements]: Omit<
     HtmlInternal.HTMLElements[K],
     'style'
   > &
     HdAttributes
+} & {
+  meta: MetaElement
 }

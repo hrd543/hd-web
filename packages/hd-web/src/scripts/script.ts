@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import minimist from 'minimist'
 
 import { buildScript } from '../build/index.js'
 import { buildPackage } from '../build-package/index.js'
@@ -17,7 +18,9 @@ const run = async () => {
     } else if (scriptType === 'dev') {
       await devScript()
     } else if (scriptType === 'package') {
-      await buildPackage(args)
+      const { src = 'src', dist = 'dist', files } = minimist(args)
+
+      await buildPackage(src, dist, files)
     } else {
       console.error(`Script ${scriptType} doesn't exist for command hd`)
     }

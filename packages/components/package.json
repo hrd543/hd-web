@@ -3,7 +3,7 @@
   "version": "0.3.1",
   "description": "A set of components and utilities for use in your hd-web project",
   "scripts": {
-    "build": "hd package --files=\".+\\.css$\"",
+    "build": "npx hd package --files=\".+\\.css$\"",
     "play": "cd playground && tsx buildPlayground.ts",
     "test": "echo \"testing\""
   },

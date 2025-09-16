@@ -8,6 +8,9 @@
     "test": "npm run test --workspaces"
   },
   "workspaces": [
+    "packages/jsx",
+    "packages/hd-web",
+    "packages/components",
     "packages/*"
   ],
   "devDependencies": {

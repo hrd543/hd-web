@@ -6,7 +6,7 @@
     "@hd-web/create": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cd ./template && tsc --noEmit",
     "test": "echo \"testing\""
   },
   "files": [

@@ -3,7 +3,7 @@
   "version": "0.3.1",
   "description": "A set of components and utilities for use in your hd-web project",
   "scripts": {
-    "build": "hd package src dist \".+\\.css$\"",
+    "build": "hd package src dist '.+\\.css$'",
     "play": "cd playground && tsx buildPlayground.ts",
     "test": "echo \"testing\""
   },

@@ -9,7 +9,6 @@ export const buildPackage = async ([
   dist = 'dist',
   regex
 ]: string[]) => {
-  console.log(src, dist, regex)
   await deleteBuildFolder(dist)
 
   if (regex) {

@@ -1,17 +1,18 @@
 import { exec } from 'child_process'
-import minimist from 'minimist'
 
 import { copyStaticFiles } from './copyStaticFiles.js'
 import { deleteBuildFolder } from './deleteBuildFolder.js'
 import { transformClientFiles } from './transformClientFiles.js'
 
-export const buildPackage = async (cliArgs: string[]) => {
-  const { src = 'src', dist = 'dist', files } = minimist(cliArgs)
-
+export const buildPackage = async (
+  src: string,
+  dist: string,
+  regex: string
+) => {
   await deleteBuildFolder(dist)
 
-  if (files) {
-    copyStaticFiles(src, dist, new RegExp(files))
+  if (regex) {
+    copyStaticFiles(src, dist, new RegExp(regex))
   }
 
   exec('tsc', () => {

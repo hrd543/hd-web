@@ -5,7 +5,9 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "lint:eslint": "eslint",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "workspaces": [
     "packages/jsx",

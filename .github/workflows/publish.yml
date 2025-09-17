@@ -1,0 +1,40 @@
+name: Publish Packages
+
+on:
+  workflow_dispatch: # Trigger manually
+
+jobs:
+  release:
+    name: Version and Publish Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for changesets to work correctly
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create version bumps from changesets
+        run: npm run version
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
+
+      - name: Commit version bump and changelogs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(release): version bump via changesets"
+          git push

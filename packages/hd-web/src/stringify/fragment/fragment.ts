@@ -5,12 +5,8 @@ import { StringifyFunction } from '../types.js'
 
 export const Fragment = 'FRAGMENT'
 
-export const stringifyFragment: StringifyFunction<
-  HdElement & { tag: string }
-> = (entry) => {
-  const [{ children }, key] = entry
-
+export const stringifyFragment: StringifyFunction<HdElement> = (entry) => {
   return {
-    entries: flattenChildren(children)?.map((child) => [child, key])
+    nodes: flattenChildren(entry.children)
   }
 }

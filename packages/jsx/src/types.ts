@@ -1,13 +1,14 @@
-export interface IComponent<
-  E extends SVGElement | HTMLElement = SVGElement | HTMLElement
-> {
-  new (element: E): object
+export type IBehaviour<T extends BaseProps> = {
+  readonly props: T
+}
+
+export type IBehaviourConstructor<
+  E extends keyof HTMLElementTagNameMap,
+  P extends BaseProps
+> = {
+  new (element: HTMLElementTagNameMap[E]): IBehaviour<P>
   key: string
-  /**
-   * Injected automatically at build time.
-   *
-   * Represents the defining file path
-   */
+  /** Used internally to track behaviour usage */
   __file?: string
 }
 
@@ -15,11 +16,13 @@ export interface IComponent<
  * Internal representation of an element
  */
 export type HdElement<T extends BaseProps = BaseProps> = {
-  tag: string | FuncComponent<T>
+  tag: string
   props: T | null
   children?: HdNode
-  // In dev mode, we can quickly get the file path using jsxDEV
-  filename?: string
+  interactive?: {
+    behaviour: IBehaviourConstructor<any, any>
+    props: any
+  }
 }
 
 export type Primitive = string | null
@@ -30,25 +33,32 @@ export type WithChildren<T = object> = T & {
 }
 
 export type BaseProps = {
-  key?: never
   [x: string]: unknown
-  [x: ClientPropKey]: string
 }
 
 export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
 
-export interface FuncComponent<T extends BaseProps = BaseProps> {
+export interface View<T extends BaseProps = BaseProps> {
   (props: Props<T>): HdNode
-  client?: IComponent
 }
 
-// Only props which start with _ are sent to the client.
-export type ClientPropKey = `_${string}`
+/*
 
-type ClientKeys<T> = {
-  [K in keyof T]: K extends ClientPropKey ? K : never
-}[keyof T]
 
-export type ClientProps<T> = {
-  [K in ClientKeys<T>]: string
+InteractiveView component with `use` `as` and `with` props
+
+e.g. <InteractiveView use={ButtonBehaviour} as="button" with={{title: "henry"}} />
+
+Then some sort of `createRef` function to pass refs around as props.
+
+Optionally a decorator within class methods to add a listener (will need to parse these myself I think)
+
+class ButtonBehaviour {
+  @on("click")
+  handleClick(e) {
+    console.log(e)
+  }
 }
+
+
+*/

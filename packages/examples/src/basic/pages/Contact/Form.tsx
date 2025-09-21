@@ -1,8 +1,8 @@
-import { FuncComponent, registerClient } from 'hd-web'
+import { View, Interactive } from 'hd-web'
 
-import FormClient from './Form.client.js'
+import FormBehaviour from './Form.client.js'
 
-export const Form: FuncComponent = () => {
+export const Form: View = () => {
   return (
     <div>
       <label>Enter your name</label>
@@ -13,11 +13,9 @@ export const Form: FuncComponent = () => {
         This means the `handleClick` method of your client
         component will be called on a "click" event
        */}
-      <button type="button" $click="handleClick">
+      <Interactive _use={FormBehaviour} _as="button" type="button">
         Click to log to console
-      </button>
+      </Interactive>
     </div>
   )
 }
-
-registerClient(Form, FormClient)

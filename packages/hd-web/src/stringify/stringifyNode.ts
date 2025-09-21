@@ -3,34 +3,30 @@ import { Fragment, HdElement } from '@hd-web/jsx'
 import { stringifyComponent } from './component/stringifyComponent.js'
 import { stringifyFragment } from './fragment/fragment.js'
 import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
-import {
-  RenderStackEntry,
-  StringifyFunction,
-  StringifyNodeOutput
-} from './types.js'
+import { StringifyFunction, StringifyNodeOutput, FlatHdNode } from './types.js'
 import { isNode } from './utils.js'
 
 export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
   const components = new Map<string, string>()
 
   let fullHtml = ''
-  const stack: RenderStackEntry[] = [[root, null]]
+  const stack: FlatHdNode[] = [root]
 
   while (stack.length) {
-    const entry = stack.pop()!
+    const entry = stack.pop() as FlatHdNode
 
     if (isNode(entry)) {
-      const { entries, html = '' } = getStringifyNodeFunction(entry[0].tag)(
+      const { nodes, html = '' } = getStringifyNodeFunction(entry)(
         entry,
         components
       )
-      stack.push(...(entries?.reverse() ?? []))
+      stack.push(...(nodes?.reverse() ?? []))
       fullHtml += html
 
       continue
     }
 
-    fullHtml += entry[0] ?? ''
+    fullHtml += entry ?? ''
   }
 
   return {
@@ -42,8 +38,11 @@ export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
   }
 }
 
-const getStringifyNodeFunction = (tag: HdElement['tag']): StringifyFunction => {
-  if (typeof tag === 'function') {
+const getStringifyNodeFunction = ({
+  tag,
+  interactive
+}: HdElement): StringifyFunction => {
+  if (interactive) {
     return stringifyComponent as StringifyFunction
   }
 

@@ -1,8 +1,8 @@
-import { FuncComponent } from '@hd-web/jsx'
+import { View } from '@hd-web/jsx'
 
 export type PageStack<T> = [path: string, page: Page<T, any>, title: string]
 
-export type PageContent<SiteData = unknown, PageData = any> = FuncComponent<{
+export type PageContent<SiteData = unknown, PageData = any> = View<{
   siteData: SiteData
   pageData: PageData
 }>

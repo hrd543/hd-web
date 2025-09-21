@@ -4,19 +4,23 @@ import type { HdDevConfig } from './dev/index.js'
 
 export { build, type BuiltFile, type HdBuildConfig } from './build/index.js'
 export { buildPackage } from './build-package/index.js'
-export { Component, registerClient } from './client/index.js'
+export { Behaviour } from './client/index.js'
 export { dev, type HdDevConfig } from './dev/index.js'
 export { HdError, type HdErrorKey } from './errors/index.js'
 export type { Page, PageContent, Site } from './shared/index.js'
 export { cleanPath } from './shared/index.js'
 export {
+  Interactive,
+  type InteractiveProps
+} from './interactions/Interactive.js'
+export {
   type BaseProps,
-  type ClientProps,
-  type FuncComponent,
+  type View,
   type HdElement,
   type HdNode,
   type Html,
-  type IComponent,
+  type IBehaviourConstructor,
+  type IBehaviour,
   type Props
 } from '@hd-web/jsx'
 

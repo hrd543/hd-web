@@ -6,7 +6,10 @@ import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
 import { StringifyFunction, StringifyNodeOutput, FlatHdNode } from './types.js'
 import { isNode } from './utils.js'
 
-export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
+export const stringifyNode = (
+  root: HdElement,
+  dev = false
+): StringifyNodeOutput => {
   const components = new Map<string, string>()
 
   let fullHtml = ''
@@ -18,7 +21,8 @@ export const stringifyNode = (root: HdElement): StringifyNodeOutput => {
     if (isNode(entry)) {
       const { nodes, html = '' } = getStringifyNodeFunction(entry)(
         entry,
-        components
+        components,
+        dev
       )
       stack.push(...(nodes?.reverse() ?? []))
       fullHtml += html

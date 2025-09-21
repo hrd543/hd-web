@@ -5,7 +5,12 @@ import { stringifyNode } from '../stringify/index.js'
 /**
  * Build the full html content from its head and body
  */
-export const buildHtml = (head: HdNode, body: HdNode, lang: string) => {
+export const buildHtml = (
+  head: HdNode,
+  body: HdNode,
+  lang: string,
+  dev: boolean
+) => {
   const htmlElement = (
     <html lang={lang}>
       <head>{head}</head>
@@ -13,7 +18,7 @@ export const buildHtml = (head: HdNode, body: HdNode, lang: string) => {
     </html>
   )
 
-  const { html, components } = stringifyNode(htmlElement)
+  const { html, components } = stringifyNode(htmlElement, dev)
 
   return {
     html: `<!DOCTYPE html>${html}`,

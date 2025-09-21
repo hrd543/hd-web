@@ -1,47 +1,20 @@
 import { ModuleGraph } from 'vite'
 
-import { HdError } from '../errors/index.js'
-import { clientFileRegex } from '../stringify/index.js'
-
-const getModules = (
-  moduleGraph: ModuleGraph,
-  components: Array<{ filename: string; key: string }>
-) => {
-  return components.flatMap(({ key, filename }) => {
-    const imports = moduleGraph.getModulesByFile(filename)
-
-    if (!imports) {
-      throw new HdError('comp.notFound', key, filename)
-    }
-
-    return Array.from(imports)
-  })
-}
-
 export const findClientFiles = (
   moduleGraph: ModuleGraph,
   components: Array<{ filename: string; key: string }>
 ): string[] => {
-  const visited = new Set<string>()
-  const js: string[] = []
+  // First, load all client files which aren't in node_modules
+  // as they won't have the __file static prop
+  const localClientFiles = moduleGraph.fileToModulesMap
+    .keys()
+    .toArray()
+    .filter(
+      (file) => file.endsWith('.client.ts') && !file.includes('node_modules')
+    )
 
-  const modules = getModules(moduleGraph, components)
+  // Then get all the ones used in components
+  const componentFiles = components.map(({ filename }) => filename)
 
-  while (modules.length) {
-    const m = modules.pop()!
-
-    if (visited.has(m.url)) {
-      continue
-    }
-
-    visited.add(m.url)
-
-    if (clientFileRegex.test(m.url)) {
-      js.push(m.url)
-    }
-
-    modules.push(...m.importedModules)
-  }
-
-  return js
+  return localClientFiles.concat(componentFiles)
 }

@@ -77,7 +77,8 @@ export const getServeHtml = (
         buildEmptyScript(rebuilt.cssImports)
       ),
       body,
-      config.lang
+      config.lang,
+      true
     )
 
     const js = findClientFiles(server.moduleGraph, components)

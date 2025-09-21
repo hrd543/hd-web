@@ -17,7 +17,8 @@ export type ComponentInfo = {
 export type StringifyFunction<T extends FlatHdNode = FlatHdNode> = (
   node: T,
   /** Component key => filename */
-  components: Map<string, string>
+  components: Map<string, string>,
+  dev: boolean
 ) => StringifyResult
 
 export type StringifyNodeOutput = {

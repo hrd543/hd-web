@@ -7,23 +7,31 @@ import { serialiseProps } from '../shared/props.js'
 
 export const stringifyComponent: StringifyFunction<HdElement> = (
   { interactive, ...entry },
-  components
+  components,
+  dev
 ) => {
   const { behaviour, props: behaviourProps } = interactive!
   const componentKey = behaviour.key
 
   const existing = components.get(componentKey)
-  const filename = url.fileURLToPath(behaviour.__file!).replaceAll('\\', '/')
+  const filename = behaviour.__file
+    ? url.fileURLToPath(behaviour.__file).replaceAll('\\', '/')
+    : undefined
 
-  if (!filename) {
-    throw new HdError('comp.filename', componentKey)
+  // In dev, the __file prop may not be provided as it's only added
+  // on build. In this case, we'll just import all components from the
+  // user's src folder anyway
+  if (filename) {
+    if (existing && existing !== filename) {
+      throw new HdError('comp.unique', componentKey)
+    }
+
+    components.set(componentKey, filename)
+  } else {
+    if (!dev) {
+      throw new HdError('comp.filename', componentKey)
+    }
   }
-
-  if (existing && existing !== filename) {
-    throw new HdError('comp.unique', componentKey)
-  }
-
-  components.set(componentKey, filename)
 
   const script = addPropsScript(behaviourProps)
 

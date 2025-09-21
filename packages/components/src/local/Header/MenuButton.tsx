@@ -1,16 +1,13 @@
 import './MenuButton.css'
 
-import { FuncComponent } from 'hd-web'
+import { View } from 'hd-web'
 
 type MenuButtonProps = {
   height: number
   className?: string
 }
 
-export const MenuButton: FuncComponent<MenuButtonProps> = ({
-  height,
-  className
-}) => {
+export const MenuButton: View<MenuButtonProps> = ({ height, className }) => {
   return (
     <button
       class={`MenuButton ${className}`}

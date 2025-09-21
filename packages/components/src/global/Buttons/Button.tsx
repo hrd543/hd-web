@@ -1,18 +1,21 @@
-import { FuncComponent, registerClient } from 'hd-web'
+import { View, Interactive } from 'hd-web'
 
-import ButtonClient from './Button.client.js'
+import ButtonBehaviour from './Button.client.js'
 import { ButtonProps } from './types.js'
 
-export const Button: FuncComponent<ButtonProps> = ({
+export const Button: View<ButtonProps> = ({
   type,
   disabled = false,
   title
 }) => {
   return (
-    <button $click="click" disabled={disabled} class={`Button Button--${type}`}>
+    <Interactive
+      _as="button"
+      _use={ButtonBehaviour}
+      disabled={disabled}
+      class={`Button Button--${type}`}
+    >
       {title}
-    </button>
+    </Interactive>
   )
 }
-
-registerClient(Button, ButtonClient)

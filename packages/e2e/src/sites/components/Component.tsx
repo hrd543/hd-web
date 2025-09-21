@@ -1,8 +1,8 @@
-import { type FuncComponent, registerClient } from 'hd-web'
+import { type View, registerClient } from 'hd-web'
 
 import ComponentClient, { type ComponentProps } from './Component.client.js'
 
-export const Component: FuncComponent<ComponentProps> = ({ id }) => {
+export const Component: View<ComponentProps> = ({ id }) => {
   return (
     <div id={`component-${id}`} $click="handleClick">
       <div id={`ref-${id}`} ref="element">

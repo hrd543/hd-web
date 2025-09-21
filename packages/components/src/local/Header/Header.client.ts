@@ -1,8 +1,6 @@
-import { Component, Html } from 'hd-web'
+import { Behaviour, Html } from 'hd-web'
 
-import { HeaderProps } from './types.js'
-
-export default class HeaderClient extends Component<HeaderProps> {
+export default class HeaderBehaviour extends Behaviour {
   static key = 'hd-header'
 
   private toggleMenu(menu: Element) {

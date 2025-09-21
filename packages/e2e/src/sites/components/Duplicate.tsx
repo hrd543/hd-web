@@ -1,8 +1,8 @@
-import { type FuncComponent, registerClient } from 'hd-web'
+import { type View, registerClient } from 'hd-web'
 
 import DuplicateClient from './Duplicate.client.js'
 
-export const Duplicate: FuncComponent = () => {
+export const Duplicate: View = () => {
   return <div>Duplicate</div>
 }
 

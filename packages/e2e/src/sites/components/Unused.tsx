@@ -1,8 +1,8 @@
-import { type FuncComponent, registerClient } from 'hd-web'
+import { type View, registerClient } from 'hd-web'
 
 import UnusedClient from './Unused.client.js'
 
-export const Unused: FuncComponent = () => {
+export const Unused: View = () => {
   return <div>Not used</div>
 }
 

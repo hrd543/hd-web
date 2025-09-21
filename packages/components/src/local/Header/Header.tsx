@@ -1,12 +1,12 @@
 import './Header.css'
 
-import { FuncComponent, registerClient } from 'hd-web'
+import { Interactive, View } from 'hd-web'
 
-import HeaderClient from './Header.client.js'
+import HeaderBehaviour from './Header.client.js'
 import { MenuButton } from './MenuButton.js'
 import { HeaderProps } from './types.js'
 
-export const Header: FuncComponent<HeaderProps> = ({
+export const Header: View<HeaderProps> = ({
   items,
   logo,
   className = '',
@@ -15,7 +15,9 @@ export const Header: FuncComponent<HeaderProps> = ({
   fontColour
 }) => {
   return (
-    <nav
+    <Interactive
+      _as="nav"
+      _use={HeaderBehaviour}
       class={`hd-header ${className ?? ''}`}
       style={{
         '--_height': height,
@@ -23,7 +25,7 @@ export const Header: FuncComponent<HeaderProps> = ({
         '--_font-colour': fontColour
       }}
     >
-      <div $click="handleClick" class="hd-header_container">
+      <div class="hd-header_container">
         <a href="/" class="hd-header_logo">
           {logo}
         </a>
@@ -36,8 +38,6 @@ export const Header: FuncComponent<HeaderProps> = ({
         </ul>
         <MenuButton height={30} className="hd-header_menuButton" />
       </div>
-    </nav>
+    </Interactive>
   )
 }
-
-registerClient(Header, HeaderClient)

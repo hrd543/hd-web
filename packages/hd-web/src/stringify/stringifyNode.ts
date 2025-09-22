@@ -44,9 +44,9 @@ export const stringifyNode = (
 
 const getStringifyNodeFunction = ({
   tag,
-  interactive
+  enhancements
 }: HdElement): StringifyFunction => {
-  if (interactive) {
+  if (enhancements) {
     return stringifyComponent as StringifyFunction
   }
 

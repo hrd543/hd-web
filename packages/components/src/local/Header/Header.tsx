@@ -1,6 +1,6 @@
 import './Header.css'
 
-import { Interactive, View } from 'hd-web'
+import { Enhance, View } from 'hd-web'
 
 import HeaderBehaviour from './Header.client.js'
 import { MenuButton } from './MenuButton.js'
@@ -15,9 +15,8 @@ export const Header: View<HeaderProps> = ({
   fontColour
 }) => {
   return (
-    <Interactive
-      _as="nav"
-      _use={HeaderBehaviour}
+    <Enhance.nav
+      with={HeaderBehaviour}
       class={`hd-header ${className ?? ''}`}
       style={{
         '--_height': height,
@@ -38,6 +37,6 @@ export const Header: View<HeaderProps> = ({
         </ul>
         <MenuButton height={30} className="hd-header_menuButton" />
       </div>
-    </Interactive>
+    </Enhance.nav>
   )
 }

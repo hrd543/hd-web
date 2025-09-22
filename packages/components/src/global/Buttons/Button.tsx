@@ -1,4 +1,4 @@
-import { View, Interactive } from 'hd-web'
+import { View, Enhance } from 'hd-web'
 
 import ButtonBehaviour from './Button.client.js'
 import { ButtonProps } from './types.js'
@@ -9,13 +9,12 @@ export const Button: View<ButtonProps> = ({
   title
 }) => {
   return (
-    <Interactive
-      _as="button"
-      _use={ButtonBehaviour}
+    <Enhance.button
+      with={ButtonBehaviour}
       disabled={disabled}
       class={`Button Button--${type}`}
     >
       {title}
-    </Interactive>
+    </Enhance.button>
   )
 }

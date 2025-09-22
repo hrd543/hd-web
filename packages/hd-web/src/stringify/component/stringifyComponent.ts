@@ -6,11 +6,11 @@ import { StringifyFunction } from '../types.js'
 import { serialiseProps } from '../shared/props.js'
 
 export const stringifyComponent: StringifyFunction<HdElement> = (
-  { interactive, ...entry },
+  { enhancements, ...entry },
   components,
   dev
 ) => {
-  const { behaviour, props: behaviourProps } = interactive!
+  const { behaviour, props: behaviourProps } = enhancements!
   const componentKey = behaviour.key
 
   const existing = components.get(componentKey)

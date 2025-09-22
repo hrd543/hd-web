@@ -19,7 +19,7 @@ export type HdElement<T extends BaseProps = BaseProps> = {
   tag: string
   props: T | null
   children?: HdNode
-  interactive?: {
+  enhancements?: {
     behaviour: IBehaviourConstructor<any, any>
     props: any
   }
@@ -41,24 +41,3 @@ export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
 export interface View<T extends BaseProps = BaseProps> {
   (props: Props<T>): HdNode
 }
-
-/*
-
-
-InteractiveView component with `use` `as` and `with` props
-
-e.g. <InteractiveView use={ButtonBehaviour} as="button" with={{title: "henry"}} />
-
-Then some sort of `createRef` function to pass refs around as props.
-
-Optionally a decorator within class methods to add a listener (will need to parse these myself I think)
-
-class ButtonBehaviour {
-  @on("click")
-  handleClick(e) {
-    console.log(e)
-  }
-}
-
-
-*/

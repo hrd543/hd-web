@@ -9,10 +9,7 @@ export { dev, type HdDevConfig } from './dev/index.js'
 export { HdError, type HdErrorKey } from './errors/index.js'
 export type { Page, PageContent, Site } from './shared/index.js'
 export { cleanPath } from './shared/index.js'
-export {
-  Interactive,
-  type InteractiveProps
-} from './interactions/Interactive.js'
+export { Enhance, type EnhanceViewProps } from './enhancements/index.js'
 export {
   type BaseProps,
   type View,

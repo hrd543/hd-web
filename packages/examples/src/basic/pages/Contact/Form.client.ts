@@ -1,11 +1,11 @@
 import { Behaviour } from 'hd-web'
 
-export default class FormBehaviour extends Behaviour {
+export default class FormBehaviour extends Behaviour<HTMLFormElement> {
   static key = 'Form'
 
-  constructor(e: HTMLButtonElement) {
+  constructor(e: HTMLFormElement) {
     super(e)
-    this.el.addEventListener('click', this.handleClick.bind(this))
+    this.ref('button')!.addEventListener('click', this.handleClick.bind(this))
   }
 
   handleClick() {

@@ -2,7 +2,6 @@ import type { BaseProps, IBehaviour } from '@hd-web/jsx'
 
 import { refAttribute } from '../stringify/constants.js'
 import { parseProps } from '../stringify/shared/props.js'
-import { traverse } from './traverse.js'
 
 export abstract class Behaviour<
   E extends HTMLElement = HTMLElement,
@@ -22,14 +21,9 @@ export abstract class Behaviour<
    *
    * Returns `undefined` if not found.
    *
-   * NB it will not check stateful children, so you can only reference
-   * children within this component.
+   * NB - It must be a child of the enhanced element.
    */
   ref(ref: string) {
-    for (const e of traverse(this.el)) {
-      if (e.getAttribute(refAttribute) === ref) {
-        return e
-      }
-    }
+    return this.el.querySelector(`[${refAttribute}="${ref}"]`)
   }
 }

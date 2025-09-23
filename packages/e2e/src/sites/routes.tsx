@@ -8,7 +8,7 @@ const routes: Site = {
     content: () => (
       <div id="root">
         {/* Adding this to trigger the js file */}
-        <Component _client="" id={1} />
+        <Component client="" id={1} />
       </div>
     ),
     routes: {

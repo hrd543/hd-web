@@ -1,52 +1,61 @@
-import { FuncComponent, HdElement, IComponent } from '@hd-web/jsx'
+import { HdElement, BaseProps } from '@hd-web/jsx'
 import url from 'url'
 
 import { HdError } from '../../errors/index.js'
-import { idAttribute } from '../constants.js'
-import { flattenChildren } from '../shared/flattenChildren.js'
 import { StringifyFunction } from '../types.js'
+import { serialiseProps } from '../shared/props.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
 
-export const stringifyComponent: StringifyFunction<
-  HdElement & { tag: FuncComponent & { client: IComponent } }
-> = (entry, components) => {
-  const [{ tag, props, children }] = entry
-  const componentKey = tag.client.key
-  const flatChildren = flattenChildren(children)
-
-  if (!flatChildren || flatChildren.length !== 1) {
-    throw new HdError('comp.oneChild', componentKey)
-  }
-
-  const child = flatChildren[0]!
-
-  if (typeof child === 'string' || typeof child.tag !== 'string') {
-    throw new HdError('comp.intrinsicChild', componentKey)
-  }
+export const stringifyComponent: StringifyFunction<HdElement> = (
+  { enhancements, ...entry },
+  components,
+  dev
+) => {
+  const { behaviour, props: behaviourProps } = enhancements!
+  const componentKey = behaviour.key
 
   const existing = components.get(componentKey)
-  // Try the client component's file prop which will only be valid
-  // in prod or external packages.
-  const filename = (
-    tag.client.__file ? url.fileURLToPath(tag.client.__file) : child.filename
-  )?.replaceAll('\\', '/')
+  const filename = behaviour.__file
+    ? url.fileURLToPath(behaviour.__file).replaceAll('\\', '/')
+    : undefined
 
-  if (!filename) {
-    throw new HdError('comp.filename', componentKey)
+  // In dev, the __file prop may not be provided as it's only added
+  // on build. In this case, we'll just import all components from the
+  // user's src folder anyway
+  if (filename) {
+    if (existing && existing !== filename) {
+      throw new HdError('comp.unique', componentKey)
+    }
+
+    components.set(componentKey, filename)
+  } else {
+    if (!dev) {
+      throw new HdError('comp.filename', componentKey)
+    }
   }
 
-  if (existing && existing !== filename) {
-    throw new HdError('comp.unique', componentKey)
-  }
-
-  components.set(componentKey, filename)
+  const script = addPropsScript(behaviourProps)
 
   return {
-    entries: [
-      [
-        { ...child, props: { ...child.props, [idAttribute]: componentKey } },
-        tag,
-        props
-      ]
+    nodes: [
+      {
+        ...entry,
+        children: flattenChildren([script, entry.children ?? null])
+      }
     ]
   }
+}
+
+const addPropsScript = (props?: BaseProps | null): HdElement | null => {
+  const stringified = serialiseProps(props)
+
+  if (stringified) {
+    return {
+      tag: 'script',
+      children: [stringified],
+      props: { type: 'application/json' }
+    }
+  }
+
+  return null
 }

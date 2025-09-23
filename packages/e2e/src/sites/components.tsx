@@ -8,8 +8,8 @@ const components: Site = {
     title: 'Components',
     content: () => (
       <div>
-        <Component _client="client1" id={1} />
-        <Component _client="client2" id={2} />
+        <Component client="client1" id={1} />
+        <Component client="client2" id={2} />
         {/* The component is being imported but not actually rendered. */}
         {Unused.name}
       </div>

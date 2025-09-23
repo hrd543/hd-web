@@ -1,6 +1,6 @@
 import './BlogInfo.css'
 
-import { FuncComponent } from 'hd-web'
+import { View } from 'hd-web'
 
 import { formatLongDate, formatShortDate } from '../../shared/formatDate.js'
 
@@ -10,7 +10,7 @@ export type BlogInfoProps = {
   format?: 'short' | 'long'
 }
 
-export const BlogInfo: FuncComponent<BlogInfoProps> = ({
+export const BlogInfo: View<BlogInfoProps> = ({
   author,
   date,
   format = 'short'

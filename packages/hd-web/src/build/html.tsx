@@ -34,7 +34,8 @@ export const buildHtmlFiles = async (
     const built = buildHtml(
       createMeta(page.title, page.description, head, scripts),
       body,
-      lang
+      lang,
+      false
     )
 
     html.push({

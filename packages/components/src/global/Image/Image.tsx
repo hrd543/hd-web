@@ -1,9 +1,9 @@
-import { FuncComponent } from 'hd-web'
+import { View } from 'hd-web'
 
 import { getImageSrc, getImageStyle } from './helpers.js'
 import { type ImageProps } from './types.js'
 
-export const Image: FuncComponent<ImageProps> = ({
+export const Image: View<ImageProps> = ({
   alt,
   src,
   srcMobile,

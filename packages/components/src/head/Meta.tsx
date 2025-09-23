@@ -1,9 +1,9 @@
-import { FuncComponent } from 'hd-web'
+import { View } from 'hd-web'
 
 /**
  * Add information like the charset and viewport to the html head element
  */
-export const Meta: FuncComponent = () => {
+export const Meta: View = () => {
   return (
     <>
       <meta charset="utf-8" />

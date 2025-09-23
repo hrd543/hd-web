@@ -1,10 +1,10 @@
-import { Header } from '@hd-web/components/local'
-import { type FuncComponent } from 'hd-web'
+// import { Header } from '@hd-web/components/local'
+import { type View } from 'hd-web'
 
-export const PageLayout: FuncComponent = ({ children }) => {
+export const PageLayout: View = ({ children }) => {
   return (
     <>
-      <Header
+      {/* <Header
         items={[
           { link: '/contact', title: 'Contact' },
           { link: '/blog', title: 'Blog' }
@@ -13,7 +13,7 @@ export const PageLayout: FuncComponent = ({ children }) => {
         bgColour="#fff"
         fontColour="#000"
         height="48px"
-      />
+      /> */}
       {children}
       <footer>Created with hd-web</footer>
     </>

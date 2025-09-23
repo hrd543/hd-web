@@ -1,25 +1,12 @@
-import type { FuncComponent, HdElement, Props } from './types.js'
+import type { View, HdElement, Props } from './types.js'
 
-export const jsx = (
-  tag: string | FuncComponent,
-  props: Props,
-  key?: string,
-  x?: boolean,
-  source?: { fileName: string }
-): HdElement => {
+// TODO sort out filenames in dev.
+
+export const jsx = (tag: string | View, props: Props): HdElement => {
   const { children, ...rest } = props
-  const isFunction = typeof tag === 'function'
+  const isView = typeof tag === 'function'
 
-  if (isFunction && tag.client) {
-    return {
-      tag,
-      props: rest,
-      children: tag(props)
-    }
-  }
-
-  // If this is a standard functional component, treat it as a fragment
-  if (isFunction) {
+  if (isView) {
     return {
       tag: Fragment,
       props: rest,
@@ -30,8 +17,7 @@ export const jsx = (
   return {
     tag,
     props: rest,
-    children,
-    filename: source?.fileName
+    children
   }
 }
 

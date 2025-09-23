@@ -1,21 +1,26 @@
-import { type FuncComponent, registerClient } from 'hd-web'
+import { type View, Enhance } from 'hd-web'
 
-import ComponentClient, { type ComponentProps } from './Component.client.js'
+import ComponentBehaviour from './Component.client.js'
 
-export const Component: FuncComponent<ComponentProps> = ({ id }) => {
+export const Component: View<{ id: number; client: string }> = ({
+  id,
+  client
+}) => {
   return (
-    <div id={`component-${id}`} $click="handleClick">
+    <Enhance.div
+      with={ComponentBehaviour}
+      using={{ client }}
+      id={`component-${id}`}
+    >
       <div id={`ref-${id}`} ref="element">
         Ref
       </div>
-      <div id={`event-${id}`} $newEvent="handleEvent">
+      <div id={`event-${id}`} ref="newEvent">
         Event
       </div>
-      <div id={`props-${id}`} $props="handleProps">
+      <div id={`props-${id}`} ref="props">
         Props
       </div>
-    </div>
+    </Enhance.div>
   )
 }
-
-registerClient(Component, ComponentClient)

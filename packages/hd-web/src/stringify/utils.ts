@@ -1,6 +1,6 @@
 import { HdElement } from '@hd-web/jsx'
 
-import { RenderStackEntry } from './types.js'
+import { FlatHdNode } from './types.js'
 
-export const isNode = (x: RenderStackEntry): x is RenderStackEntry<HdElement> =>
-  typeof x[0] === 'object' && x[0] !== null
+export const isNode = (x: FlatHdNode): x is HdElement =>
+  typeof x === 'object' && x !== null

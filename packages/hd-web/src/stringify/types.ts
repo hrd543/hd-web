@@ -1,7 +1,7 @@
-import { BaseProps, FuncComponent, HdNode } from '@hd-web/jsx'
+import { HdNode } from '@hd-web/jsx'
 
 type StringifyResult = {
-  entries?: RenderStackEntry[]
+  nodes?: FlatHdNode[]
   html?: string
 }
 
@@ -9,20 +9,16 @@ type Flattened<T> = T extends Array<unknown> ? never : T
 
 export type FlatHdNode = Flattened<HdNode>
 
-export type RenderStackEntry<
-  T extends FlatHdNode = FlatHdNode,
-  P extends BaseProps = BaseProps
-> = [element: T, component: FuncComponent<P> | null, props?: P | null]
-
 export type ComponentInfo = {
   filename: string
   key: string
 }
 
 export type StringifyFunction<T extends FlatHdNode = FlatHdNode> = (
-  entry: RenderStackEntry<T>,
+  node: T,
   /** Component key => filename */
-  components: Map<string, string>
+  components: Map<string, string>,
+  dev: boolean
 ) => StringifyResult
 
 export type StringifyNodeOutput = {
@@ -31,5 +27,3 @@ export type StringifyNodeOutput = {
   /** The stringified html */
   html: string
 }
-
-export type ComponentListener = [event: string, method: string]

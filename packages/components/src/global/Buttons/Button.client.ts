@@ -1,9 +1,8 @@
-import { Component, Html } from 'hd-web'
+import { Behaviour, Html } from 'hd-web'
 
-import { ButtonProps } from './types.js'
 import { isLoading } from './utils.js'
 
-export default class ButtonClient extends Component<ButtonProps> {
+export default class ButtonBehaviour extends Behaviour {
   static key = 'hd-button'
 
   click(e: Html.TypedMouseEvent<HTMLButtonElement>) {

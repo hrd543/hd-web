@@ -6,10 +6,7 @@ import type * as CssInternal from 'csstype'
 // TODO: improve this by actually defining my own html types.
 // This looks a bit naff when you hover intrinsic elements.
 
-type ListenerKey = `$${string}`
-
 type HdAttributes = {
-  [key: ListenerKey]: string
   ref?: string
   style?: CssProperties
 }

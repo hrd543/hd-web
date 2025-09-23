@@ -1,3 +1,2 @@
-export { Component } from './Component.js'
+export { Behaviour } from './behaviour.js'
 export { getClientJs } from './getClientJs.js'
-export { registerClient } from './registerClient.js'

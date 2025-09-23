@@ -1,9 +1,9 @@
-import { Component } from 'hd-web'
+import { Behaviour } from 'hd-web'
 
-export default class UnusedClient extends Component {
+export default class UnusedClient extends Behaviour {
   static key = '_unusedKey'
 
-  constructor(e: HTMLElement | SVGElement) {
+  constructor(e: HTMLElement) {
     super(e)
 
     console.log('unused')

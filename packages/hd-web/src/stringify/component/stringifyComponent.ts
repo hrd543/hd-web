@@ -4,6 +4,7 @@ import url from 'url'
 import { HdError } from '../../errors/index.js'
 import { StringifyFunction } from '../types.js'
 import { serialiseProps } from '../shared/props.js'
+import { flattenChildren } from '../shared/flattenChildren.js'
 
 export const stringifyComponent: StringifyFunction<HdElement> = (
   { enhancements, ...entry },
@@ -36,11 +37,16 @@ export const stringifyComponent: StringifyFunction<HdElement> = (
   const script = addPropsScript(behaviourProps)
 
   return {
-    nodes: [...(script ? [script] : []), entry]
+    nodes: [
+      {
+        ...entry,
+        children: flattenChildren([script, entry.children ?? null])
+      }
+    ]
   }
 }
 
-const addPropsScript = (props?: BaseProps | null): HdElement | undefined => {
+const addPropsScript = (props?: BaseProps | null): HdElement | null => {
   const stringified = serialiseProps(props)
 
   if (stringified) {
@@ -50,4 +56,6 @@ const addPropsScript = (props?: BaseProps | null): HdElement | undefined => {
       props: { type: 'application/json' }
     }
   }
+
+  return null
 }

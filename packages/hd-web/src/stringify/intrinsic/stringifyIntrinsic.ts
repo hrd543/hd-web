@@ -13,7 +13,7 @@ export const stringifyIntrinsic: StringifyFunction<HdElement> = ({
   processRef(props ?? {})
 
   return {
-    nodes: [...(flattenChildren(children) ?? []), closeIntrinsic(tag)],
+    nodes: flattenChildren([children ?? null, closeIntrinsic(tag)]),
     html: openIntrinsic(tag, props ?? {})
   }
 }

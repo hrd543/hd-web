@@ -1,9 +1,7 @@
-import { type View, registerClient } from 'hd-web'
+import { type View, Enhance } from 'hd-web'
 
-import UnusedClient from './Unused.client.js'
+import UnusedBehaviour from './Unused.client.js'
 
 export const Unused: View = () => {
-  return <div>Not used</div>
+  return <Enhance.div with={UnusedBehaviour}>Not used</Enhance.div>
 }
-
-registerClient(Unused, UnusedClient)

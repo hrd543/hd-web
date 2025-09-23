@@ -1,15 +1,20 @@
-import { Component } from 'hd-web'
+import { Behaviour } from 'hd-web'
 
-export type ComponentProps = {
-  id: number
-  _client: string
-}
-
-export default class ComponentClient extends Component<ComponentProps> {
+export default class ComponentClient extends Behaviour<
+  HTMLDivElement,
+  { client: string }
+> {
   static key = '_componentKey'
 
-  constructor(e: HTMLElement | SVGElement) {
+  constructor(e: HTMLDivElement) {
     super(e)
+
+    this.el.addEventListener('click', this.handleClick)
+    this.ref('newEvent')!.addEventListener(
+      'newEvent',
+      this.handleEvent.bind(this)
+    )
+    this.ref('props')!.addEventListener('props', this.handleProps.bind(this))
 
     console.log('running')
   }
@@ -23,7 +28,7 @@ export default class ComponentClient extends Component<ComponentProps> {
   }
 
   handleProps() {
-    console.log(this.props._client)
+    console.log(this.props.client)
     console.log((this.props as any).id)
   }
 }

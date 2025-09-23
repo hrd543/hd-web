@@ -8,7 +8,7 @@ const duplicateComponents: Site = {
     title: 'Duplicate components site',
     content: () => (
       <div>
-        <Component id={1} _client="" />
+        <Component id={1} client="" />
         <Duplicate />
       </div>
     )

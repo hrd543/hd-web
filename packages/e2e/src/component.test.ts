@@ -26,8 +26,9 @@ describe('Components', async () => {
   }))!
   const files = getFileByPath(built)
 
-  window.document.documentElement.innerHTML = files['index.html']!.contents!
+  const html = files['index.html']!.contents!
   const js = files['components.js']!.contents!
+  window.document.documentElement.innerHTML = html
   vm.runInContext(js, window)
 
   it('should run the component constructor for each instance', () => {

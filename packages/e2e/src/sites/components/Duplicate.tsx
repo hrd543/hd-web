@@ -1,9 +1,7 @@
-import { type View, registerClient } from 'hd-web'
+import { type View, Enhance } from 'hd-web'
 
-import DuplicateClient from './Duplicate.client.js'
+import DuplicateBehaviour from './Duplicate.client.js'
 
 export const Duplicate: View = () => {
-  return <div>Duplicate</div>
+  return <Enhance.div with={DuplicateBehaviour}>Duplicate</Enhance.div>
 }
-
-registerClient(Duplicate, DuplicateClient)

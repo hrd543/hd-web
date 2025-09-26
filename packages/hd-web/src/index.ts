@@ -1,3 +1,7 @@
+import { HdBuildConfig } from './build/index.js'
+import { HdDevConfig } from './dev/index.js'
+import type { HdPlugin as HdPluginRaw } from './plugins/index.js'
+
 export { build, type BuiltFile, type HdBuildConfig } from './build/index.js'
 export { buildPackage } from './build-package/index.js'
 export { Behaviour } from './client/index.js'
@@ -17,3 +21,4 @@ export {
   type IBehaviour,
   type Props
 } from '@hd-web/jsx'
+export type HdPlugin = HdPluginRaw<HdBuildConfig & HdDevConfig>

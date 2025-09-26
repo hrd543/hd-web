@@ -2,14 +2,10 @@ import path from 'path'
 import url from 'url'
 
 import { HdError } from '../errors/index.js'
-import { SharedConfig } from './sharedConfig.js'
+import { WithPlugins } from './config.js'
 
 export const readConfigFile = async <Dev, Build>(): Promise<
-  Partial<{
-    shared: Partial<SharedConfig>
-    dev: Partial<Dev>
-    build: Partial<Build>
-  }>
+  Partial<WithPlugins<Dev & Build>>
 > => {
   const configFile = path.join(process.cwd(), 'hd.config.js')
 

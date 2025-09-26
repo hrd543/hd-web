@@ -1,4 +1,4 @@
-import { SharedConfig } from '../../config/sharedConfig.js'
+import { SharedConfig } from '../sharedConfig.js'
 import { buildPages } from './buildPages.js'
 import { BuiltSite, Site } from './types.js'
 

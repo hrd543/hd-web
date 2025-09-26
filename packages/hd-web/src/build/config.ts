@@ -1,8 +1,9 @@
+import { applyPluginsToConfig, HdPlugin } from '../plugins/index.js'
 import {
-  defaultSharedConfig,
   mergeConfig,
+  defaultSharedConfig,
   SharedConfig
-} from '../config/index.js'
+} from '../shared/index.js'
 
 export type BuildConfig = SharedConfig & {
   /** The folder containing any static files, like a favicon */
@@ -23,8 +24,11 @@ const defaultBuildSiteConfig: BuildConfig = {
  * Replace all missing / undefined keys with the defaults, and validate
  * the config for any potential issues.
  */
-export const validateConfig = (rawConfig: Partial<BuildConfig>) => {
+export const validateConfig = (
+  rawConfig: Partial<BuildConfig>,
+  plugins: Array<HdPlugin<BuildConfig>>
+) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
-  return config
+  return applyPluginsToConfig(config, plugins)
 }

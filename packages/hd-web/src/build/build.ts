@@ -10,14 +10,21 @@ import { buildHtmlFiles, getScriptElements } from './html.js'
 import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { runEsbuildFirst, runEsbuildLast } from './runEsbuild.js'
 import { readMetafile } from './utils.js'
+import { HdPlugin, filterPlugins, runPlugins } from '../plugins/index.js'
 
-export const build = async (config: Partial<BuildConfig> = {}) => {
-  const fullConfig = validateConfig(config)
+export const build = async (
+  config: Partial<BuildConfig> = {},
+  allPlugins: Array<HdPlugin<BuildConfig>> = []
+) => {
+  const plugins = filterPlugins(allPlugins, 'build')
+  const fullConfig = validateConfig(config, plugins)
 
   await deleteBuildFolder(fullConfig)
   const staticFiles = await copyStaticFolder(fullConfig)
 
-  const first = await runEsbuildFirst(fullConfig)
+  await runPlugins(fullConfig, plugins, 'start')
+
+  const first = await runEsbuildFirst(fullConfig, plugins)
 
   // doesn't support splitting yet
   const files = readMetafile(first.metafile, fullConfig.out)
@@ -49,6 +56,8 @@ export const build = async (config: Partial<BuildConfig> = {}) => {
 
     return
   }
+
+  await runPlugins(fullConfig, plugins, 'end')
 
   return buildReturnResult(
     fullConfig.out,

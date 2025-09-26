@@ -10,8 +10,12 @@ import { buildHtmlFiles, getScriptElements } from './html.js'
 import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { runEsbuildFirst, runEsbuildLast } from './runEsbuild.js'
 import { readMetafile } from './utils.js'
+import { HdPlugin } from '../plugins/types.js'
 
-export const build = async (config: Partial<BuildConfig> = {}) => {
+export const build = async (
+  config: Partial<BuildConfig> = {},
+  plugins: Array<HdPlugin<BuildConfig>>
+) => {
   const fullConfig = validateConfig(config)
 
   await deleteBuildFolder(fullConfig)

@@ -1,8 +1,8 @@
 import {
-  defaultSharedConfig,
   mergeConfig,
+  defaultSharedConfig,
   SharedConfig
-} from '../config/index.js'
+} from '../shared/index.js'
 
 export type BuildConfig = SharedConfig & {
   /** The folder containing any static files, like a favicon */

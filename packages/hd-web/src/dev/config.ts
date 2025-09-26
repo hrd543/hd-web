@@ -1,8 +1,8 @@
 import {
-  defaultSharedConfig,
   mergeConfig,
+  defaultSharedConfig,
   SharedConfig
-} from '../config/index.js'
+} from '../shared/index.js'
 
 export type DevConfig = SharedConfig & {
   /** The port to serve the application */

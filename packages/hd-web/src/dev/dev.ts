@@ -9,7 +9,7 @@ import { devPlugin } from './devPlugin.js'
 
 export const dev = async (
   config: Partial<DevConfig> = {},
-  allPlugins: Array<HdPlugin<DevConfig>>
+  allPlugins: Array<HdPlugin<DevConfig>> = []
 ) => {
   const plugins = filterPlugins(allPlugins, 'dev')
   const fullConfig = validateConfig(config, plugins)

@@ -14,7 +14,7 @@ import { HdPlugin, filterPlugins, runPlugins } from '../plugins/index.js'
 
 export const build = async (
   config: Partial<BuildConfig> = {},
-  allPlugins: Array<HdPlugin<BuildConfig>>
+  allPlugins: Array<HdPlugin<BuildConfig>> = []
 ) => {
   const plugins = filterPlugins(allPlugins, 'build')
   const fullConfig = validateConfig(config, plugins)

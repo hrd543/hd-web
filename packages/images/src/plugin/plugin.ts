@@ -1,28 +1,32 @@
 import type { HdPlugin } from 'hd-web'
 import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
+import { getImages, registerImage, resetImages } from '../shared/index.js'
 
 export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
-  let images: string[] = []
-
   return {
     name: 'hd-plugin-images',
-    async onBuildEnd() {
-      console.log('images', [...images])
-      images = []
+
+    async onBuildStart() {
+      resetImages()
     },
 
-    // Don't let esbuild handle images
+    async onBuildEnd() {
+      console.log('images', getImages())
+      resetImages()
+    },
+
+    // Don't let esbuild handle these images
     modifyConfig(config) {
       return {
         ...config,
-        fileTypes: []
+        fileTypes: config.fileTypes.filter((f) => !fileTypes.includes(f))
       }
     },
 
     onLoad: {
       filter: buildFileTypeRegex(fileTypes),
       load: async ({ path }) => {
-        images.push(path)
+        registerImage({ src: path })
 
         return {
           contents: `const path = "${path}"; export default path`

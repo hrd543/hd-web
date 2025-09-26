@@ -4,12 +4,13 @@ import { createServer } from 'vite'
 import { DevConfig, validateConfig } from './config.js'
 import { formatHtmlRoutes } from './formatHtmlRoutes.js'
 import { getServeHtml } from './serveHtml.js'
-import { HdPlugin } from '../plugins/types.js'
+import { HdPlugin, filterPlugins } from '../plugins/index.js'
 
 export const dev = async (
   config: Partial<DevConfig> = {},
-  plugins: Array<HdPlugin<DevConfig>>
+  allPlugins: Array<HdPlugin<DevConfig>>
 ) => {
+  const plugins = filterPlugins(allPlugins, 'dev')
   const fullConfig = validateConfig(config, plugins)
   const app = express()
 

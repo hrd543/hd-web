@@ -5,6 +5,7 @@ export type HdPlugin<Config> = {
     filter: RegExp
     load: (args: { path: string }) => Promise<{ code: string }>
   }
-  onStart?: (config: Config) => Promise<void>
-  onEnd?: (config: Config) => Promise<void>
+  onBuildStart?: (config: Config) => Promise<void>
+  onBuildEnd?: (config: Config) => Promise<void>
+  apply?: 'dev' | 'build'
 }

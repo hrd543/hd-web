@@ -30,7 +30,7 @@ export const dev = async (
   app.use(
     server.middlewares,
     formatHtmlRoutes,
-    getServeHtml(fullConfig, server)
+    getServeHtml(fullConfig, plugins, server)
   )
 
   app.listen(fullConfig.port)

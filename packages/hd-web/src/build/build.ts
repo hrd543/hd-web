@@ -24,7 +24,7 @@ export const build = async (
 
   await runPlugins(fullConfig, plugins, 'start')
 
-  const first = await runEsbuildFirst(fullConfig)
+  const first = await runEsbuildFirst(fullConfig, plugins)
 
   // doesn't support splitting yet
   const files = readMetafile(first.metafile, fullConfig.out)

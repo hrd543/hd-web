@@ -3,7 +3,7 @@ export type HdPlugin<Config> = {
   modifyConfig?: (config: Config) => Config | undefined
   onLoad?: {
     filter: RegExp
-    load: (args: { path: string }) => Promise<{ code: string }>
+    load: (args: { path: string }) => Promise<{ contents: string }>
   }
   onBuildStart?: (config: Config) => Promise<void>
   onBuildEnd?: (config: Config) => Promise<void>

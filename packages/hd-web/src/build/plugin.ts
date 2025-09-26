@@ -3,8 +3,12 @@ import fs from 'fs/promises'
 
 import { clientFileRegex } from '../stringify/index.js'
 import { addFileToClass } from '../utils/index.js'
+import { HdPlugin } from '../plugins/types.js'
+import { BuildConfig } from './config.js'
 
-export const plugin = (): esbuild.Plugin => ({
+export const plugin = (
+  plugins: Array<HdPlugin<BuildConfig>>
+): esbuild.Plugin => ({
   name: 'hd-web-plugin',
   setup(build) {
     build.onLoad({ filter: clientFileRegex }, async (args) => {
@@ -13,6 +17,12 @@ export const plugin = (): esbuild.Plugin => ({
       return {
         contents: addFileToClass(code, args.path.replaceAll('\\', '/')),
         loader: 'jsx'
+      }
+    })
+
+    plugins.forEach((p) => {
+      if (p.onLoad) {
+        build.onLoad({ filter: p.onLoad.filter }, p.onLoad.load)
       }
     })
   }

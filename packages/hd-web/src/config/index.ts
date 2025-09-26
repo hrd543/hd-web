@@ -1,3 +1,6 @@
-export * from './mergeConfig.js'
+export {
+  type WithPlugins,
+  type HdSiteConfig,
+  defineHdConfig
+} from './config.js'
 export { readConfigFile } from './readConfigFile.js'
-export * from './sharedConfig.js'

@@ -10,7 +10,7 @@ export const dev = async (
   config: Partial<DevConfig> = {},
   plugins: Array<HdPlugin<DevConfig>>
 ) => {
-  const fullConfig = validateConfig(config)
+  const fullConfig = validateConfig(config, plugins)
   const app = express()
 
   const server = await createServer({

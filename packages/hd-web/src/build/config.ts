@@ -1,3 +1,4 @@
+import { applyPluginsToConfig, HdPlugin } from '../plugins/index.js'
 import {
   mergeConfig,
   defaultSharedConfig,
@@ -23,8 +24,11 @@ const defaultBuildSiteConfig: BuildConfig = {
  * Replace all missing / undefined keys with the defaults, and validate
  * the config for any potential issues.
  */
-export const validateConfig = (rawConfig: Partial<BuildConfig>) => {
+export const validateConfig = (
+  rawConfig: Partial<BuildConfig>,
+  plugins: Array<HdPlugin<BuildConfig>>
+) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
-  return config
+  return applyPluginsToConfig(config, plugins)
 }

@@ -3,6 +3,7 @@ import {
   defaultSharedConfig,
   SharedConfig
 } from '../shared/index.js'
+import { applyPluginsToConfig, HdPlugin } from '../plugins/index.js'
 
 export type DevConfig = SharedConfig & {
   /** The port to serve the application */
@@ -26,8 +27,11 @@ const defaultBuildSiteConfig: DevConfig = {
  * Replace all missing / undefined keys with the defaults, and validate
  * the config for any potential issues.
  */
-export const validateConfig = (rawConfig: Partial<DevConfig>) => {
+export const validateConfig = (
+  rawConfig: Partial<DevConfig>,
+  plugins: Array<HdPlugin<DevConfig>>
+) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
-  return config
+  return applyPluginsToConfig(config, plugins)
 }

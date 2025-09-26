@@ -16,7 +16,7 @@ export const build = async (
   config: Partial<BuildConfig> = {},
   plugins: Array<HdPlugin<BuildConfig>>
 ) => {
-  const fullConfig = validateConfig(config)
+  const fullConfig = validateConfig(config, plugins)
 
   await deleteBuildFolder(fullConfig)
   const staticFiles = await copyStaticFolder(fullConfig)

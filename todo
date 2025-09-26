@@ -2,3 +2,11 @@
 - Improve errors in dev mode
 - Flesh out documentation
 - Get actual 404 pages in dev mode
+
+- Try cloudflare access blog page
+- markdown plugin
+- improve comments on types and functions
+- Expand on examples with more comments
+- Improve wiki to better explain concepts
+- Improve create package somehow?
+- Add layout option to site / pages

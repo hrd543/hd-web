@@ -1,6 +1,8 @@
 // import { Header } from '@hd-web/components/local'
 import { type View } from 'hd-web'
 import henry from '../img/henry.jpg'
+import unused from '../img/unused.jpg'
+import { Image } from '@hd-web/images'
 
 export const PageLayout: View = ({ children }) => {
   return (
@@ -15,7 +17,8 @@ export const PageLayout: View = ({ children }) => {
         fontColour="#000"
         height="48px"
       /> */}
-      <img src={henry} />
+      <img src={henry.src} />
+      <Image src={unused} alt="" />
       {children}
       <footer>Created with hd-web</footer>
     </>

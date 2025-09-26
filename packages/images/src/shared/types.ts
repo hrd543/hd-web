@@ -1,5 +1,6 @@
 export type HdImageRecord = {
   src: string
+  compress?: boolean
 }
 
 export type HdImage = {
@@ -11,6 +12,8 @@ export type HdImage = {
    * Prefer using the `Image` component or accessing `src` where possible
    */
   srcRaw: string
+  /** This is the original location on the fs of the image */
+  comesFrom: string
 }
 
 // Need to use global variables as the code gets bundled so may not

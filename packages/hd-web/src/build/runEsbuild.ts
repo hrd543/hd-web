@@ -29,7 +29,7 @@ export const runEsbuildFirst = async (
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
-      plugins: [plugin(plugins)],
+      plugins: [plugin(plugins, config)],
       platform: 'node',
       entryPoints: [config.entry],
       outdir: config.out,

@@ -26,7 +26,7 @@ export const dev = async (
       // This makes sure these node_modules are transformed by vite
       noExternal: ['@hd-web/components', ...fullConfig.dependenciesToTransform]
     },
-    plugins: [devPlugin(plugins)]
+    plugins: [devPlugin(plugins, fullConfig)]
   })
 
   app.use(

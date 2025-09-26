@@ -6,9 +6,11 @@ import { addFileToClass } from '../utils/index.js'
 import { HdPlugin } from '../plugins/types.js'
 import { BuildConfig } from './config.js'
 import { HdError } from '../errors/HdError.js'
+import { HdBuildConfig } from './index.js'
 
 export const plugin = (
-  plugins: Array<HdPlugin<BuildConfig>>
+  plugins: Array<HdPlugin<BuildConfig>>,
+  config: HdBuildConfig
 ): esbuild.Plugin => ({
   name: 'hd-web-plugin',
   setup(build) {
@@ -25,7 +27,7 @@ export const plugin = (
       if (onLoad) {
         build.onLoad({ filter: onLoad.filter }, async (args) => {
           try {
-            return await onLoad.load(args)
+            return await onLoad.load({ ...args, config })
           } catch (e) {
             throw new HdError('plugin.error', name, 'onLoad', e)
           }

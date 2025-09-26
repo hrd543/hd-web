@@ -1,3 +1,4 @@
+import { HdError } from '../errors/HdError.js'
 import { HdPlugin } from './types.js'
 
 export const runPlugins = async <T>(
@@ -8,6 +9,10 @@ export const runPlugins = async <T>(
   const method = type === 'start' ? 'onBuildStart' : 'onBuildEnd'
 
   for (const plugin of plugins) {
-    await plugin[method]?.(config)
+    try {
+      await plugin[method]?.(config)
+    } catch (e) {
+      throw new HdError('plugin.error', plugin.name, method, e)
+    }
   }
 }

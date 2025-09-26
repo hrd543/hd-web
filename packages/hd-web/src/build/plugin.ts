@@ -5,6 +5,7 @@ import { clientFileRegex } from '../stringify/index.js'
 import { addFileToClass } from '../utils/index.js'
 import { HdPlugin } from '../plugins/types.js'
 import { BuildConfig } from './config.js'
+import { HdError } from '../errors/HdError.js'
 
 export const plugin = (
   plugins: Array<HdPlugin<BuildConfig>>
@@ -20,9 +21,15 @@ export const plugin = (
       }
     })
 
-    plugins.forEach((p) => {
-      if (p.onLoad) {
-        build.onLoad({ filter: p.onLoad.filter }, p.onLoad.load)
+    plugins.forEach(({ onLoad, name }) => {
+      if (onLoad) {
+        build.onLoad({ filter: onLoad.filter }, async (args) => {
+          try {
+            return await onLoad.load(args)
+          } catch (e) {
+            throw new HdError('plugin.error', name, 'onLoad', e)
+          }
+        })
       }
     })
   }

@@ -1,2 +1,5 @@
-export { type HdImage, type HdImageRecord } from './types.js'
+export {
+  type HdImage,
+  type CompressedImageInfo as HdImageRecord
+} from './types.js'
 export * from './imageRegistration.js'

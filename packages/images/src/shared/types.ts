@@ -1,6 +1,6 @@
-export type HdImageRecord = {
+export type CompressedImageInfo = {
   src: string
-  compress?: boolean
+  compression: number
 }
 
 export type HdImage = {
@@ -19,5 +19,8 @@ export type HdImage = {
 // Need to use global variables as the code gets bundled so may not
 // necessarily reference the same local variables
 declare global {
-  var _hdImages: HdImageRecord[]
+  var _hdImages: {
+    original: Set<string>
+    compressed: Map<string, CompressedImageInfo[]>
+  }
 }

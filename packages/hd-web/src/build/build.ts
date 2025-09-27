@@ -49,7 +49,7 @@ export const build = async (
   // TODO I should remove the `__file` prop here if it exists?
   const final = await runEsbuildLast(fullConfig, outfile, js)
 
-  await runPlugins(fullConfig, plugins, 'end')
+  const pluginResults = await runPlugins(fullConfig, plugins, 'end')
 
   if (fullConfig.write) {
     if (!js) {
@@ -64,6 +64,7 @@ export const build = async (
     outfile,
     first,
     final,
+    pluginResults,
     html,
     staticFiles
   )

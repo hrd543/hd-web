@@ -1,4 +1,6 @@
 import type { HdPlugin } from 'hd-web'
+import fs from 'fs/promises'
+
 import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
 import { getImages, resetImages } from '../shared/index.js'
 import { getBuildSrc } from './getBuildSrc.js'
@@ -11,8 +13,16 @@ export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
       resetImages()
     },
 
-    async onBuildEnd() {
-      console.log('images', getImages())
+    async onBuildEnd({ out }) {
+      const { original, compressed } = getImages()
+
+      for (const image of original) {
+        const { src } = getBuildSrc(out, image)
+
+        // Need to respect the "write" option here.
+        await fs.copyFile(image, src)
+      }
+
       resetImages()
     },
 

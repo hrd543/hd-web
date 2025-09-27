@@ -4,6 +4,7 @@ import fs from 'fs/promises'
 import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
 import { getImages, resetImages } from '../shared/index.js'
 import { getBuildSrc } from './getBuildSrc.js'
+import path from 'path'
 
 export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
   return {
@@ -13,17 +14,38 @@ export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
       resetImages()
     },
 
-    async onBuildEnd({ out }) {
+    async onBuildEnd({ out, write }) {
       const { original, compressed } = getImages()
+      const copied: string[] = []
+
+      if (write) {
+        await fs.mkdir(path.join(out, 'images'))
+      }
 
       for (const image of original) {
-        const { src } = getBuildSrc(out, image)
+        const { src, relativeSrc } = getBuildSrc(out, image)
+        copied.push(relativeSrc)
 
-        // Need to respect the "write" option here.
-        await fs.copyFile(image, src)
+        if (write) {
+          await fs.copyFile(image, src)
+        }
+      }
+
+      // For now, just copying without compression
+      for (const { src: image } of compressed) {
+        const { src, relativeSrc } = getBuildSrc(out, image)
+        copied.push(relativeSrc)
+
+        if (write) {
+          await fs.copyFile(image, src)
+        }
       }
 
       resetImages()
+
+      return {
+        files: copied.map((f) => ({ relativePath: f }))
+      }
     },
 
     // Don't let esbuild handle these images

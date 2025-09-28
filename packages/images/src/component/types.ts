@@ -7,7 +7,7 @@ export type ImageProps = {
   ratio?: number
   /** Should the width or height determine the size. Defaults to w */
   dim?: 'w' | 'h' | null
-  compression: number
+  quality: number
   lazy?: boolean
   className?: string
 }

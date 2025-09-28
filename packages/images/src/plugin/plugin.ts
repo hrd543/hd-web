@@ -2,9 +2,9 @@ import type { HdPlugin } from 'hd-web'
 import fs from 'fs/promises'
 
 import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
-import { getImages, resetImages } from '../shared/index.js'
-import { getBuildSrc } from './getBuildSrc.js'
+import { getImages, resetImages, getCopiedImgSrc } from '../shared/index.js'
 import path from 'path'
+import { processImage } from '../processing/processImage.js'
 
 export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
   return {
@@ -15,29 +15,20 @@ export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
     },
 
     async onBuildEnd({ out, write }) {
-      const { original, compressed } = getImages()
+      const images = getImages()
       const copied: string[] = []
 
       if (write) {
         await fs.mkdir(path.join(out, 'images'))
       }
 
-      for (const image of original) {
-        const { src, relativeSrc } = getBuildSrc(out, image)
-        copied.push(relativeSrc)
+      for (const image of images) {
+        const newSrc = getCopiedImgSrc(image)
+
+        copied.push(newSrc)
 
         if (write) {
-          await fs.copyFile(image, src)
-        }
-      }
-
-      // For now, just copying without compression
-      for (const { src: image } of compressed) {
-        const { src, relativeSrc } = getBuildSrc(out, image)
-        copied.push(relativeSrc)
-
-        if (write) {
-          await fs.copyFile(image, src)
+          await processImage(image, path.posix.join(out, newSrc))
         }
       }
 
@@ -59,17 +50,16 @@ export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
     onLoad: {
       filter: buildFileTypeRegex(fileTypes),
       load: async ({ path, config }) => {
-        const { relativeSrc } = getBuildSrc(config.out, path)
+        const newSrc = getCopiedImgSrc({ src: path })
         const stringifiedPath = JSON.stringify(path)
 
         const contents = `
           export default {
             get src() {
-              globalThis._hdImages.original.add(${stringifiedPath})
+              globalThis._hdImages.set(${stringifiedPath}, [{ src: ${stringifiedPath} }])
 
-              return "${relativeSrc}"
+              return "${newSrc}"
             },
-            srcRaw: "${relativeSrc}",
             comesFrom: ${stringifiedPath}
           }
           `

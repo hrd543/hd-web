@@ -1,43 +1,42 @@
-import { CompressedImageInfo } from './types.js'
+import { CopiedImageInfo, ImageModifications } from './types.js'
 
 export const resetImages = () => {
-  globalThis._hdImages = {
-    original: new Set(),
-    compressed: new Map()
-  }
+  globalThis._hdImages = new Map()
 }
 
-const areCompressedImagesEqual = (
-  a: CompressedImageInfo,
-  b: CompressedImageInfo
+const areModificationsEqual = (
+  a: ImageModifications,
+  b: ImageModifications
 ) => {
-  // Can ignore src since it's assumed that'll be the same
-  return a.compression === b.compression
+  return a.quality === b.quality
 }
 
 // We only want to store references to images which will actually need to be created.
 // If I reference the same image twice with identical options, only need one copy.
-const shouldAddCompressedImage = (
-  existing: CompressedImageInfo[],
-  toAdd: CompressedImageInfo
+const shouldRegisterImage = (
+  existing: CopiedImageInfo[],
+  toAdd: CopiedImageInfo
 ) => {
-  return !existing.some((image) => areCompressedImagesEqual(image, toAdd))
+  return !existing.some((image) => {
+    if (toAdd.modifications && image.modifications) {
+      return areModificationsEqual(toAdd.modifications, image.modifications)
+    }
+
+    return !toAdd.modifications && !image.modifications
+  })
 }
 
-export const registerCompressedImage = (image: CompressedImageInfo) => {
-  const compressed = globalThis._hdImages.compressed
-  const existing = compressed.get(image.src)
+export const registerImage = (image: CopiedImageInfo) => {
+  const images = globalThis._hdImages
+  const existing = images.get(image.src)
 
   if (existing) {
-    if (shouldAddCompressedImage(existing, image)) {
+    if (shouldRegisterImage(existing, image)) {
       existing.push(image)
     }
   } else {
-    compressed.set(image.src, [image])
+    images.set(image.src, [image])
   }
 }
 
-export const getImages = () => ({
-  compressed: globalThis._hdImages.compressed.values().toArray().flat(),
-  original: Array.from(globalThis._hdImages.original)
-})
+export const getImages = () => globalThis._hdImages.values().toArray().flat()

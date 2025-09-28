@@ -1,5 +1,3 @@
-export {
-  type HdImage,
-  type CompressedImageInfo as HdImageRecord
-} from './types.js'
+export * from './types.js'
 export * from './imageRegistration.js'
+export * from './getCopiedImgSrc.js'

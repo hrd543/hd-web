@@ -1,13 +1,13 @@
 import { View } from 'hd-web'
 import { ImageProps } from './types.js'
 import { getImageStyle } from './getImageStyle.js'
-import { registerCompressedImage } from '../shared/index.js'
+import { registerImage, getCopiedImgSrc } from '../shared/index.js'
 
 export const Image: View<ImageProps> = ({
   alt,
   src,
   ratio = 1,
-  compression,
+  quality,
   dim = 'w',
   lazy = true,
   className
@@ -16,7 +16,8 @@ export const Image: View<ImageProps> = ({
   const height = 100
   const width = height * ratio
 
-  registerCompressedImage({ src: src.comesFrom, compression })
+  const image = { src: src.comesFrom, modifications: { quality } }
+  registerImage(image)
 
   return (
     <img
@@ -26,7 +27,7 @@ export const Image: View<ImageProps> = ({
       width={width}
       height={height}
       alt={alt}
-      src={src.srcRaw}
+      src={getCopiedImgSrc(image)}
     />
   )
 }

@@ -18,7 +18,7 @@ export const PageLayout: View = ({ children }) => {
         height="48px"
       /> */}
       <img src={henry.src} />
-      <Image src={unused} compression={0.5} alt="" />
+      <Image src={unused} quality={25} alt="" />
       {children}
       <footer>Created with hd-web</footer>
     </>

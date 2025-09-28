@@ -1,6 +1,17 @@
-export type CompressedImageInfo = {
+export type ImageModifications = {
+  /**
+   * Integer describing how much to optimise the image
+   *
+   * (low quality) 0 <= quality <= 100 (high quality)
+   */
+  quality: number
+}
+
+export type CopiedImageInfo = {
+  /** The src of the original image */
   src: string
-  compression: number
+  /** Has the image been edited in any way? */
+  modifications?: ImageModifications
 }
 
 export type HdImage = {
@@ -19,8 +30,5 @@ export type HdImage = {
 // Need to use global variables as the code gets bundled so may not
 // necessarily reference the same local variables
 declare global {
-  var _hdImages: {
-    original: Set<string>
-    compressed: Map<string, CompressedImageInfo[]>
-  }
+  var _hdImages: Map<string, CopiedImageInfo[]>
 }

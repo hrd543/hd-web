@@ -2,11 +2,18 @@ import type { HdPlugin } from 'hd-web'
 import fs from 'fs/promises'
 
 import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
-import { getImages, resetImages, getCopiedImgSrc } from '../shared/index.js'
+import {
+  getImages,
+  resetImages,
+  getCopiedImgSrc,
+  registerImage
+} from '../shared/index.js'
 import path from 'path'
 import { processImage } from '../processing/processImage.js'
 
 export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
+  const filterRegex = buildFileTypeRegex(fileTypes)
+
   return {
     name: 'hd-plugin-images',
 
@@ -47,8 +54,25 @@ export const plugin = (fileTypes = imageFileTypes): HdPlugin => {
       }
     },
 
+    onResolve: {
+      filter: filterRegex,
+      resolve: async ({ path, type }) => {
+        // If this
+        if (type === 'css') {
+          const image = { src: path }
+          registerImage(image)
+
+          return {
+            path: getCopiedImgSrc(image),
+            // TODO add this as an actual option
+            external: true
+          }
+        }
+      }
+    },
+
     onLoad: {
-      filter: buildFileTypeRegex(fileTypes),
+      filter: filterRegex,
       load: async ({ path, config }) => {
         const newSrc = getCopiedImgSrc({ src: path })
         const stringifiedPath = JSON.stringify(path)

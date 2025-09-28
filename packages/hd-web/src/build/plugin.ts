@@ -23,13 +23,34 @@ export const plugin = (
       }
     })
 
-    plugins.forEach(({ onLoad, name }) => {
+    build.onResolve
+
+    plugins.forEach(({ onLoad, name, onResolve }) => {
       if (onLoad) {
         build.onLoad({ filter: onLoad.filter }, async (args) => {
           try {
             return await onLoad.load({ ...args, config })
           } catch (e) {
             throw new HdError('plugin.error', name, 'onLoad', e)
+          }
+        })
+      }
+
+      if (onResolve) {
+        build.onResolve({ filter: onResolve.filter }, async (args) => {
+          try {
+            const type =
+              args.kind === 'import-rule' ||
+              args.kind === 'composes-from' ||
+              args.kind === 'url-token'
+                ? 'css'
+                : 'js'
+
+            return (
+              (await onResolve.resolve({ ...args, type, config })) ?? undefined
+            )
+          } catch (e) {
+            throw new HdError('plugin.error', name, 'onResolve', e)
           }
         })
       }

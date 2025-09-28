@@ -16,6 +16,15 @@ export type HdPlugin<Config> = {
       config: Config
     }) => Promise<{ contents: string }>
   }
+  onResolve?: {
+    filter: RegExp
+    resolve: (args: {
+      path: string
+      config: Config
+      importer: string
+      type: 'js' | 'css'
+    }) => Promise<void | { path?: string }>
+  }
   onBuildStart?: (config: Config) => Promise<void>
   onBuildEnd?: (config: Config) => Promise<HdBuildEndResult | void>
   apply?: 'dev' | 'build'

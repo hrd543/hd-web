@@ -1,4 +1,4 @@
-import { applyPluginsToConfig, HdPlugin } from '../plugins/index.js'
+import { applyPluginsToConfig, Plugin } from '../plugins/index.js'
 import {
   mergeConfig,
   defaultSharedConfig,
@@ -26,7 +26,7 @@ const defaultBuildSiteConfig: BuildConfig = {
  */
 export const validateConfig = (
   rawConfig: Partial<BuildConfig>,
-  plugins: Array<HdPlugin<BuildConfig>>
+  plugins: Array<Plugin<BuildConfig>>
 ) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 

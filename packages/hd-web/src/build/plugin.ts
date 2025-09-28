@@ -3,13 +3,13 @@ import fs from 'fs/promises'
 
 import { clientFileRegex } from '../stringify/index.js'
 import { addFileToClass } from '../utils/index.js'
-import { HdPlugin } from '../plugins/types.js'
+import { Plugin } from '../plugins/types.js'
 import { BuildConfig } from './config.js'
 import { HdError } from '../errors/HdError.js'
 import { HdBuildConfig } from './index.js'
 
 export const plugin = (
-  plugins: Array<HdPlugin<BuildConfig>>,
+  plugins: Array<Plugin<BuildConfig>>,
   config: HdBuildConfig
 ): esbuild.Plugin => ({
   name: 'hd-web-plugin',

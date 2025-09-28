@@ -3,14 +3,14 @@ import path from 'path'
 
 import { BuiltFile } from './types.js'
 import { readBuildResultFile } from './utils.js'
-import { HdBuildEndResult } from '../plugins/index.js'
+import { BuildEndResult } from '../plugins/index.js'
 
 export const buildReturnResult = (
   out: string,
   outfile: string,
   first: BuildResult,
   final: BuildResult | undefined,
-  pluginResults: HdBuildEndResult[],
+  pluginResults: BuildEndResult[],
   html: BuiltFile[],
   staticFiles?: BuiltFile[]
 ) => {

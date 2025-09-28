@@ -4,7 +4,7 @@ import { HdError } from '../errors/HdError.js'
 import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
 import { getFileLoaders } from './utils.js'
-import { HdPlugin } from '../plugins/types.js'
+import { Plugin } from '../plugins/types.js'
 
 const getSharedEsbuildOptions = ({
   target,
@@ -24,7 +24,7 @@ const getSharedEsbuildOptions = ({
 
 export const runEsbuildFirst = async (
   config: BuildConfig,
-  plugins: Array<HdPlugin<BuildConfig>>
+  plugins: Array<Plugin<BuildConfig>>
 ) => {
   try {
     return await esbuild.build({

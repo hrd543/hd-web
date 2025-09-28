@@ -1,13 +1,13 @@
 import { HdError } from '../errors/HdError.js'
-import { HdBuildEndResult, HdPlugin } from './types.js'
+import { BuildEndResult, Plugin } from './types.js'
 
 export const runPlugins = async <T>(
   config: T,
-  plugins: Array<HdPlugin<T>>,
+  plugins: Array<Plugin<T>>,
   type: 'start' | 'end'
-): Promise<Array<HdBuildEndResult>> => {
+): Promise<Array<BuildEndResult>> => {
   const method = type === 'start' ? 'onBuildStart' : 'onBuildEnd'
-  const results: Array<HdBuildEndResult | void> = []
+  const results: Array<BuildEndResult | void> = []
 
   for (const plugin of plugins) {
     try {
@@ -17,5 +17,5 @@ export const runPlugins = async <T>(
     }
   }
 
-  return results.filter((x): x is HdBuildEndResult => Boolean(x))
+  return results.filter((x): x is BuildEndResult => Boolean(x))
 }

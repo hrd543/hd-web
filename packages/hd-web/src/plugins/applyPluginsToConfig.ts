@@ -1,9 +1,9 @@
 import { HdError } from '../errors/HdError.js'
-import { HdPlugin } from './types.js'
+import { Plugin } from './types.js'
 
 export const applyPluginsToConfig = <T>(
   initial: T,
-  plugins: Array<HdPlugin<T>>
+  plugins: Array<Plugin<T>>
 ): T =>
   plugins.reduce((modified, p) => {
     try {

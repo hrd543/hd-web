@@ -1,10 +1,10 @@
 import { HdError } from '../errors/HdError.js'
-import { HdPlugin } from '../plugins/types.js'
+import { Plugin } from '../plugins/types.js'
 import { DevConfig } from './config.js'
 import * as vite from 'vite'
 
 export const devPlugin = (
-  plugins: Array<HdPlugin<DevConfig>>,
+  plugins: Array<Plugin<DevConfig>>,
   config: DevConfig
 ): vite.Plugin => {
   return {

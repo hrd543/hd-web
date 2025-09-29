@@ -1,5 +1,5 @@
 import { HdConfig, OnResolveArgs, OnResolveResult } from 'hd-web'
-import { getCopiedImgSrc, registerImage } from '../shared/index.js'
+import { registerImage } from '../shared/index.js'
 
 /**
  * We need to resolve css imports as unoptimised images,
@@ -11,10 +11,10 @@ export const resolveCallback = async ({
 }: OnResolveArgs<HdConfig>): Promise<OnResolveResult | void> => {
   if (type === 'css') {
     const image = { src: path }
-    registerImage(image)
+    const registered = registerImage(image)
 
     return {
-      path: getCopiedImgSrc(image),
+      path: registered,
       external: true
     }
   }

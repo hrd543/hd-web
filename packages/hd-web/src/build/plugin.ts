@@ -29,7 +29,11 @@ export const plugin = (
       if (onLoad) {
         build.onLoad({ filter: onLoad.filter }, async (args) => {
           try {
-            return await onLoad.load({ ...args, config })
+            return await onLoad.load({
+              ...args,
+              config,
+              buildType: 'build'
+            })
           } catch (e) {
             throw new HdError('plugin.error', name, 'onLoad', e)
           }
@@ -47,7 +51,12 @@ export const plugin = (
                 : 'js'
 
             return (
-              (await onResolve.resolve({ ...args, type, config })) ?? undefined
+              (await onResolve.resolve({
+                ...args,
+                type,
+                config,
+                buildType: 'build'
+              })) ?? undefined
             )
           } catch (e) {
             throw new HdError('plugin.error', name, 'onResolve', e)

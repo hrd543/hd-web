@@ -17,7 +17,7 @@ export const plugin = (fileTypes = imageFileTypes): Plugin<HdConfig> => {
     onBuildStart,
     onBuildEnd,
 
-    // Don't let esbuild handle these images
+    // Don't let the builder handle these images
     modifyConfig(config) {
       return {
         ...config,

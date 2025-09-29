@@ -16,6 +16,7 @@ export type OnResolveArgs<Config> = {
   importer: string
   /** The type of file doing the importing */
   type: 'js' | 'css'
+  buildType: PluginBuildType
 }
 
 export type OnResolveResult = {
@@ -29,12 +30,15 @@ export type OnLoadArgs<Config> = {
   /** The path of the module being loaded */
   path: string
   config: Config
+  buildType: PluginBuildType
 }
 
 export type OnLoadResult = {
   /** The contents of the js to be loaded when importing */
   contents: string
 }
+
+export type PluginBuildType = 'dev' | 'build'
 
 export type Plugin<Config> = {
   /** The name of this plugin */
@@ -54,9 +58,12 @@ export type Plugin<Config> = {
     ) => Promiseish<OnResolveResult | void | undefined>
   }
   /** Runs at the start of every rebuild */
-  onBuildStart?: (config: Config) => Promiseish<void>
+  onBuildStart?: (config: Config, type: PluginBuildType) => Promiseish<void>
   /** Runs at the end of every rebuild */
-  onBuildEnd?: (config: Config) => Promiseish<BuildEndResult | void>
+  onBuildEnd?: (
+    config: Config,
+    type: PluginBuildType
+  ) => Promiseish<BuildEndResult | void>
   /** Should this apply to dev or build (or both if undefined) */
-  apply?: 'dev' | 'build'
+  apply?: PluginBuildType
 }

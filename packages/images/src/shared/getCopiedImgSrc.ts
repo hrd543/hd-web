@@ -3,10 +3,20 @@ import { CopiedImageInfo } from './types.js'
 
 const imgFolder = 'images'
 
-export const getCopiedImgSrc = (image: CopiedImageInfo) => {
+export const getCopiedImgSrc = (image: CopiedImageInfo, dev = false) => {
+  if (dev) {
+    return getDevFilepath(image.src)
+  }
+
   const filename = getImgFilename(image)
 
   return `/${imgFolder}/${filename}`
+}
+
+// Dev requires filepaths relative to the root rather than absolute
+const getDevFilepath = (absolutePath: string) => {
+  const relativePath = path.relative(process.cwd(), absolutePath)
+  return '/' + relativePath.split(path.sep).join('/')
 }
 
 const getImgFilename = (image: CopiedImageInfo) => {

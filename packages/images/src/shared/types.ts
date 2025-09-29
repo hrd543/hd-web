@@ -30,5 +30,10 @@ export type HdImage = {
 // Need to use global variables as the code gets bundled so may not
 // necessarily reference the same local variables
 declare global {
-  var _hdImages: Map<string, CopiedImageInfo[]>
+  /**
+   * A map of images to be copied over after the build.
+   *
+   * Will be undefined in dev mode
+   */
+  var _hdImages: Map<string, CopiedImageInfo[]> | undefined
 }

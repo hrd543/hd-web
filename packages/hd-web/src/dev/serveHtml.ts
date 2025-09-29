@@ -56,7 +56,7 @@ export const getServeHtml = (
       next()
     }
 
-    await runPlugins(config, plugins, 'start')
+    await runPlugins(config, plugins, 'start', 'dev')
     const rebuilt = await getRebuilt()
 
     if (rebuilt === null) {
@@ -88,7 +88,7 @@ export const getServeHtml = (
     const componentJs = getClientJs(js)
     const withJs = addJsToEmptyScript(html, componentJs)
 
-    await runPlugins(config, plugins, 'end')
+    await runPlugins(config, plugins, 'end', 'dev')
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

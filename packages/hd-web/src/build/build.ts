@@ -22,7 +22,7 @@ export const build = async (
   await deleteBuildFolder(fullConfig)
   const staticFiles = await copyStaticFolder(fullConfig)
 
-  await runPlugins(fullConfig, plugins, 'start')
+  await runPlugins(fullConfig, plugins, 'start', 'build')
 
   const first = await runEsbuildFirst(fullConfig, plugins)
 
@@ -49,7 +49,7 @@ export const build = async (
   // TODO I should remove the `__file` prop here if it exists?
   const final = await runEsbuildLast(fullConfig, outfile, js)
 
-  const pluginResults = await runPlugins(fullConfig, plugins, 'end')
+  const pluginResults = await runPlugins(fullConfig, plugins, 'end', 'build')
 
   if (fullConfig.write) {
     if (!js) {

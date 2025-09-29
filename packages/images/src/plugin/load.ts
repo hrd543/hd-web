@@ -16,7 +16,7 @@ export const loadCallback = async ({
   const contents = `
     export default {
       get src() {
-        globalThis._hdImages.set(${stringifiedPath}, [{ src: ${stringifiedPath} }])
+        globalThis._hdImages?.set(${stringifiedPath}, [{ src: ${stringifiedPath} }])
 
         return "${newSrc}"
       },

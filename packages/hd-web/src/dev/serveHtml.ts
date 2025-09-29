@@ -11,7 +11,7 @@ import { getCssImports } from './getCssImports.js'
 import { getLatest } from './getLatest.js'
 import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
-import { HdPlugin, runPlugins } from '../plugins/index.js'
+import { Plugin, runPlugins } from '../plugins/index.js'
 
 type RebuildResult = {
   site: BuiltSite
@@ -22,7 +22,7 @@ type UpdateType = 'update' | 'delete' | 'add'
 
 export const getServeHtml = (
   config: DevConfig,
-  plugins: Array<HdPlugin<DevConfig>>,
+  plugins: Array<Plugin<DevConfig>>,
   server: ViteDevServer
 ): RequestHandler => {
   const [getRebuilt, rebuild] = getLatest<RebuildResult, UpdateType>(
@@ -56,7 +56,7 @@ export const getServeHtml = (
       next()
     }
 
-    await runPlugins(config, plugins, 'start')
+    await runPlugins(config, plugins, 'start', 'dev')
     const rebuilt = await getRebuilt()
 
     if (rebuilt === null) {
@@ -88,7 +88,7 @@ export const getServeHtml = (
     const componentJs = getClientJs(js)
     const withJs = addJsToEmptyScript(html, componentJs)
 
-    await runPlugins(config, plugins, 'end')
+    await runPlugins(config, plugins, 'end', 'dev')
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "hd-web": "^0.1.2",
-    "@hd-web/components": "^0.3.0",
-    "@hd-web/images": "^0.0.0"
+    "@hd-web/components": "^0.3.0"
   },
   "sideEffects": false,
   "type": "module"

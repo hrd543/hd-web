@@ -16,3 +16,5 @@
 - Implement a proper solution in dev mode
 - Clean up the code, especially the separation between dev and build mode (should these be two separate plugins?)
 - Write tests - this could mean exporting some stuff from e2e as helpers.
+- Add more modifications to the image, like resizing etc.
+- Clean up the image props.

@@ -31,11 +31,19 @@ export const plugin = (
           { filter: onLoad.filter, namespace: onLoad.namespace },
           async (args) => {
             try {
-              return await onLoad.load({
+              const result = await onLoad.load({
                 ...args,
                 config,
                 buildType: 'build'
               })
+
+              return {
+                ...result,
+                // TODO Document this
+                // Make the resolveDir the root if we provide a namespace
+                // (Esbuild defaults to undefined which makes it hard to import relatively)
+                resolveDir: onLoad.namespace ? process.cwd() : undefined
+              }
             } catch (e) {
               throw new HdError('plugin.error', name, 'onLoad', e)
             }

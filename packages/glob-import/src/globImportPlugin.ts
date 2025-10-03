@@ -1,20 +1,31 @@
 import { HdConfig, Plugin } from 'hd-web'
 import fg from 'fast-glob'
 import nodePath from 'path'
-import { pathToFileURL } from 'url'
 
-export const mdGlobPlugin = (): Plugin<HdConfig> => {
+/**
+ * Returns a relative path that always starts with "./" or "../"
+ */
+const safeRelative = (from: string, to: string) => {
+  const rel = nodePath.relative(from, to)
+
+  if (!rel.startsWith('.') && rel !== '') {
+    return './' + rel
+  }
+
+  return rel || '.'
+}
+
+export const globImportPlugin = (): Plugin<HdConfig> => {
   return {
-    name: 'hd-markdown-glob',
+    name: 'hd-glob-import',
 
     onResolve: {
       filter: /^glob:/,
+
+      // Resolves all glob:xyz imports to point to the intended location
       async resolve({ path, importer }) {
         const pattern = path.slice(5)
-
         const resolved = nodePath.join(nodePath.dirname(importer), pattern)
-
-        console.log('resolve\n', resolved)
 
         return {
           path: resolved,
@@ -23,18 +34,19 @@ export const mdGlobPlugin = (): Plugin<HdConfig> => {
       }
     },
 
+    // Loads as if a js file which export an array of the files found in the glob
     onLoad: {
       filter: /.*/,
       namespace: 'glob',
       async load({ path: rawPath }) {
         const path = rawPath.replaceAll('\\', '/')
         const files = await fg.glob(path)
-        console.log(files)
+
         const imports = files
-          .map(
-            (file, i) =>
-              `import * as _${i} from "./${nodePath.relative(process.cwd(), file).replaceAll('\\', '/')}"`
+          .map((file) =>
+            safeRelative(process.cwd(), file).replaceAll('\\', '/')
           )
+          .map((file, i) => `import * as _${i} from "${file}"`)
           .join(';')
 
         // Check if the imports should instead just import an exported object
@@ -45,12 +57,7 @@ export const mdGlobPlugin = (): Plugin<HdConfig> => {
             export default files
           `
 
-        console.log(contents)
-
-        return {
-          contents,
-          resolveDir: process.cwd()
-        }
+        return { contents }
       }
     }
   }

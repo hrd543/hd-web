@@ -14,8 +14,6 @@ export const plugin = (
 ): esbuild.Plugin => ({
   name: 'hd-web-plugin',
   setup(build) {
-    console.log('starting build')
-
     build.onLoad({ filter: clientFileRegex }, async (args) => {
       const code = await fs.readFile(args.path, { encoding: 'utf-8' })
 
@@ -53,8 +51,6 @@ export const plugin = (
 
       if (onResolve) {
         build.onResolve({ filter: onResolve.filter }, async (args) => {
-          console.log('resolving a file', name, args.path)
-
           try {
             const type =
               args.kind === 'import-rule' ||

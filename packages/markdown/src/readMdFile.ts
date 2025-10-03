@@ -9,12 +9,6 @@ export type MdFile<T> = {
   name: string
 }
 
-export const readMdGlob = async <T>(
-  glob: string
-): Promise<Array<MdFile<T>>> => {
-  return (await import(`glob:${glob}`)).default
-}
-
 export const readMdFile = async <T>(filepath: string): Promise<MdFile<T>> => {
   const contents = await fs.readFile(filepath)
   const { data: frontmatter, content: markdown } = matter(contents)

@@ -15,6 +15,7 @@
     "packages/components",
     "packages/images",
     "packages/markdown",
+    "packages/glob-import",
     "packages/*"
   ],
   "devDependencies": {

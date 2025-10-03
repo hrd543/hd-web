@@ -24,6 +24,7 @@ export type OnResolveResult = {
   path?: string
   /** Use this to optionally ignore processing this file via `onLoad` */
   external?: boolean
+  namespace?: string
 }
 
 export type OnLoadArgs<Config> = {
@@ -48,6 +49,7 @@ export type Plugin<Config> = {
   /** Runs whenever a file matching the filter is loaded */
   onLoad?: {
     filter: RegExp
+    namespace?: string
     load: (args: OnLoadArgs<Config>) => Promiseish<OnLoadResult>
   }
   /** Runs whenever a file matching the filter has its import resolved */

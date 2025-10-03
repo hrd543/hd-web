@@ -36,7 +36,7 @@ export const runEsbuildFirst = async (
       metafile: true,
       format: config.write ? 'esm' : 'iife',
       // Ignore any hd-web dependencies.
-      external: ['vite', 'esbuild', 'express']
+      external: ['vite', 'esbuild', 'express', '@hd-web/*']
     })
   } catch (e: unknown) {
     if (!isEsbuildError(e)) {

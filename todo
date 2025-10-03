@@ -11,6 +11,9 @@
 - Improve create package somehow?
 - Add layout option to site / pages
 
+- Sort out types like `Html.HtmlImgAttributes` and the fact that you can't use that as the type arg for `View` directly :/
+- Investigate whether I need to run esbuild twice - can I just build the css?
+
 ## Image plugin
 
 - Implement a proper solution in dev mode

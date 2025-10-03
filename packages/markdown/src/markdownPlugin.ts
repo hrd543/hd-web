@@ -1,22 +1,23 @@
 import { HdConfig, Plugin } from 'hd-web'
-import fs from 'fs/promises'
-import matter from 'gray-matter'
+import { readMdFile } from './readMdFile.js'
 
 export const markdownPlugin = (): Plugin<HdConfig> => {
   return {
     name: 'hd-markdown',
+
     onLoad: {
       filter: /\.md$/,
       async load({ path }) {
-        const contents = await fs.readFile(path)
-        const { data: frontmatter, content: markdown } = matter(contents)
+        const { meta, content, name, path: mdPath } = await readMdFile(path)
 
         return {
           contents: `
-            export const meta = ${JSON.stringify(frontmatter)}
-            const Content = ${JSON.stringify(markdown)}
+            export const meta = ${JSON.stringify(meta)}
+            export const path = ${JSON.stringify(mdPath)}
+            export const name = ${JSON.stringify(name)}
+            export const content = ${JSON.stringify(content)}
 
-            export default Content
+            export default content
           `
         }
       }

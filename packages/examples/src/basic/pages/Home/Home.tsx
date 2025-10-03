@@ -7,6 +7,7 @@ import { BlogData } from '../../blogs/index.js'
 import { PageLayout } from '../../shared/PageLayout.js'
 import { BlogPage } from '../Blog/BlogPage.js'
 import { Contact } from '../Contact/Contact.js'
+import { MarkdownPage } from '../markdown/Markdown.js'
 
 export const Home: Page<BlogData> = {
   title: 'Hd-web site',
@@ -18,6 +19,7 @@ export const Home: Page<BlogData> = {
   ),
   routes: {
     contact: Contact,
-    blog: BlogPage
+    blog: BlogPage,
+    md: MarkdownPage
   }
 }

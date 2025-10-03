@@ -1,6 +1,8 @@
 import { HdImage } from '../shared/index.js'
 
 export type ImageProps = {
+  // only `comesFrom` is used, but using this type so it's less confusing
+  // to users.
   src: HdImage
   alt: string
   /** The intended ratio of width / height */

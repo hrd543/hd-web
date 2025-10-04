@@ -3,7 +3,7 @@ import minimist from 'minimist'
 
 import { buildScript } from '../build/index.js'
 import { buildPackage } from '../build-package/index.js'
-import { devScript } from '../dev/index.js'
+import { devScript } from '../dev2/script.js'
 import { HdError } from '../errors/HdError.js'
 
 const allArgs = process.argv.slice(2)

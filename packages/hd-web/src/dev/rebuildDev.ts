@@ -5,7 +5,6 @@ import { DevConfig } from './config.js'
 import { DevRebuild } from './types.js'
 import { Plugin } from '../plugins/types.js'
 import { plugin } from './plugin.js'
-import { getFileLoaders } from './utils.js'
 
 export const getDevRebuildCallback = async (
   config: DevConfig,
@@ -63,3 +62,15 @@ const getSiteInMemory = (js: string) => {
 
   return f().default
 }
+
+// TODO use the shared version of this
+const supportedFileTypes = ['.png', '.webp', '.woff2', '.jpg', '.jpeg']
+const getFileLoaders = (extraFileTypes: string[]) =>
+  [...supportedFileTypes, ...extraFileTypes].reduce(
+    (all, type) => {
+      all[type] = 'file'
+
+      return all
+    },
+    {} as Record<string, 'file'>
+  )

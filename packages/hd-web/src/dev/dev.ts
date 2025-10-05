@@ -18,7 +18,11 @@ export const dev = async (config: Partial<DevConfig> = {}) => {
   triggerRebuild()
   watch(triggerRebuild)
 
-  app.use(formatHtmlRoutes, getServeHtml(fullConfig, getRebuilt))
+  app.use(
+    formatHtmlRoutes,
+    express.static(process.cwd()),
+    getServeHtml(fullConfig, getRebuilt)
+  )
 
   app.listen(fullConfig.port)
 

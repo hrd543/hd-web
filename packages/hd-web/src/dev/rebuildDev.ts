@@ -10,7 +10,7 @@ export const getDevRebuildCallback = async (
 ): Promise<() => Promise<DevRebuild>> => {
   const context = await esbuild.context({
     ...getEsbuildOptions(),
-    plugins: [plugin(), ...config.plugins],
+    plugins: [...config.plugins, plugin()],
     entryPoints: [config.entry],
     loader: getFileLoaders(config.fileTypes)
   })

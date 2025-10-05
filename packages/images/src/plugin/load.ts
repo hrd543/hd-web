@@ -1,4 +1,4 @@
-import { HdConfig, OnLoadArgs, OnLoadResult } from 'hd-web'
+import type { OnLoadResult } from 'esbuild'
 import { getCopiedImgSrc } from '../shared/index.js'
 
 /**
@@ -9,7 +9,9 @@ import { getCopiedImgSrc } from '../shared/index.js'
  */
 export const loadCallback = async ({
   path
-}: OnLoadArgs<HdConfig>): Promise<OnLoadResult> => {
+}: {
+  path: string
+}): Promise<OnLoadResult> => {
   const newSrc = getCopiedImgSrc({ src: path })
   const stringifiedPath = JSON.stringify(path)
 

@@ -1,38 +1,25 @@
-import type { HdConfig, Plugin } from 'hd-web'
+import type { Plugin } from 'esbuild'
 
-import {
-  buildFileTypeRegex,
-  imageFileTypes,
-  removeFilesFromList
-} from './imageFileTypes.js'
+import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
 import { resolveCallback } from './resolve.js'
 import { loadCallback } from './load.js'
 import { onBuildEnd, onBuildStart } from './buildCallbacks.js'
 
-export const plugin = (fileTypes = imageFileTypes): Plugin<HdConfig> => {
+export const plugin = (fileTypes = imageFileTypes): Plugin => {
   const filterRegex = buildFileTypeRegex(fileTypes)
 
   return {
     name: 'hd-plugin-images',
-    onBuildStart,
-    onBuildEnd,
+    setup(build) {
+      build.onStart(() => onBuildStart(build.initialOptions.write))
 
-    // Don't let the builder handle these images
-    modifyConfig(config) {
-      return {
-        ...config,
-        fileTypes: removeFilesFromList(fileTypes, config.fileTypes)
-      }
-    },
+      build.onEnd(() =>
+        onBuildEnd(build.initialOptions.outdir!, build.initialOptions.write)
+      )
 
-    onResolve: {
-      filter: filterRegex,
-      resolve: resolveCallback
-    },
+      build.onResolve({ filter: filterRegex }, resolveCallback)
 
-    onLoad: {
-      filter: filterRegex,
-      load: loadCallback
+      build.onLoad({ filter: filterRegex }, loadCallback)
     }
   }
 }

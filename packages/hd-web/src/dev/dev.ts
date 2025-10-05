@@ -8,17 +8,11 @@ import { getServeHtml } from './serveHtml.js'
 import { Plugin, filterPlugins } from '../plugins/index.js'
 import { getEsbuildContext } from './buildDev.js'
 import { getLatest } from './getLatest.js'
-import { buildSite, BuiltSite } from '../shared/index.js'
+import { buildSite } from '../shared/index.js'
 import { getSite } from './getSite.js'
 import { HdError } from '../errors/HdError.js'
 import { debounce } from './debounce.js'
-
-type RebuildResult = {
-  site: BuiltSite
-  css: string
-}
-
-type UpdateType = 'update' | 'delete' | 'add'
+import { DevRebuild } from './types.js'
 
 export const dev = async (
   config: Partial<DevConfig> = {},
@@ -31,41 +25,37 @@ export const dev = async (
 
   const context = await getEsbuildContext(fullConfig, allPlugins)
 
-  const [getRebuilt, rebuild] = getLatest<RebuildResult, UpdateType>(
-    async (old, type) => {
-      try {
-        const bef = performance.now()
-        const first = await context.rebuild()
-        const outfile = first.outputFiles!.find((f) =>
-          f.path.endsWith('.js')
-        )!.path
-        const css = first.outputFiles!.find((f) =>
-          f.path.endsWith('.css')
-        )!.text
-        const site = await buildSite(
-          await getSite(outfile, first.outputFiles),
-          fullConfig
-        )
+  const [getRebuilt, rebuild] = getLatest<DevRebuild>(async (old) => {
+    try {
+      const bef = performance.now()
+      const first = await context.rebuild()
+      const outfile = first.outputFiles!.find((f) =>
+        f.path.endsWith('.js')
+      )!.path
+      const css = first.outputFiles!.find((f) => f.path.endsWith('.css'))!.text
+      const site = await buildSite(
+        await getSite(outfile, first.outputFiles),
+        fullConfig
+      )
 
-        console.log('Took: ', performance.now() - bef)
+      console.log('Took: ', performance.now() - bef)
 
-        return {
-          site,
-          css
-        }
-      } catch (e: unknown) {
-        if (!isEsbuildError(e)) {
-          throw e
-        }
-
-        throw new HdError('fs.fileType', e.message)
+      return {
+        site,
+        css
       }
+    } catch (e: unknown) {
+      if (!isEsbuildError(e)) {
+        throw e
+      }
+
+      throw new HdError('fs.fileType', e.message)
     }
-  )
+  })
 
-  rebuild('update')()
+  rebuild()
 
-  watch(rebuild('update'))
+  watch(rebuild)
 
   app.use(formatHtmlRoutes, getServeHtml(fullConfig, plugins, getRebuilt))
 

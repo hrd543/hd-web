@@ -1,23 +1,20 @@
 import { RequestHandler } from 'express'
 
 import { getClientJs } from '../client/index.js'
-import { BuiltSite, renderPage } from '../shared/index.js'
+import { renderPage } from '../shared/index.js'
 import { buildHtml, createMeta } from '../shared/index.js'
 import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { DevConfig } from './config.js'
 import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
 import { Plugin, runPlugins } from '../plugins/index.js'
-
-type RebuildResult = {
-  site: BuiltSite
-  css: string
-}
+import { runEsbuildLast } from './buildDev.js'
+import { DevRebuild } from './types.js'
 
 export const getServeHtml = (
   config: DevConfig,
   plugins: Array<Plugin<DevConfig>>,
-  getRebuilt: () => Promise<RebuildResult | null>
+  getRebuilt: () => Promise<DevRebuild | null>
 ): RequestHandler => {
   return async (req, res, next) => {
     if (!isPage(req.url)) {
@@ -53,7 +50,9 @@ export const getServeHtml = (
     )
 
     const componentJs = getClientJs(components.map(({ filename }) => filename))
-    const withJs = addJsToEmptyScript(html, componentJs)
+    const built = await runEsbuildLast(config, 'main.js', componentJs)
+    // TODO fix this
+    const withJs = addJsToEmptyScript(html, built as unknown as string)
 
     await runPlugins(config, plugins, 'end', 'dev')
 

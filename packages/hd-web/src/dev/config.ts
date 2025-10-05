@@ -3,7 +3,6 @@ import {
   defaultSharedConfig,
   SharedConfig
 } from '../shared/index.js'
-import { applyPluginsToConfig, Plugin } from '../plugins/index.js'
 
 export type DevConfig = SharedConfig & {
   /** The port to serve the application */
@@ -20,18 +19,14 @@ export type DevConfig = SharedConfig & {
 const defaultBuildSiteConfig: DevConfig = {
   ...defaultSharedConfig,
   dependenciesToTransform: [],
-  port: 8080
+  port: 8080,
+  write: false
 }
 
 /**
  * Replace all missing / undefined keys with the defaults, and validate
  * the config for any potential issues.
  */
-export const validateConfig = (
-  rawConfig: Partial<DevConfig>,
-  plugins: Array<Plugin<DevConfig>>
-) => {
-  const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
-
-  return applyPluginsToConfig(config, plugins)
+export const validateConfig = (rawConfig: Partial<DevConfig>) => {
+  return { ...mergeConfig(rawConfig, defaultBuildSiteConfig), write: false }
 }

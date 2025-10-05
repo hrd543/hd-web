@@ -1,14 +1,11 @@
 import * as esbuild from 'esbuild'
 
-import { HdError } from '../errors/HdError.js'
+import { HdError, isEsbuildError } from '../errors/index.js'
 import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
-import { getFileLoaders } from './utils.js'
-import { Plugin } from '../plugins/types.js'
 
 const getSharedEsbuildOptions = ({
   target,
-  fileTypes,
   write
 }: BuildConfig): esbuild.BuildOptions => ({
   minify: true,
@@ -18,25 +15,21 @@ const getSharedEsbuildOptions = ({
   target,
   write,
   publicPath: '/',
-  loader: getFileLoaders(fileTypes),
   logLevel: 'silent'
 })
 
-export const runEsbuildFirst = async (
-  config: BuildConfig,
-  plugins: Array<Plugin<BuildConfig>>
-) => {
+export const runEsbuildFirst = async (config: BuildConfig) => {
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
-      plugins: [plugin(plugins, config)],
+      plugins: [...config.plugins, plugin()],
       platform: 'node',
       entryPoints: [config.entry],
       outdir: config.out,
       metafile: true,
       format: config.write ? 'esm' : 'iife',
       // Ignore any hd-web dependencies.
-      external: ['vite', 'esbuild', 'express']
+      external: ['esbuild', 'express']
     })
   } catch (e: unknown) {
     if (!isEsbuildError(e)) {
@@ -82,9 +75,3 @@ export const runEsbuildLast = async (
     }
   }
 }
-
-const isEsbuildError = (e: unknown): e is esbuild.BuildFailure =>
-  e instanceof Error &&
-  'errors' in e &&
-  Array.isArray(e.errors) &&
-  e.errors.length > 0

@@ -1,4 +1,3 @@
-import path from 'path'
 import { getCopiedImgSrc } from './getCopiedImgSrc.js'
 import { CopiedImageInfo, ImageModifications } from './types.js'
 

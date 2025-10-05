@@ -1,62 +1,24 @@
 import { RequestHandler } from 'express'
-import { ViteDevServer } from 'vite'
 
 import { getClientJs } from '../client/index.js'
-import { buildSite, BuiltSite, renderPage } from '../shared/index.js'
+import { renderPage } from '../shared/index.js'
 import { buildHtml, createMeta } from '../shared/index.js'
 import { addJsToEmptyScript, buildEmptyScript } from './buildInlineScript.js'
 import { DevConfig } from './config.js'
-import { findClientFiles } from './findClientFiles.js'
-import { getCssImports } from './getCssImports.js'
-import { getLatest } from './getLatest.js'
 import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
-import { Plugin, runPlugins } from '../plugins/index.js'
-
-type RebuildResult = {
-  site: BuiltSite
-  cssImports: string[]
-}
-
-type UpdateType = 'update' | 'delete' | 'add'
+import { DevRebuild } from './types.js'
+import { transformClientJs } from './transformClientJs.js'
 
 export const getServeHtml = (
   config: DevConfig,
-  plugins: Array<Plugin<DevConfig>>,
-  server: ViteDevServer
+  getRebuilt: () => Promise<DevRebuild | null>
 ): RequestHandler => {
-  const [getRebuilt, rebuild] = getLatest<RebuildResult, UpdateType>(
-    async (old, type) => {
-      const site = (await server.ssrLoadModule(config.entry)).default
-      const cssImports = getCssImports(server.moduleGraph)
-
-      // We only need to rebuild the pages on update (or initial load)
-      if (type === 'update' || old === null) {
-        return {
-          site: await buildSite(site, config),
-          cssImports
-        }
-      }
-
-      // But we need to update the css imports all the time
-      return {
-        ...old,
-        cssImports
-      }
-    }
-  )
-
-  rebuild('update')()
-  server.watcher.on('change', rebuild('update'))
-  server.watcher.on('add', rebuild('add'))
-  server.watcher.on('unlink', rebuild('delete'))
-
   return async (req, res, next) => {
     if (!isPage(req.url)) {
       next()
     }
 
-    await runPlugins(config, plugins, 'start', 'dev')
     const rebuilt = await getRebuilt()
 
     if (rebuilt === null) {
@@ -77,21 +39,19 @@ export const getServeHtml = (
         page.title,
         page.description,
         head,
-        buildEmptyScript(rebuilt.cssImports)
+        buildEmptyScript(rebuilt.css)
       ),
       body,
       config.lang,
       true
     )
 
-    const js = findClientFiles(server.moduleGraph, components)
-    const componentJs = getClientJs(js)
-    const withJs = addJsToEmptyScript(html, componentJs)
-
-    await runPlugins(config, plugins, 'end', 'dev')
+    const componentJs = getClientJs(components.map(({ filename }) => filename))
+    const built = await transformClientJs(componentJs)
+    const withJs = addJsToEmptyScript(html, built)
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')
-    res.end(await server.transformIndexHtml(req.originalUrl, withJs))
+    res.end(withJs)
   }
 }

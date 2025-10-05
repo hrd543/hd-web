@@ -32,7 +32,6 @@
     "@hd-web/jsx": "^0.3.0",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",
-    "vite": "^7.1.2",
     "minimist": "^1.2.8"
   },
   "devDependencies": {

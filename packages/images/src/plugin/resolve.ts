@@ -1,5 +1,7 @@
-import { HdConfig, OnResolveArgs, OnResolveResult } from 'hd-web'
+import type { OnResolveArgs, OnResolveResult } from 'esbuild'
 import { registerImage } from '../shared/index.js'
+
+const cssKinds = new Set(['import-rule', 'composes-from', 'url-token'])
 
 /**
  * We need to resolve css imports as unoptimised images,
@@ -7,9 +9,9 @@ import { registerImage } from '../shared/index.js'
  */
 export const resolveCallback = async ({
   path,
-  type
-}: OnResolveArgs<HdConfig>): Promise<OnResolveResult | void> => {
-  if (type === 'css') {
+  kind
+}: OnResolveArgs): Promise<OnResolveResult | undefined> => {
+  if (cssKinds.has(kind)) {
     const image = { src: path }
     const registered = registerImage(image)
 

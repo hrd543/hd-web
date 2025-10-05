@@ -3,5 +3,5 @@ export const filsystemErrors = {
     `Couldn't find static folder "${folder}"`,
   'fs.missingConfig': () => "Couldn't find an hd.config.js file",
   'fs.fileType': (message: string) =>
-    `Esbuild failed with the following error.\nDid you include all the file types in the fileTypes config option?\n\n${message}`
+    `Esbuild failed with the following error.\nDo you need to add a plugin to handle a file type?\n\n${message}`
 }

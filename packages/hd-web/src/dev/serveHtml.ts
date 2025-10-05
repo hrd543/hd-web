@@ -8,8 +8,8 @@ import { DevConfig } from './config.js'
 import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
 import { Plugin, runPlugins } from '../plugins/index.js'
-import { runEsbuildLast } from './buildDev.js'
 import { DevRebuild } from './types.js'
+import { transformClientJs } from './transformClientJs.js'
 
 export const getServeHtml = (
   config: DevConfig,
@@ -50,9 +50,8 @@ export const getServeHtml = (
     )
 
     const componentJs = getClientJs(components.map(({ filename }) => filename))
-    const built = await runEsbuildLast(config, 'main.js', componentJs)
-    // TODO fix this
-    const withJs = addJsToEmptyScript(html, built as unknown as string)
+    const built = await transformClientJs(componentJs)
+    const withJs = addJsToEmptyScript(html, built)
 
     await runPlugins(config, plugins, 'end', 'dev')
 

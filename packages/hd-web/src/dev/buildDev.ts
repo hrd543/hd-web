@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild'
 
-import { HdError } from '../errors/HdError.js'
+import { HdError, isEsbuildError } from '../errors/index.js'
 import { plugin } from './plugin.js'
 import { getFileLoaders } from './utils.js'
 import { Plugin } from '../plugins/types.js'
@@ -71,9 +71,3 @@ export const runEsbuildLast = async (
     }
   }
 }
-
-const isEsbuildError = (e: unknown): e is esbuild.BuildFailure =>
-  e instanceof Error &&
-  'errors' in e &&
-  Array.isArray(e.errors) &&
-  e.errors.length > 0

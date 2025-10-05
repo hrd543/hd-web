@@ -1,5 +1,5 @@
 import * as esbuild from 'esbuild'
-import { HdError } from '../errors/HdError.js'
+import { HdError, isEsbuildError } from '../errors/index.js'
 import { buildSite } from '../shared/index.js'
 import { DevConfig } from './config.js'
 import { DevRebuild } from './types.js'
@@ -35,9 +35,3 @@ const getSiteInMemory = (js: string) => {
 
   return f().default
 }
-
-const isEsbuildError = (e: unknown): e is esbuild.BuildFailure =>
-  e instanceof Error &&
-  'errors' in e &&
-  Array.isArray(e.errors) &&
-  e.errors.length > 0

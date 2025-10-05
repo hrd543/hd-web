@@ -20,7 +20,8 @@ export type DevConfig = SharedConfig & {
 const defaultBuildSiteConfig: DevConfig = {
   ...defaultSharedConfig,
   dependenciesToTransform: [],
-  port: 8080
+  port: 8080,
+  write: false
 }
 
 /**
@@ -33,5 +34,5 @@ export const validateConfig = (
 ) => {
   const config = mergeConfig(rawConfig, defaultBuildSiteConfig)
 
-  return applyPluginsToConfig(config, plugins)
+  return applyPluginsToConfig({ ...config, write: false }, plugins)
 }

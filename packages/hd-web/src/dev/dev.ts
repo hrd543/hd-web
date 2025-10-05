@@ -18,7 +18,6 @@ export const dev = async (
   config: Partial<DevConfig> = {},
   allPlugins: Array<Plugin<DevConfig>> = []
 ) => {
-  config.write = false
   const plugins = filterPlugins(allPlugins, 'dev')
   const fullConfig = validateConfig(config, plugins)
   const app = express()

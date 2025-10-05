@@ -11,6 +11,7 @@ import { getLatest } from './getLatest.js'
 import { buildSite, BuiltSite } from '../shared/index.js'
 import { getSite } from './getSite.js'
 import { HdError } from '../errors/HdError.js'
+import { debounce } from './debounce.js'
 
 type RebuildResult = {
   site: BuiltSite
@@ -81,8 +82,9 @@ const isEsbuildError = (e: unknown): e is esbuild.BuildFailure =>
 
 const watch = async (rebuild: () => void) => {
   const watcher = fs.watch(process.cwd(), { recursive: true })
+  const debounced = debounce(rebuild, 100)
 
   for await (const event of watcher) {
-    rebuild()
+    debounced()
   }
 }

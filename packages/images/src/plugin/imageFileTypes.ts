@@ -6,10 +6,3 @@ export const buildFileTypeRegex = (fileTypes: string[]): RegExp => {
 
   return new RegExp(`\\.(${fileTypeOr})$`)
 }
-
-export const removeFilesFromList = (
-  pluginTypes: string[],
-  configTypes: string[]
-) => {
-  return configTypes.filter((f) => !pluginTypes.includes(f))
-}

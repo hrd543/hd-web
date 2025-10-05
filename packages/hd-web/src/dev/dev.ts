@@ -4,9 +4,8 @@ import { DevConfig, validateConfig } from './config.js'
 import { formatHtmlRoutes } from './formatHtmlRoutes.js'
 import { getServeHtml } from './serveHtml.js'
 import { Plugin, filterPlugins } from '../plugins/index.js'
-import { getEsbuildContext } from './buildDev.js'
 import { getLatest } from './getLatest.js'
-import { rebuildDev } from './rebuildDev.js'
+import { getDevRebuildCallback } from './rebuildDev.js'
 import { watch } from './watch.js'
 
 export const dev = async (
@@ -17,15 +16,12 @@ export const dev = async (
   const fullConfig = validateConfig(config, plugins)
   const app = express()
 
-  const context = await getEsbuildContext(fullConfig, allPlugins)
-
-  const [getRebuilt, rebuild] = getLatest(
-    async () => await rebuildDev(fullConfig, context)
+  const [getRebuilt, triggerRebuild] = getLatest(
+    await getDevRebuildCallback(fullConfig, plugins)
   )
 
-  rebuild()
-
-  watch(rebuild)
+  triggerRebuild()
+  watch(triggerRebuild)
 
   app.use(formatHtmlRoutes, getServeHtml(fullConfig, plugins, getRebuilt))
 

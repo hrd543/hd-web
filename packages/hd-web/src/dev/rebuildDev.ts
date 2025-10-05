@@ -11,8 +11,7 @@ export const getDevRebuildCallback = async (
   const context = await esbuild.context({
     ...getEsbuildOptions(),
     plugins: [...config.plugins, plugin()],
-    entryPoints: [config.entry],
-    loader: getFileLoaders(config.fileTypes)
+    entryPoints: [config.entry]
   })
 
   return async () => {
@@ -60,15 +59,3 @@ const getSiteInMemory = (js: string) => {
 
   return f().default
 }
-
-// TODO use the shared version of this
-const supportedFileTypes = ['.png', '.webp', '.woff2', '.jpg', '.jpeg']
-const getFileLoaders = (extraFileTypes: string[]) =>
-  [...supportedFileTypes, ...extraFileTypes].reduce(
-    (all, type) => {
-      all[type] = 'file'
-
-      return all
-    },
-    {} as Record<string, 'file'>
-  )

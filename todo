@@ -16,6 +16,7 @@
 - Implement a proper solution in dev mode
 - Clean up the code, especially the separation between dev and build mode (should these be two separate plugins?)
 - Write tests - this could mean exporting some stuff from e2e as helpers.
+- Make it actually support file types since it's useful for dev
 
 ## Dev mode
 

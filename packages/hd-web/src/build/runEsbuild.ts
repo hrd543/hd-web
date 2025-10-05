@@ -3,11 +3,9 @@ import * as esbuild from 'esbuild'
 import { HdError, isEsbuildError } from '../errors/index.js'
 import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
-import { getFileLoaders } from './utils.js'
 
 const getSharedEsbuildOptions = ({
   target,
-  fileTypes,
   write
 }: BuildConfig): esbuild.BuildOptions => ({
   minify: true,
@@ -17,7 +15,6 @@ const getSharedEsbuildOptions = ({
   target,
   write,
   publicPath: '/',
-  loader: getFileLoaders(fileTypes),
   logLevel: 'silent'
 })
 

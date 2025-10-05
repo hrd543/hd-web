@@ -44,15 +44,3 @@ export const readBuildResultFile = (
     contents
   }
 }
-
-const supportedFileTypes = ['.png', '.webp', '.woff2', '.jpg', '.jpeg']
-
-export const getFileLoaders = (extraFileTypes: string[]) =>
-  [...supportedFileTypes, ...extraFileTypes].reduce(
-    (all, type) => {
-      all[type] = 'file'
-
-      return all
-    },
-    {} as Record<string, 'file'>
-  )

@@ -16,3 +16,8 @@
 - Implement a proper solution in dev mode
 - Clean up the code, especially the separation between dev and build mode (should these be two separate plugins?)
 - Write tests - this could mean exporting some stuff from e2e as helpers.
+
+## Dev mode
+
+- Currently bundles all code and runs using `Function`. Really should pre-build dependencies into separate .cache folder and then reroute imports to it.
+  - Can then use some sort of load module or import with data url to actually import the bundled src code

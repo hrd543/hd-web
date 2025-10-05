@@ -1,7 +1,6 @@
 import { HdBuildConfig } from './build/index.js'
 import { HdDevConfig } from './dev/index.js'
 
-export type * from './plugins/types.js'
 export { build, type BuiltFile, type HdBuildConfig } from './build/index.js'
 export { buildPackage } from './build-package/index.js'
 export { Behaviour } from './client/index.js'

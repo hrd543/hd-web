@@ -3,16 +3,14 @@ import { HdError, isEsbuildError } from '../errors/index.js'
 import { buildSite } from '../shared/index.js'
 import { DevConfig } from './config.js'
 import { DevRebuild } from './types.js'
-import { Plugin } from '../plugins/types.js'
 import { plugin } from './plugin.js'
 
 export const getDevRebuildCallback = async (
-  config: DevConfig,
-  plugins: Plugin<DevConfig>[]
+  config: DevConfig
 ): Promise<() => Promise<DevRebuild>> => {
   const context = await esbuild.context({
     ...getEsbuildOptions(),
-    plugins: [plugin(plugins, config)],
+    plugins: [plugin(), ...config.plugins],
     entryPoints: [config.entry],
     loader: getFileLoaders(config.fileTypes)
   })

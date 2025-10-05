@@ -3,14 +3,9 @@ import fs from 'fs/promises'
 
 import { clientFileRegex } from '../stringify/index.js'
 import { addFileToClass } from '../utils/index.js'
-import { Plugin } from '../plugins/types.js'
-import { HdError } from '../errors/HdError.js'
-import { DevConfig } from './config.js'
 
-export const plugin = (
-  plugins: Array<Plugin<DevConfig>>,
-  config: DevConfig
-): esbuild.Plugin => ({
+// TODO investigate whether this is needed in dev too
+export const plugin = (): esbuild.Plugin => ({
   name: 'hd-web-plugin',
   setup(build) {
     build.onLoad({ filter: clientFileRegex }, async (args) => {
@@ -19,48 +14,6 @@ export const plugin = (
       return {
         contents: addFileToClass(code, args.path.replaceAll('\\', '/')),
         loader: 'jsx'
-      }
-    })
-
-    build.onResolve
-
-    plugins.forEach(({ onLoad, name, onResolve }) => {
-      if (onLoad) {
-        build.onLoad({ filter: onLoad.filter }, async (args) => {
-          try {
-            return await onLoad.load({
-              ...args,
-              config,
-              buildType: 'build'
-            })
-          } catch (e) {
-            throw new HdError('plugin.error', name, 'onLoad', e)
-          }
-        })
-      }
-
-      if (onResolve) {
-        build.onResolve({ filter: onResolve.filter }, async (args) => {
-          try {
-            const type =
-              args.kind === 'import-rule' ||
-              args.kind === 'composes-from' ||
-              args.kind === 'url-token'
-                ? 'css'
-                : 'js'
-
-            return (
-              (await onResolve.resolve({
-                ...args,
-                type,
-                config,
-                buildType: 'build'
-              })) ?? undefined
-            )
-          } catch (e) {
-            throw new HdError('plugin.error', name, 'onResolve', e)
-          }
-        })
       }
     })
   }

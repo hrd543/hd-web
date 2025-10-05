@@ -10,21 +10,14 @@ import { buildHtmlFiles, getScriptElements } from './html.js'
 import { copyStaticFolder, deleteBuildFolder } from './preBuild.js'
 import { runEsbuildFirst, runEsbuildLast } from './runEsbuild.js'
 import { readMetafile } from './utils.js'
-import { Plugin, filterPlugins, runPlugins } from '../plugins/index.js'
 
-export const build = async (
-  config: Partial<BuildConfig> = {},
-  allPlugins: Array<Plugin<BuildConfig>> = []
-) => {
-  const plugins = filterPlugins(allPlugins, 'build')
-  const fullConfig = validateConfig(config, plugins)
+export const build = async (config: Partial<BuildConfig> = {}) => {
+  const fullConfig = validateConfig(config)
 
   await deleteBuildFolder(fullConfig)
   const staticFiles = await copyStaticFolder(fullConfig)
 
-  await runPlugins(fullConfig, plugins, 'start', 'build')
-
-  const first = await runEsbuildFirst(fullConfig, plugins)
+  const first = await runEsbuildFirst(fullConfig)
 
   // doesn't support splitting yet
   const files = readMetafile(first.metafile, fullConfig.out)
@@ -49,8 +42,6 @@ export const build = async (
   // TODO I should remove the `__file` prop here if it exists?
   const final = await runEsbuildLast(fullConfig, outfile, js)
 
-  const pluginResults = await runPlugins(fullConfig, plugins, 'end', 'build')
-
   if (fullConfig.write) {
     if (!js) {
       await fs.rm(outfile)
@@ -64,7 +55,6 @@ export const build = async (
     outfile,
     first,
     final,
-    pluginResults,
     html,
     staticFiles
   )

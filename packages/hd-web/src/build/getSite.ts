@@ -8,7 +8,7 @@ const getSiteInMemory = (js: string) => {
 }
 
 const getSiteOnDisk = async (outfile: string) =>
-  (await import(/* @vite-ignore */ url.pathToFileURL(outfile).href)).default
+  (await import(url.pathToFileURL(outfile).href)).default
 
 export const getSite = async (
   outfile: string,

@@ -10,9 +10,7 @@ export const readConfigFile = async <Dev, Build>(): Promise<
   const configFile = path.join(process.cwd(), 'hd.config.js')
 
   try {
-    const file = await import(
-      /* @vite-ignore */ url.pathToFileURL(configFile).href
-    )
+    const file = await import(url.pathToFileURL(configFile).href)
 
     return file.default
   } catch {

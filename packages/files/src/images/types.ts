@@ -1,7 +1,7 @@
-import { HdImage } from '../shared/index.js'
+import { HdFile } from '../shared/types.js'
 
 export type ImageProps = {
-  src: HdImage
+  src: HdFile
   alt: string
   /** The intended ratio of width / height */
   ratio?: number

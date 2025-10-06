@@ -1,8 +1,8 @@
 import { defineHdConfig } from 'hd-web'
-import { hdWebPluginImages } from '@hd-web/images'
+import { hdPluginFiles } from '@hd-web/files'
 
 export default defineHdConfig({
   entry: './main.tsx',
   out: 'dist',
-  plugins: [hdWebPluginImages()]
+  plugins: [hdPluginFiles(['.jpg'])]
 })

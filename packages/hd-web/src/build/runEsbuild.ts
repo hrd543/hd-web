@@ -5,14 +5,12 @@ import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
 
 const getSharedEsbuildOptions = ({
-  target,
   write
 }: BuildConfig): esbuild.BuildOptions => ({
   minify: true,
   bundle: true,
   treeShaking: true,
   globalName: 'site',
-  target,
   write,
   publicPath: '/',
   logLevel: 'silent'
@@ -22,6 +20,7 @@ export const runEsbuildFirst = async (config: BuildConfig) => {
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
+      target: 'esnext',
       plugins: [...config.plugins, plugin()],
       platform: 'node',
       entryPoints: [config.entry],
@@ -55,6 +54,7 @@ export const runEsbuildLast = async (
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
+      target: config.target,
       stdin: { contents: js, loader: 'js', resolveDir: '.' },
       outfile,
       platform: 'browser',

@@ -1,11 +1,11 @@
 import type { Plugin } from 'esbuild'
 
-import { buildFileTypeRegex, imageFileTypes } from './imageFileTypes.js'
+import { buildFileTypeRegex } from './fileTypes.js'
 import { resolveCallback } from './resolve.js'
 import { loadCallback } from './load.js'
 import { onBuildEnd, onBuildStart } from './buildCallbacks.js'
 
-export const plugin = (fileTypes = imageFileTypes): Plugin => {
+export const plugin = (fileTypes: string[]): Plugin => {
   const filterRegex = buildFileTypeRegex(fileTypes)
 
   return {

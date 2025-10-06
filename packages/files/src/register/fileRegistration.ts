@@ -47,6 +47,7 @@ export const registerFile = <T extends HdFileType>(
   file: HdFileInfo<HdFileInfoByType[T]>
 ) => {
   const type = getFileType(file.src) as T
+  console.log(type)
   const files = globalThis._hdFiles?.[type]
   const existing = files?.get(file.src)
 
@@ -56,12 +57,13 @@ export const registerFile = <T extends HdFileType>(
     }
   } else {
     files?.set(file.src, [file])
+    console.log(files)
   }
 }
 
-type HdFileInfoWithType<T extends HdFileType = HdFileType> = HdFileInfo<
-  HdFileInfoByType[HdFileType]
-> & { type: HdFileType }
+type HdFileInfoWithType = HdFileInfo<HdFileInfoByType[HdFileType]> & {
+  type: HdFileType
+}
 
 export const getFiles = () => {
   if (!globalThis._hdFiles) {

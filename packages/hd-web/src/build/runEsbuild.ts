@@ -3,6 +3,7 @@ import * as esbuild from 'esbuild'
 import { HdError, isEsbuildError } from '../errors/index.js'
 import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
+import { convertToEsbuildPlugin, Plugin } from '../plugins/index.js'
 
 const getSharedEsbuildOptions = ({
   write
@@ -16,12 +17,15 @@ const getSharedEsbuildOptions = ({
   logLevel: 'silent'
 })
 
-export const runEsbuildFirst = async (config: BuildConfig) => {
+export const runEsbuildFirst = async (
+  config: BuildConfig,
+  plugins: Plugin<BuildConfig>[]
+) => {
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
       target: 'esnext',
-      plugins: [...config.plugins, plugin()],
+      plugins: [...plugins.map(convertToEsbuildPlugin(config)), plugin()],
       platform: 'node',
       entryPoints: [config.entry],
       outdir: config.out,

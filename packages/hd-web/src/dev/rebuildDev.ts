@@ -4,23 +4,33 @@ import { buildSite } from '../shared/index.js'
 import { DevConfig } from './config.js'
 import { DevRebuild } from './types.js'
 import { plugin } from './plugin.js'
+import {
+  convertToEsbuildPlugin,
+  Plugin,
+  runPluginCallbacks
+} from '../plugins/index.js'
 
 export const getDevRebuildCallback = async (
-  config: DevConfig
+  config: DevConfig,
+  plugins: Plugin<DevConfig>[]
 ): Promise<() => Promise<DevRebuild>> => {
   const context = await esbuild.context({
     ...getEsbuildOptions(),
-    plugins: [...config.plugins, plugin()],
+    plugins: [...plugins.map(convertToEsbuildPlugin(config)), plugin()],
     entryPoints: [config.entry]
   })
 
   return async () => {
     try {
+      await runPluginCallbacks(config, plugins, 'onSiteStart')
+
       const before = performance.now()
       const { outputFiles } = await context.rebuild()
       const jsFile = outputFiles!.find((f) => f.path.endsWith('.js'))!
       const css = outputFiles!.find((f) => f.path.endsWith('.css'))!.text
       const site = await buildSite(getSiteInMemory(jsFile.text), config)
+
+      await runPluginCallbacks(config, plugins, 'onSiteEnd')
 
       console.log('Hd-web rebuilt in ', performance.now() - before, 'ms')
 

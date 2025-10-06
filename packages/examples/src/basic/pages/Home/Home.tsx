@@ -7,7 +7,7 @@ import { BlogData } from '../../blogs/index.js'
 import { PageLayout } from '../../shared/PageLayout.js'
 import { BlogPage } from '../Blog/BlogPage.js'
 import { Contact } from '../Contact/Contact.js'
-import h from './h.jpg'
+import h from './h.png'
 import { Image } from '@hd-web/files'
 
 export const Home: Page<BlogData> = {

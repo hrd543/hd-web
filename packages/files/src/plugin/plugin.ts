@@ -1,25 +1,28 @@
-import type { Plugin } from 'esbuild'
+import type { Plugin } from 'hd-web'
 
 import { buildFileTypeRegex } from './fileTypes.js'
 import { resolveCallback } from './resolve.js'
 import { loadCallback } from './load.js'
 import { onBuildEnd, onBuildStart } from './buildCallbacks.js'
+import { PluginOptions } from './options.js'
 
-export const plugin = (fileTypes: string[]): Plugin => {
-  const filterRegex = buildFileTypeRegex(fileTypes)
+export const plugin = (options: PluginOptions): Plugin => {
+  const filterRegex = buildFileTypeRegex(options.fileTypes)
 
   return {
-    name: 'hd-plugin-images',
-    setup(build) {
-      build.onStart(() => onBuildStart(build.initialOptions.write))
-
-      build.onEnd(() =>
-        onBuildEnd(build.initialOptions.outdir!, build.initialOptions.write)
-      )
-
+    name: 'hd-plugin-files',
+    bundleSetup(build) {
       build.onResolve({ filter: filterRegex }, resolveCallback)
 
       build.onLoad({ filter: filterRegex }, loadCallback)
+    },
+
+    onPageStart(config) {
+      onBuildStart(config.write)
+    },
+
+    async onPageEnd(config) {
+      await onBuildEnd(config.out, config.write)
     }
   }
 }

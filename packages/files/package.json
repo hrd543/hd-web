@@ -1,7 +1,7 @@
 {
-  "name": "@hd-web/images",
+  "name": "@hd-web/files",
   "version": "0.0.0",
-  "description": "Add support for optimising images",
+  "description": "Add support for copying and optimising non-js files",
   "scripts": {
     "build": "tsc",
     "test": "npm run test:file \"src/**/*.test.ts\"",

@@ -3,31 +3,34 @@ import * as esbuild from 'esbuild'
 import { HdError, isEsbuildError } from '../errors/index.js'
 import { BuildConfig } from './config.js'
 import { plugin } from './plugin.js'
+import { convertToEsbuildPlugin, Plugin } from '../plugins/index.js'
 
 const getSharedEsbuildOptions = ({
-  target,
   write
 }: BuildConfig): esbuild.BuildOptions => ({
   minify: true,
   bundle: true,
   treeShaking: true,
   globalName: 'site',
-  target,
   write,
   publicPath: '/',
   logLevel: 'silent'
 })
 
-export const runEsbuildFirst = async (config: BuildConfig) => {
+export const runEsbuildFirst = async (
+  config: BuildConfig,
+  plugins: Plugin<BuildConfig>[]
+) => {
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
-      plugins: [...config.plugins, plugin()],
+      target: 'esnext',
+      plugins: [...plugins.map(convertToEsbuildPlugin(config)), plugin()],
       platform: 'node',
       entryPoints: [config.entry],
       outdir: config.out,
       metafile: true,
-      format: config.write ? 'esm' : 'iife',
+      format: 'esm',
       // Ignore any hd-web dependencies.
       external: ['esbuild', 'express']
     })
@@ -55,6 +58,7 @@ export const runEsbuildLast = async (
   try {
     return await esbuild.build({
       ...getSharedEsbuildOptions(config),
+      target: config.target,
       stdin: { contents: js, loader: 'js', resolveDir: '.' },
       outfile,
       platform: 'browser',

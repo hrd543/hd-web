@@ -9,14 +9,11 @@ export type SharedConfig = {
   entry: string
   /** Should it write to the filesystem? Useful for tests; defaults to true */
   write: boolean
-  /** A list of esbuild plugins to use when bundling the initial code */
-  plugins: Array<esbuild.Plugin>
 }
 
 export const defaultSharedConfig: SharedConfig = {
   lang: 'en-GB',
   joinTitles: true,
   entry: 'src/index.tsx',
-  write: true,
-  plugins: []
+  write: true
 }

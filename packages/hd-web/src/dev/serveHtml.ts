@@ -9,9 +9,11 @@ import { getPageContent } from './getPageContent.js'
 import { isPage } from './isPage.js'
 import { DevRebuild } from './types.js'
 import { transformClientJs } from './transformClientJs.js'
+import { Plugin, runPluginCallbacks } from '../plugins/index.js'
 
 export const getServeHtml = (
   config: DevConfig,
+  plugins: Plugin<DevConfig>[],
   getRebuilt: () => Promise<DevRebuild | null>
 ): RequestHandler => {
   return async (req, res, next) => {
@@ -20,6 +22,7 @@ export const getServeHtml = (
     }
 
     const rebuilt = await getRebuilt()
+    await runPluginCallbacks(config, plugins, 'onPageStart')
 
     if (rebuilt === null) {
       res.statusCode = 202
@@ -49,6 +52,7 @@ export const getServeHtml = (
     const componentJs = getClientJs(components.map(({ filename }) => filename))
     const built = await transformClientJs(componentJs)
     const withJs = addJsToEmptyScript(html, built)
+    await runPluginCallbacks(config, plugins, 'onPageEnd')
 
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/html')

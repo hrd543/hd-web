@@ -1,7 +1,9 @@
 import { View } from 'hd-web'
 import { ImageProps } from './types.js'
 import { getImageStyle } from './getImageStyle.js'
-import { registerImage } from '../shared/index.js'
+import { registerFile } from '../register/fileRegistration.js'
+import { getCopiedSrc } from '../register/getCopiedSrc.js'
+import { getCopiedImgFilename } from './getCopiedImgFilename.js'
 
 export const Image: View<ImageProps> = ({
   alt,
@@ -17,7 +19,7 @@ export const Image: View<ImageProps> = ({
   const width = height * ratio
 
   const image = { src: src.comesFrom, modifications: { quality } }
-  const registered = registerImage(image)
+  registerFile(image)
 
   return (
     <img
@@ -27,7 +29,7 @@ export const Image: View<ImageProps> = ({
       width={width}
       height={height}
       alt={alt}
-      src={registered}
+      src={getCopiedSrc(image, getCopiedImgFilename)}
     />
   )
 }

@@ -1,3 +1,5 @@
+// TODO fix this once image test reimplemented
+
 declare module '*.png' {
   const value: string
   export = value

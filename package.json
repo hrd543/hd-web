@@ -13,6 +13,7 @@
     "packages/jsx",
     "packages/hd-web",
     "packages/components",
+    "packages/files",
     "packages/*"
   ],
   "devDependencies": {

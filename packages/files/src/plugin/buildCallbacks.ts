@@ -10,7 +10,6 @@ import { processImage } from '../images/processImage.js'
 // We want to copy files over only when writing for now.
 export const onBuildStart = (write: boolean | undefined) => {
   if (write) {
-    console.log('init')
     initialiseFiles()
   }
 }

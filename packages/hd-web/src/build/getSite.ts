@@ -1,11 +1,6 @@
 import * as esbuild from 'esbuild'
 import url from 'url'
-
-const getSiteInMemory = (js: string) => {
-  const f = new Function(`${js}; return site`)
-
-  return f().default
-}
+import { getSiteInMemory } from '../shared/index.js'
 
 const getSiteOnDisk = async (outfile: string) =>
   (await import(url.pathToFileURL(outfile).href)).default
@@ -17,7 +12,7 @@ export const getSite = async (
   if (builtFiles) {
     const code = builtFiles.find((f) => f.path === outfile)!.text
 
-    return getSiteInMemory(code)
+    return await getSiteInMemory(code)
   }
 
   return await getSiteOnDisk(outfile)

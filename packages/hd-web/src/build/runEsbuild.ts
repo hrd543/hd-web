@@ -30,7 +30,7 @@ export const runEsbuildFirst = async (
       entryPoints: [config.entry],
       outdir: config.out,
       metafile: true,
-      format: config.write ? 'esm' : 'iife',
+      format: 'esm',
       // Ignore any hd-web dependencies.
       external: ['esbuild', 'express']
     })

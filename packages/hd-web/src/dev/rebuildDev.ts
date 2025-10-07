@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild'
+
 import { HdError, isEsbuildError } from '../errors/index.js'
-import { buildSite } from '../shared/index.js'
+import { buildSite, getSiteInMemory } from '../shared/index.js'
 import { DevConfig } from './config.js'
 import { DevRebuild } from './types.js'
 import { plugin } from './plugin.js'
@@ -28,7 +29,7 @@ export const getDevRebuildCallback = async (
       const { outputFiles } = await context.rebuild()
       const jsFile = outputFiles!.find((f) => f.path.endsWith('.js'))!
       const css = outputFiles!.find((f) => f.path.endsWith('.css'))!.text
-      const site = await buildSite(getSiteInMemory(jsFile.text), config)
+      const site = await buildSite(await getSiteInMemory(jsFile.text), config)
 
       await runPluginCallbacks(config, plugins, 'onSiteEnd')
 
@@ -52,20 +53,14 @@ const getEsbuildOptions = (): esbuild.BuildOptions => ({
   platform: 'node',
   outdir: 'www',
   metafile: true,
-  format: 'iife',
+  format: 'esm',
   // Ignore any hd-web dependencies.
   external: ['esbuild', 'express'],
-  minify: false,
+  // Minifying for now to help the text import below
+  minify: true,
   bundle: true,
-  globalName: 'site',
   target: 'esnext',
   write: false,
   publicPath: '/',
   logLevel: 'silent'
 })
-
-const getSiteInMemory = (js: string) => {
-  const f = new Function(`${js}; return site`)
-
-  return f().default
-}

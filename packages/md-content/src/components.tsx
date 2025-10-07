@@ -1,4 +1,4 @@
-import { HdImage, Image } from '@hd-web/images'
+import { HdFile, Image } from '@hd-web/files'
 import { View } from 'hd-web'
 import { MarkdownOptions } from './types.js'
 
@@ -8,7 +8,7 @@ const mdImage =
     return (
       <Image
         alt={alt}
-        src={{ comesFrom: src } as HdImage}
+        src={{ comesFrom: src } as HdFile}
         quality={options.imageQuality}
       />
     )

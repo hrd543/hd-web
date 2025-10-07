@@ -1,13 +1,12 @@
-import { HdConfig, Plugin } from 'hd-web'
+import { Plugin } from 'hd-web'
 import { readMdFile } from './readMdFile.js'
 
-export const markdownPlugin = (): Plugin<HdConfig> => {
+export const markdownPlugin = (): Plugin => {
   return {
     name: 'hd-markdown',
 
-    onLoad: {
-      filter: /\.md$/,
-      async load({ path }) {
+    bundleSetup(build) {
+      build.onLoad({ filter: /\.md$/ }, async ({ path }) => {
         const { meta, content, name, path: mdPath } = await readMdFile(path)
 
         return {
@@ -20,7 +19,7 @@ export const markdownPlugin = (): Plugin<HdConfig> => {
             export default content
           `
         }
-      }
+      })
     }
   }
 }

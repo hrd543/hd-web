@@ -2,6 +2,7 @@ import { Processor } from 'unified'
 import { HdElement } from 'hd-web'
 
 export type MarkdownOptions = {
+  fileTypes: string[]
   /** @see `@hd-web/images` `Image` component `quality` */
   imageQuality: number
 }

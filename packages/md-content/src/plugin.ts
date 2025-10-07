@@ -1,15 +1,17 @@
-import { HdConfig, Plugin } from 'hd-web'
+import { Plugin } from 'hd-web'
 import { initialise } from './markdown.js'
-import { markdownPlugin } from '@hd-web/markdown'
-import { hdWebPluginImages } from '@hd-web/images'
+import { hdPluginMarkdown } from '@hd-web/markdown'
+import { hdPluginFiles } from '@hd-web/files'
 import { MarkdownOptions } from './types.js'
-import { hdGlobImportPlugin } from '@hd-web/glob-import'
+import { hdPluginGlobImport } from '@hd-web/glob-import'
 
-export const mdContentPlugin = (
-  options: MarkdownOptions
-): Array<Plugin<HdConfig>> => {
+export const mdContentPlugin = (options: MarkdownOptions): Array<Plugin> => {
   initialise(options)
 
   // The glob plugin needs to be first to take precedence over the imports
-  return [hdGlobImportPlugin(), markdownPlugin(), hdWebPluginImages()]
+  return [
+    hdPluginGlobImport(),
+    hdPluginMarkdown(),
+    hdPluginFiles({ fileTypes: options.fileTypes })
+  ]
 }

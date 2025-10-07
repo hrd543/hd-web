@@ -50,7 +50,7 @@ export const globImportPlugin = (): Plugin => {
             export default files
           `
 
-          return { contents }
+          return { contents, resolveDir: process.cwd() }
         }
       )
     }

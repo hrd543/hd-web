@@ -22,7 +22,7 @@
   "dependencies": {
     "@hd-web/glob-import": "^0.0.0",
     "@hd-web/markdown": "^0.0.0",
-    "@hd-web/images": "^0.0.0",
+    "@hd-web/files": "^0.0.0",
     "rehype-react": "^8.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",

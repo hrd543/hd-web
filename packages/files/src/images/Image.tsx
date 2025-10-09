@@ -9,7 +9,7 @@ export const Image: View<ImageProps> = ({
   alt,
   src,
   ratio = 1,
-  quality,
+  quality = 100,
   dim = 'w',
   lazy = true,
   className

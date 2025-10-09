@@ -22,3 +22,7 @@
 
 - Currently bundles all code and runs using `Function`. Really should pre-build dependencies into separate .cache folder and then reroute imports to it.
   - Can then use some sort of load module or import with data url to actually import the bundled src code
+
+## Errors
+
+Support errors in plugins etc, so that I can have custom error types in the files package

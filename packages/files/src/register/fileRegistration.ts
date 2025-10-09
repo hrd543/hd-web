@@ -1,4 +1,6 @@
 import assert from 'assert'
+import path from 'path'
+
 import { HdFileInfoByType, HdFileType } from './types.js'
 import { HdFileInfo } from '../shared/types.js'
 import { getFileType } from './getFileType.js'
@@ -40,12 +42,33 @@ const shouldRegisterFile = <T>(
   })
 }
 
+const getValidatedFile = <T extends HdFileType>(
+  file: HdFileInfo<HdFileInfoByType[T]>
+): HdFileInfo<HdFileInfoByType[T]> => {
+  // We can't support relative paths (yet)
+  if (file.src.startsWith('.')) {
+    throw new Error(
+      `Couldn't register file ${file.src}. Don't currently support relative imports for files`
+    )
+  }
+
+  if (file.src.startsWith('/')) {
+    return {
+      ...file,
+      src: path.join(process.cwd(), file.src)
+    }
+  }
+
+  return file
+}
+
 /**
  * Register a file to be copied over.
  */
 export const registerFile = <T extends HdFileType>(
-  file: HdFileInfo<HdFileInfoByType[T]>
+  rawFile: HdFileInfo<HdFileInfoByType[T]>
 ) => {
+  const file = getValidatedFile(rawFile)
   const type = getFileType(file.src) as T
   const files = globalThis._hdFiles?.[type]
   const existing = files?.get(file.src)

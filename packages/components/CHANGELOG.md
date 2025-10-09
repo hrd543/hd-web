@@ -1,5 +1,13 @@
 # @hd-web/components
 
+## 0.4.1
+
+### Patch Changes
+
+- 5bd0113: Fix publish pipeline
+- Updated dependencies [5bd0113]
+  - hd-web@0.2.1
+
 ## 0.4.0
 
 ### Minor Changes

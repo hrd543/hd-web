@@ -1,5 +1,11 @@
 # @hd-web/jsx
 
+## 0.4.1
+
+### Patch Changes
+
+- 5bd0113: Fix publish pipeline
+
 ## 0.4.0
 
 ### Minor Changes

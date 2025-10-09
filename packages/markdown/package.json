@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/markdown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add support for loading markdown files with frontmatter",
   "scripts": {
     "build": "tsc && cp src/md.d.ts dist",
@@ -17,7 +17,7 @@
     "/dist"
   ],
   "peerDependencies": {
-    "hd-web": "^0.2.0"
+    "hd-web": "^0.2.1"
   },
   "dependencies": {
     "fast-glob": "^3.3.3",

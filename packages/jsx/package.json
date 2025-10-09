@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/jsx",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Provides jsx for building sites with hd-web",
   "scripts": {
     "build": "tsc",

@@ -1,6 +1,6 @@
 {
   "name": "examples",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -9,9 +9,9 @@
     "example:dev": "tsx ./src/script.ts dev"
   },
   "dependencies": {
-    "hd-web": "^0.1.2",
-    "@hd-web/components": "^0.3.0",
-    "@hd-web/files": "^0.0.0"
+    "hd-web": "^0.2.0",
+    "@hd-web/components": "^0.4.0",
+    "@hd-web/files": "^1.0.0"
   },
   "sideEffects": false,
   "type": "module"

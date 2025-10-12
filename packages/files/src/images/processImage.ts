@@ -20,10 +20,24 @@ export const processImage = async (
     return await fs.copyFile(src, outputFile)
   }
 
-  await sharp(src)
-    .webp({
-      quality: modifications.quality,
+  const { size, quality } = modifications
+  let copied = await sharp(src)
+
+  if (size) {
+    copied = copied.resize({
+      width: size[0],
+      height: size[1],
+      fit: 'cover',
+      position: sharp.strategy.attention
+    })
+  }
+
+  if (quality !== undefined) {
+    copied = copied.webp({
+      quality,
       lossless: false
     })
-    .toFile(outputFile)
+  }
+
+  await copied.toFile(outputFile)
 }

@@ -4,21 +4,27 @@ import { getImageStyle } from './getImageStyle.js'
 import { registerFile } from '../register/fileRegistration.js'
 import { getCopiedSrc } from '../register/getCopiedSrc.js'
 import { getCopiedImgFilename } from './getCopiedImgFilename.js'
+import { ImageModifications } from '../shared/modifications.js'
 
 export const Image: View<ImageProps> = ({
   alt,
+  // TODO change this type to just be comesFrom
   src,
-  ratio = 1,
-  quality = 100,
+  width,
+  height,
+  resize,
+  quality,
   dim = 'w',
   lazy = true,
   className
 }) => {
-  // Use height 100 just to give it an actual ratio
-  const height = 100
-  const width = height * ratio
+  const modifications: ImageModifications = { quality }
 
-  const image = { src: src.comesFrom, modifications: { quality } }
+  if (resize) {
+    modifications.size = [width, height]
+  }
+
+  const image = { src: src.comesFrom, modifications }
   registerFile(image)
 
   return (

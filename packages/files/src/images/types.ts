@@ -1,10 +1,11 @@
 import { HdFile } from '../shared/types.js'
 
 export type ImageProps = {
-  src: HdFile
+  src: Pick<HdFile, 'comesFrom'>
   alt: string
-  /** The intended ratio of width / height */
-  ratio?: number
+  width: number
+  height: number
+  resize?: boolean
   /** Should the width or height determine the size. Defaults to w */
   dim?: 'w' | 'h' | null
   /** Number between 0 and 100 for the image quality */

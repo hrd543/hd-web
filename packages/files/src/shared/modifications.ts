@@ -6,7 +6,9 @@ export type ImageModifications = {
    *
    * (low quality) 0 <= quality <= 100 (high quality)
    */
-  quality: number
+  quality?: number
+  /** The desired width and height of the image */
+  size?: [w: number, h: number]
 }
 
 export type OtherModifications = never

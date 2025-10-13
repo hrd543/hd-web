@@ -8,7 +8,6 @@ import { ImageModifications } from '../shared/modifications.js'
 
 export const Image: View<ImageProps> = ({
   alt,
-  // TODO change this type to just be comesFrom
   src,
   width,
   height,

@@ -8,7 +8,7 @@ export type ImageModifications = {
    */
   quality?: number
   /** The desired width and height of the image */
-  size?: [w: number, h: number]
+  size?: [w: number | undefined, h: number | undefined]
 }
 
 export type OtherModifications = never

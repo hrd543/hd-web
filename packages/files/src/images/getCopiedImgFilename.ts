@@ -1,14 +1,17 @@
 import { ImageModifications } from '../shared/modifications.js'
+import { FileNameFunction } from '../shared/types.js'
 
-export const getCopiedImgFilename = (
-  name: string,
-  ext: string,
-  modifications?: ImageModifications
+// TODO work out how I could actually hash the image contents
+// This might require async views
+export const getCopiedImgFilename: FileNameFunction<ImageModifications> = (
+  { name, ext },
+  modifications
 ) => {
   if (!modifications) {
-    return `${name}${ext}`
+    return { name, ext }
   }
-  // TODO add some hashing here
 
-  return `${name}-${modifications.quality}.webp`
+  // TODO hash the quality and size properly
+
+  return { name: `${name}-${modifications.quality}`, ext: 'webp' }
 }

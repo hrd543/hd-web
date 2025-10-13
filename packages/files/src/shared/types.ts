@@ -1,3 +1,5 @@
+import path from 'path'
+
 export type HdFileInfo<T> = {
   /** The original source of the file */
   src: string
@@ -11,3 +13,8 @@ export type HdFile = {
   /** This is the original location on the fs of the file */
   comesFrom: string
 }
+
+export type FileNameFunction<T> = (
+  src: path.ParsedPath,
+  modifications?: T
+) => { name: string; ext: string }

@@ -1,8 +1,8 @@
-import { View } from '@hd-web/jsx'
+import { AsyncView } from '@hd-web/jsx'
 
 export type PageStack<T> = [path: string, page: Page<T, any>, title: string]
 
-export type PageContent<SiteData = unknown, PageData = any> = View<{
+export type PageContent<SiteData = unknown, PageData = any> = AsyncView<{
   siteData: SiteData
   pageData: PageData
 }>

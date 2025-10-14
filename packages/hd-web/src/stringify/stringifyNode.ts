@@ -6,20 +6,20 @@ import { stringifyIntrinsic } from './intrinsic/stringifyIntrinsic.js'
 import { StringifyFunction, StringifyNodeOutput, FlatHdNode } from './types.js'
 import { isNode } from './utils.js'
 
-export const stringifyNode = (
+export const stringifyNode = async (
   root: HdElement,
   dev = false
-): StringifyNodeOutput => {
+): Promise<StringifyNodeOutput> => {
   const components = new Map<string, string>()
 
   let fullHtml = ''
   const stack: FlatHdNode[] = [root]
 
   while (stack.length) {
-    const entry = stack.pop() as FlatHdNode
+    const entry = stack.pop()!
 
     if (isNode(entry)) {
-      const { nodes, html = '' } = getStringifyNodeFunction(entry)(
+      const { nodes, html = '' } = await getStringifyNodeFunction(entry)(
         entry,
         components,
         dev

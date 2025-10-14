@@ -18,7 +18,7 @@ export type IBehaviourConstructor<
 export type HdElement<T extends BaseProps = BaseProps> = {
   tag: string
   props: T | null
-  children?: HdNode
+  children?: HdNode | Promise<HdNode>
   enhancements?: {
     behaviour: IBehaviourConstructor<any, any>
     props: any
@@ -40,4 +40,8 @@ export type Props<T extends BaseProps = BaseProps> = WithChildren<T>
 
 export interface View<T extends BaseProps = BaseProps> {
   (props: Props<T>): HdNode
+}
+
+export interface AsyncView<T extends BaseProps = BaseProps> {
+  (props: Props<T>): Promise<HdNode> | HdNode
 }

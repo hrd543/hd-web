@@ -6,7 +6,7 @@ import { StringifyFunction } from '../types.js'
 import { serialiseProps } from '../shared/props.js'
 import { flattenChildren } from '../shared/flattenChildren.js'
 
-export const stringifyComponent: StringifyFunction<HdElement> = (
+export const stringifyComponent: StringifyFunction<HdElement> = async (
   { enhancements, ...entry },
   components,
   dev
@@ -40,7 +40,7 @@ export const stringifyComponent: StringifyFunction<HdElement> = (
     nodes: [
       {
         ...entry,
-        children: flattenChildren([script, entry.children ?? null])
+        children: flattenChildren([script, (await entry.children) ?? null])
       }
     ]
   }

@@ -14,13 +14,24 @@ export const processImage = async (
     return await fs.writeFile(out, buffer)
   }
 
-  const { size, quality } = modifications
+  const { size, quality, keepOrientation } = modifications
   let copied = await sharp(buffer)
 
   if (size && size[0] && size[1]) {
+    let w = size[0]
+    let h = size[1]
+
+    if (keepOrientation) {
+      const { width, height } = await copied.metadata()
+      if (height > width) {
+        w = size[1]
+        h = size[0]
+      }
+    }
+
     copied = copied.resize({
-      width: size[0],
-      height: size[1],
+      width: w,
+      height: h,
       fit: 'cover',
       position: sharp.strategy.attention
     })

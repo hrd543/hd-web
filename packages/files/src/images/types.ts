@@ -1,10 +1,12 @@
 import { HdFile } from '../shared/types.js'
 
+export type ImageSize = [w: number, h: number]
+type ImageSizeFunction = (imageSize: ImageSize) => ImageSize
+
 export type ImageProps = {
   src: Pick<HdFile, 'comesFrom'>
   alt: string
-  width?: number
-  height?: number
+  size?: ImageSize | ImageSizeFunction
   resize?: boolean
   // TODO remove this option as it's not really relevant.
   // Once the html types are better, allow for adding style to the img

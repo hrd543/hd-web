@@ -1,20 +1,18 @@
 import { Processor } from 'unified'
 import { HdElement } from 'hd-web'
 
-type ImageSize = [w: number, h: number]
-
 export type MarkdownOptions = {
   fileTypes: string[]
   images: {
     /** @see `@hd-web/images` `Image` component `quality` */
     quality: number
     /**
-     * The width and height of images to be resized. Leave undefined
-     * to prevent images being resized.
+     * The width and height of the images, given the actual dimensions
+     * of the image.
      *
-     * Use a function to get specific sizes based on the filepath
+     * Leave undefined to avoid resizing
      */
-    size: ImageSize | undefined | ((path: string) => ImageSize | undefined)
+    size?: (imgDimensions: [w: number, h: number]) => [w: number, h: number]
   }
 }
 

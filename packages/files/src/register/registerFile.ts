@@ -1,5 +1,5 @@
 import { getFileProcessor } from '../processing/getFileProcessor.js'
-import { FileModificatons, FileType } from '../shared/modifications.js'
+import { FileModificatons, FileType } from '../processing/types.js'
 import { getFileType } from './getFileType.js'
 import { hashBuffer } from './hashBuffer.js'
 import fs from 'fs/promises'
@@ -22,7 +22,9 @@ const getValidatedFile = (src: string) => {
 
 export const registerFile = async <T extends FileType>(
   srcRaw: string,
-  modificationsRaw?: FileModificatons<T>
+  modificationsRaw: FileModificatons<T> | undefined,
+  // Useful if work has already been done on the file to avoid re-reading
+  fileBuffer?: Buffer
 ) => {
   const src = getValidatedFile(srcRaw)
   // This means we're in dev mode
@@ -47,7 +49,7 @@ export const registerFile = async <T extends FileType>(
   }
 
   // and process the file
-  const fileContents = await fs.readFile(src)
+  const fileContents = fileBuffer ?? (await fs.readFile(src))
   const hash = hashBuffer(fileContents)
   const newFileType = processor.getFileType?.(modifications) ?? ext
   const filename = `files/${name}-${hash}-${modificationsHash}${newFileType}`

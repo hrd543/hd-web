@@ -13,3 +13,5 @@ export const imageProcessor: FileProcessor<ImageModifications> = {
   getFileType: getImageFiletype,
   sanitise: sanitiseImageModifications
 }
+
+export type { ImageModifications }

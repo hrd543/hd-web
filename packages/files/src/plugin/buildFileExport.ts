@@ -10,7 +10,7 @@ import { registerFile } from '../register/registerFile.js'
 export const buildFileExport = (src: string): HdFile => {
   return {
     src() {
-      return registerFile(src)
+      return registerFile(src, undefined)
     },
     comesFrom: src
   }

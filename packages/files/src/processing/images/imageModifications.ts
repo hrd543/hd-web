@@ -7,6 +7,13 @@ export type ImageModifications = {
   quality?: number
   /** The desired width and height of the image */
   size?: [w: number | undefined, h: number | undefined]
+  /**
+   * Any portrait images will have the dimensions swapped.
+   *
+   * This is useful when you don't know the orientation but
+   * know what you want the ratio to be
+   */
+  keepOrientation?: boolean
 }
 
 export const stringifyImageModifications = (

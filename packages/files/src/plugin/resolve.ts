@@ -29,7 +29,7 @@ export const resolveCallback = async ({
 }: OnResolveArgs): Promise<OnResolveResult | undefined> => {
   if (cssKinds.has(kind)) {
     return {
-      path: await registerFile(getFullSrc(path, importer)),
+      path: await registerFile(getFullSrc(path, importer), undefined),
       external: true
     }
   }

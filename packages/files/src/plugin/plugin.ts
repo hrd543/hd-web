@@ -17,12 +17,12 @@ export const plugin = (options: PluginOptions): Plugin => {
       build.onLoad({ filter: filterRegex }, loadCallback)
     },
 
-    onPageStart(config) {
-      onBuildStart(config.write)
+    async onPageStart(config) {
+      await onBuildStart(config.write, config.out)
     },
 
-    async onPageEnd(config) {
-      await onBuildEnd(config.out, config.write)
+    onPageEnd() {
+      onBuildEnd()
     }
   }
 }

@@ -1,8 +1,6 @@
 import nodePath from 'path'
 import type { OnResolveArgs, OnResolveResult } from 'esbuild'
-
-import { registerFile } from '../register/fileRegistration.js'
-import { getCopiedSrc } from '../register/getCopiedSrc.js'
+import { registerFile } from '../register/registerFile.js'
 
 const cssKinds = new Set(['import-rule', 'composes-from', 'url-token'])
 
@@ -30,11 +28,8 @@ export const resolveCallback = async ({
   importer
 }: OnResolveArgs): Promise<OnResolveResult | undefined> => {
   if (cssKinds.has(kind)) {
-    const file = { src: getFullSrc(path, importer) }
-    registerFile(file)
-
     return {
-      path: getCopiedSrc(file),
+      path: await registerFile(getFullSrc(path, importer)),
       external: true
     }
   }

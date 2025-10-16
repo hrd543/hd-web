@@ -1,12 +1,10 @@
-import { View } from 'hd-web'
+import { AsyncView } from 'hd-web'
 import { ImageProps } from './types.js'
 import { getImageStyle } from './getImageStyle.js'
-import { registerFile } from '../register/fileRegistration.js'
-import { getCopiedSrc } from '../register/getCopiedSrc.js'
-import { getCopiedImgFilename } from './getCopiedImgFilename.js'
 import { ImageModifications } from '../shared/modifications.js'
+import { registerFile } from '../register/registerFile.js'
 
-export const Image: View<ImageProps> = ({
+export const Image: AsyncView<ImageProps> = async ({
   alt,
   src,
   width,
@@ -23,8 +21,7 @@ export const Image: View<ImageProps> = ({
     modifications.size = [width, height]
   }
 
-  const image = { src: src.comesFrom, modifications }
-  registerFile(image)
+  const newSrc = await registerFile(src.comesFrom, modifications)
 
   return (
     <img
@@ -34,7 +31,7 @@ export const Image: View<ImageProps> = ({
       width={width}
       height={height}
       alt={alt}
-      src={getCopiedSrc(image, getCopiedImgFilename)}
+      src={newSrc}
     />
   )
 }

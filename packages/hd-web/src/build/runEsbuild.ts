@@ -32,7 +32,7 @@ export const runEsbuildFirst = async (
       metafile: true,
       format: 'esm',
       // Ignore any hd-web dependencies.
-      external: ['esbuild', 'express']
+      external: ['esbuild', 'express', 'sharp']
     })
   } catch (e: unknown) {
     if (!isEsbuildError(e)) {

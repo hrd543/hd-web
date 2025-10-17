@@ -20,6 +20,11 @@ const getValidatedFile = (src: string) => {
   return src
 }
 
+// TODO work out if exporting this is the best approach.
+// It's currently exported so that I can get the proper filename
+// for thumbnails in the head meta component of blogs.
+// The image should already be copied over so maybe I could just
+// fetch it from the cache?
 export const registerFile = async <T extends FileType>(
   srcRaw: string,
   modificationsRaw: FileModificatons<T> | undefined,

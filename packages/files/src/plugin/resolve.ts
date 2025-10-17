@@ -34,5 +34,3 @@ export const resolveCallback = async ({
     }
   }
 }
-
-// TODO Fix the preview images on the blogs - their src is wrong.

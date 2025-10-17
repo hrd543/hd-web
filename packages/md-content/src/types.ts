@@ -13,6 +13,8 @@ export type MarkdownOptions = {
      * Leave undefined to avoid resizing
      */
     size?: (imgDimensions: [w: number, h: number]) => [w: number, h: number]
+    /** Which file types should be copied over without any optimisations */
+    ignoreFileTypes?: string[]
   }
 }
 

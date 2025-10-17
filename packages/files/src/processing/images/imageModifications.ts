@@ -40,5 +40,5 @@ export const stringifyImageModifications = (
     }
   }
 
-  return strings.join('')
+  return strings.join('') || 'original'
 }

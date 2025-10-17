@@ -17,7 +17,7 @@ export const plugin = (options: PluginOptions): Plugin => {
       build.onLoad({ filter: filterRegex }, loadCallback)
     },
 
-    async onPageStart(config) {
+    async onStart(config) {
       await onBuildStart(config.write, config.out)
     },
 

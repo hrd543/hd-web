@@ -52,7 +52,7 @@ export const registerFile = async <T extends FileType>(
   const fileContents = fileBuffer ?? (await fs.readFile(src))
   const hash = hashBuffer(fileContents)
   const newFileType = processor.getFileType?.(modifications) ?? ext
-  const filename = `files/${name}-${hash}-${modificationsHash}${newFileType}`
+  const filename = `/files/${name}-${hash}-${modificationsHash}${newFileType}`
   await processor.process(
     fileContents,
     path.posix.join(globalThis._hdFilesOutFolder, filename),

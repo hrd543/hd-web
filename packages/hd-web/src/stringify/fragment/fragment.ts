@@ -5,8 +5,10 @@ import { StringifyFunction } from '../types.js'
 
 export const Fragment = 'FRAGMENT'
 
-export const stringifyFragment: StringifyFunction<HdElement> = (entry) => {
+export const stringifyFragment: StringifyFunction<HdElement> = async (
+  entry
+) => {
   return {
-    nodes: flattenChildren(entry.children)
+    nodes: flattenChildren(await entry.children)
   }
 }

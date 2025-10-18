@@ -36,8 +36,8 @@ export const getServeHtml = (
       return res.end('Not found')
     }
 
-    const { head, body } = renderPage(rebuilt.site, page)
-    const { html, components } = buildHtml(
+    const { head, body } = await renderPage(rebuilt.site, page)
+    const { html, components } = await buildHtml(
       createMeta(
         page.title,
         page.description,

@@ -12,6 +12,7 @@ export type { Page, PageContent, Site } from './shared/index.js'
 export { cleanPath } from './shared/index.js'
 export { Enhance, type EnhanceViewProps } from './enhancements/index.js'
 export {
+  type AsyncView,
   type BaseProps,
   type View,
   type HdElement,

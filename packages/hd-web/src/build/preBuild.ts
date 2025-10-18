@@ -9,6 +9,7 @@ import { getFileType } from './utils.js'
 export const deleteBuildFolder = async (config: BuildConfig) => {
   if (config.write) {
     await fs.rm(config.out, { recursive: true, force: true })
+    await fs.mkdir(config.out)
   }
 }
 

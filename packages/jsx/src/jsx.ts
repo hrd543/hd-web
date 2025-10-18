@@ -1,8 +1,8 @@
-import type { View, HdElement, Props } from './types.js'
+import type { HdElement, Props, AsyncView } from './types.js'
 
 // TODO sort out filenames in dev.
 
-export const jsx = (tag: string | View, props: Props): HdElement => {
+export const jsx = (tag: string | AsyncView, props: Props): HdElement => {
   const { children, ...rest } = props
   const isView = typeof tag === 'function'
 

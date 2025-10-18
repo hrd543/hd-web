@@ -1,12 +1,8 @@
-import path from 'path'
-
-import { HdFileType } from './types.js'
+import { FileType } from '../processing/types.js'
 
 const images = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif'])
 
-export const getFileType = (filepath: string): HdFileType => {
-  const { ext } = path.parse(filepath)
-
+export const getFileType = (ext: string): FileType => {
   if (images.has(ext)) {
     return 'image'
   }

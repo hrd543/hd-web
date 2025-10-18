@@ -3,6 +3,8 @@ import { View } from 'hd-web'
 import { getImageSrc, getImageStyle } from './helpers.js'
 import { type ImageProps } from './types.js'
 
+// TODO remove this - some things still depend on it (or rename)
+
 export const Image: View<ImageProps> = ({
   alt,
   src,

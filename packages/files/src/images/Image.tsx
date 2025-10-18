@@ -1,35 +1,75 @@
-import { View } from 'hd-web'
-import { ImageProps } from './types.js'
-import { getImageStyle } from './getImageStyle.js'
-import { registerFile } from '../register/fileRegistration.js'
-import { getCopiedSrc } from '../register/getCopiedSrc.js'
-import { getCopiedImgFilename } from './getCopiedImgFilename.js'
+import { AsyncView } from 'hd-web'
+import fs from 'fs/promises'
 
-export const Image: View<ImageProps> = ({
+import { ImageProps, ImageSize } from './types.js'
+import { getImageStyle } from './getImageStyle.js'
+import { registerFile } from '../register/registerFile.js'
+import { ImageModifications } from '../processing/images/index.js'
+import sharp from 'sharp'
+import path from 'path'
+
+// TODO make this shared, I copied it from registerFile
+const getValidatedFile = (src: string) => {
+  // We can't support relative paths (yet)
+  if (src.startsWith('.')) {
+    throw new Error(
+      `Couldn't register file ${src}. Don't currently support relative imports for files`
+    )
+  }
+
+  if (src.startsWith('/')) {
+    return path.join(process.cwd(), src)
+  }
+
+  return src
+}
+
+const getDimensions = (
+  size: ImageProps['size'],
+  fileSize: { width: number; height: number }
+): ImageSize | undefined => {
+  if (size === undefined) {
+    return
+  }
+
+  if (Array.isArray(size)) {
+    return size
+  }
+
+  return size([fileSize.width, fileSize.height])
+}
+
+export const Image: AsyncView<ImageProps> = async ({
   alt,
   src,
-  ratio = 1,
-  quality = 100,
+  size: sizeRaw,
+  resize,
+  quality,
   dim = 'w',
   lazy = true,
   className
 }) => {
-  // Use height 100 just to give it an actual ratio
-  const height = 100
-  const width = height * ratio
+  const modifications: ImageModifications = { quality }
+  const fileBuffer = await fs.readFile(getValidatedFile(src.comesFrom))
+  const fileMeta = await sharp(fileBuffer).metadata()
+  const size = getDimensions(sizeRaw, fileMeta)
 
-  const image = { src: src.comesFrom, modifications: { quality } }
-  registerFile(image)
+  if (resize) {
+    modifications.size = size
+  }
+
+  const newSrc = await registerFile(src.comesFrom, modifications, fileBuffer)
 
   return (
-    <img
-      class={`hd-image ${className ?? ''}`}
-      loading={lazy ? 'lazy' : undefined}
-      style={getImageStyle(dim)}
-      width={width}
-      height={height}
-      alt={alt}
-      src={getCopiedSrc(image, getCopiedImgFilename)}
-    />
+    <picture class={`hd-image ${className ?? ''}`}>
+      <img
+        loading={lazy ? 'lazy' : undefined}
+        style={getImageStyle(dim)}
+        width={size?.[0]}
+        height={size?.[1]}
+        alt={alt}
+        src={newSrc}
+      />
+    </picture>
   )
 }

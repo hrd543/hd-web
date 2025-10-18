@@ -51,20 +51,20 @@ export const getJoinedTitle = (
 
 export const getPathArray = (p: string) => p.split('/').filter((x) => x !== '')
 
-export const renderPage = (
+export const renderPage = async (
   site: BuiltSite,
   pageContent: BuiltPage[1]
-): {
+): Promise<{
   body: HdNode
   head: HdNode
-} => {
+}> => {
   const props = { pageData: pageContent.pageData, siteData: site.data }
 
   const head = pageContent.head ?? site.head
   const body = pageContent.content
 
   return {
-    body: body(props),
-    head: head(props)
+    body: await body(props),
+    head: await head(props)
   }
 }

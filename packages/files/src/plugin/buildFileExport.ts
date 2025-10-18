@@ -1,6 +1,5 @@
-import { registerFile } from '../register/fileRegistration.js'
 import { HdFile } from '../shared/types.js'
-import { getCopiedSrc } from '../register/getCopiedSrc.js'
+import { registerFile } from '../register/registerFile.js'
 
 /**
  * We want loading a file to return an object which can access both the
@@ -9,15 +8,9 @@ import { getCopiedSrc } from '../register/getCopiedSrc.js'
  * If accessing `src`, we want to register the file to be copied.
  */
 export const buildFileExport = (src: string): HdFile => {
-  // Don't need the second argument as it will always be the raw file
-  // (for now)
-  const newSrc = getCopiedSrc({ src })
-
   return {
-    get src() {
-      registerFile({ src: newSrc })
-
-      return newSrc
+    src() {
+      return registerFile(src, undefined)
     },
     comesFrom: src
   }

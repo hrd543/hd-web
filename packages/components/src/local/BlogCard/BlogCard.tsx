@@ -2,15 +2,10 @@ import './BlogCard.css'
 
 import { View } from 'hd-web'
 
-import { Image } from '../../global/index.js'
 import { BlogInfo } from '../BlogInfo/BlogInfo.js'
 
 export type BlogCardProps = {
-  thumbnail: {
-    src: string
-    alt: string
-    srcMobile?: string
-  }
+  Thumbnail: View<{ width: number; height: number }>
   title: string
   link: string
   author: string
@@ -18,7 +13,7 @@ export type BlogCardProps = {
 }
 
 export const BlogCard: View<BlogCardProps> = ({
-  thumbnail,
+  Thumbnail,
   title,
   link,
   author,
@@ -32,7 +27,7 @@ export const BlogCard: View<BlogCardProps> = ({
         </a>
         <BlogInfo date={date} author={author} />
       </div>
-      <Image {...thumbnail} ratio={16 / 9} />
+      <Thumbnail width={300} height={169} />
     </article>
   )
 }

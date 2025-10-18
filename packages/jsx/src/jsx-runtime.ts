@@ -1,5 +1,5 @@
 import type * as Html from './html.js'
-import { View, HdElement, WithChildren } from './types.js'
+import { View, HdElement, WithChildren, AsyncView } from './types.js'
 
 type HtmlIntrinsicElementsMap = {
   [K in keyof HTMLElementTagNameMap]: WithChildren<Html.HTMLElements[K]>
@@ -20,4 +20,4 @@ export interface ElementChildrenAttribute {
 
 export type Element = HdElement
 
-export type ElementType = string | View<any>
+export type ElementType = string | View<any> | AsyncView<any>

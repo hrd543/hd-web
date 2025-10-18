@@ -29,9 +29,9 @@ export const buildHtmlFiles = async (
   const html: BuiltFile[] = []
   const components: ComponentInfo[] = []
 
-  site.pages.map(getHtmlFilepath).forEach(([p, page]) => {
-    const { body, head } = renderPage(site, page)
-    const built = buildHtml(
+  for (const [p, page] of site.pages.map(getHtmlFilepath)) {
+    const { body, head } = await renderPage(site, page)
+    const built = await buildHtml(
       createMeta(page.title, page.description, head, scripts),
       body,
       lang,
@@ -45,7 +45,7 @@ export const buildHtmlFiles = async (
       contents: built.html
     })
     components.push(...built.components)
-  })
+  }
 
   if (write) {
     await Promise.all(

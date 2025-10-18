@@ -1,7 +1,13 @@
-import { Behaviour, Html } from 'hd-web'
+import { Behaviour } from 'hd-web'
 
 export default class HeaderBehaviour extends Behaviour {
   static key = 'hd-header'
+
+  constructor(e: HTMLElement) {
+    super(e)
+
+    e.addEventListener('click', this.handleClick.bind(this))
+  }
 
   private toggleMenu(menu: Element) {
     const links = this.ref('links')!
@@ -11,20 +17,21 @@ export default class HeaderBehaviour extends Behaviour {
     menu.ariaExpanded = menu.ariaExpanded === 'true' ? 'false' : 'true'
   }
 
-  handleClick(e: Html.TypedMouseEvent<HTMLDivElement>) {
+  handleClick(e: MouseEvent) {
     if (!e.target) {
       return
     }
 
     const menu = this.ref('menu')!
+    const target = e.target as HTMLElement
 
     // Need to check what we clicked on. If it was a link,
     // then hide the menu
-    if (e.target.tagName === 'A' || e.target.tagName === 'LI') {
+    if (target.tagName === 'A' || target.tagName === 'LI') {
       this.toggleMenu(menu)
     }
 
-    if (menu.contains(e.target)) {
+    if (menu.contains(target)) {
       this.toggleMenu(menu)
     }
   }

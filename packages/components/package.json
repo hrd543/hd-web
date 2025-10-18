@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/components",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A set of components and utilities for use in your hd-web project",
   "scripts": {
     "build": "tsx ./build.ts",
@@ -37,7 +37,7 @@
     }
   },
   "dependencies": {
-    "hd-web": "^0.2.1"
+    "hd-web": "^0.3.0"
   },
   "sideEffects": false,
   "type": "module",

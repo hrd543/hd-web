@@ -1,6 +1,6 @@
 {
   "name": "@hd-web/glob-import",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Provides support for importing a file glob",
   "scripts": {
     "build": "tsc",
@@ -17,7 +17,7 @@
     "/dist"
   ],
   "peerDependencies": {
-    "hd-web": "^0.2.1"
+    "hd-web": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0"

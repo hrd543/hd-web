@@ -1,5 +1,11 @@
 # @hd-web/jsx
 
+## 0.5.0
+
+### Minor Changes
+
+- e73be68: Add more image optimisation options and hook up to a real example
+
 ## 0.4.1
 
 ### Patch Changes

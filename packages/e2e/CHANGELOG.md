@@ -1,5 +1,12 @@
 # e2e
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [e73be68]
+  - hd-web@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

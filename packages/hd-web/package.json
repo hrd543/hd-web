@@ -1,6 +1,6 @@
 {
   "name": "hd-web",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Build your hd-web site or start a dev server",
   "bin": {
     "hd": "/dist/scripts/script.js"
@@ -29,7 +29,7 @@
     "/dist"
   ],
   "dependencies": {
-    "@hd-web/jsx": "^0.4.1",
+    "@hd-web/jsx": "^0.5.0",
     "esbuild": "^0.25.9",
     "express": "^5.1.0",
     "minimist": "^1.2.8"

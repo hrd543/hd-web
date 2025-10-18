@@ -1,6 +1,6 @@
 {
   "name": "e2e",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -8,7 +8,7 @@
     "test:file": "node --import tsx --test"
   },
   "dependencies": {
-    "hd-web": "^0.2.0",
+    "hd-web": "^0.3.0",
     "cheerio": "^1.1.2",
     "happy-dom": "^18.0.1"
   },

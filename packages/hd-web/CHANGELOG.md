@@ -1,5 +1,16 @@
 # hd-web
 
+## 0.3.0
+
+### Minor Changes
+
+- e73be68: Add more image optimisation options and hook up to a real example
+
+### Patch Changes
+
+- Updated dependencies [e73be68]
+  - @hd-web/jsx@0.5.0
+
 ## 0.2.1
 
 ### Patch Changes

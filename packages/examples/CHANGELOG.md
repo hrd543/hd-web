@@ -1,5 +1,14 @@
 # examples
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [e73be68]
+  - @hd-web/components@0.5.0
+  - @hd-web/md-content@2.0.0
+  - hd-web@0.3.0
+
 ## 0.1.0
 
 ### Minor Changes

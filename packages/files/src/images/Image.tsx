@@ -61,14 +61,15 @@ export const Image: AsyncView<ImageProps> = async ({
   const newSrc = await registerFile(src.comesFrom, modifications, fileBuffer)
 
   return (
-    <img
-      class={`hd-image ${className ?? ''}`}
-      loading={lazy ? 'lazy' : undefined}
-      style={getImageStyle(dim)}
-      width={size?.[0]}
-      height={size?.[1]}
-      alt={alt}
-      src={newSrc}
-    />
+    <picture class={`hd-image ${className ?? ''}`}>
+      <img
+        loading={lazy ? 'lazy' : undefined}
+        style={getImageStyle(dim)}
+        width={size?.[0]}
+        height={size?.[1]}
+        alt={alt}
+        src={newSrc}
+      />
+    </picture>
   )
 }

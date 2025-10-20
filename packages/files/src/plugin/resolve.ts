@@ -6,13 +6,25 @@ const cssKinds = new Set(['import-rule', 'composes-from', 'url-token'])
 
 // TODO consolidate all instances of functions like this
 
+// Gets the abs path relative to cwd
+const getPath = (src: string) => {
+  const absPath = nodePath.relative(process.cwd(), src).replaceAll('\\', '/')
+
+  if (absPath.startsWith('.')) {
+    throw new Error(`Path ${src} must be within cwd`)
+  }
+
+  if (absPath.startsWith('/')) {
+    return absPath
+  }
+
+  return '/' + absPath
+}
+
+// fixes relative imports
 const getFullSrc = (path: string, importer: string) => {
   if (path.startsWith('.')) {
     return nodePath.join(nodePath.dirname(importer), path)
-  }
-
-  if (path.startsWith('/')) {
-    return nodePath.join(process.cwd(), path)
   }
 
   return path
@@ -29,7 +41,7 @@ export const resolveCallback = async ({
 }: OnResolveArgs): Promise<OnResolveResult | undefined> => {
   if (cssKinds.has(kind)) {
     return {
-      path: await registerFile(getFullSrc(path, importer), undefined),
+      path: await registerFile(getPath(getFullSrc(path, importer)), undefined),
       external: true
     }
   }

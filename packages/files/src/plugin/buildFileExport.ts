@@ -7,7 +7,10 @@ import { registerFile } from '../register/registerFile.js'
  *
  * If accessing `src`, we want to register the file to be copied.
  */
-export const buildFileExport = (src: string): HdFile => {
+export const buildFileExport = (
+  // This must be absolute (/xyz)
+  src: string
+): HdFile => {
   return {
     src() {
       return registerFile(src, undefined)

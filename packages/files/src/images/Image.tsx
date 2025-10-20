@@ -17,12 +17,14 @@ const getValidatedFile = (src: string) => {
     )
   }
 
-  if (src.startsWith('/')) {
-    return path.join(process.cwd(), src)
+  if (path.isAbsolute(src) && !src.startsWith('/')) {
+    throw new Error(`Couldn't register file ${src}. Paths must start with /`)
   }
 
   return src
 }
+
+const resolvePath = (src: string) => path.join(process.cwd(), src)
 
 const getDimensions = (
   size: ImageProps['size'],
@@ -41,6 +43,7 @@ const getDimensions = (
 
 export const Image: AsyncView<ImageProps> = async ({
   alt,
+  // This src must be absolute (/xyz)
   src,
   size: sizeRaw,
   resize,
@@ -50,7 +53,9 @@ export const Image: AsyncView<ImageProps> = async ({
   className
 }) => {
   const modifications: ImageModifications = { quality }
-  const fileBuffer = await fs.readFile(getValidatedFile(src.comesFrom))
+  const fileBuffer = await fs.readFile(
+    resolvePath(getValidatedFile(src.comesFrom))
+  )
   const fileMeta = await sharp(fileBuffer).metadata()
   const size = getDimensions(sizeRaw, fileMeta)
 

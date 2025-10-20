@@ -13,12 +13,14 @@ const getValidatedFile = (src: string) => {
     )
   }
 
-  if (src.startsWith('/')) {
-    return path.join(process.cwd(), src)
+  if (path.isAbsolute(src) && !src.startsWith('/')) {
+    throw new Error(`Couldn't register file ${src}. Paths must start with /`)
   }
 
   return src
 }
+
+const resolvePath = (src: string) => path.join(process.cwd(), src)
 
 // TODO work out if exporting this is the best approach.
 // It's currently exported so that I can get the proper filename
@@ -26,6 +28,7 @@ const getValidatedFile = (src: string) => {
 // The image should already be copied over so maybe I could just
 // fetch it from the cache?
 export const registerFile = async <T extends FileType>(
+  // This must come in as absolute (/xyz => relative to cwd)
   srcRaw: string,
   modificationsRaw: FileModificatons<T> | undefined,
   // Useful if work has already been done on the file to avoid re-reading
@@ -54,7 +57,7 @@ export const registerFile = async <T extends FileType>(
   }
 
   // and process the file
-  const fileContents = fileBuffer ?? (await fs.readFile(src))
+  const fileContents = fileBuffer ?? (await fs.readFile(resolvePath(src)))
   const hash = hashBuffer(fileContents)
   const newFileType = processor.getFileType?.(modifications) ?? ext
   const filename = `/files/${name}-${hash}-${modificationsHash}${newFileType}`

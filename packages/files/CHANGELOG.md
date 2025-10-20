@@ -1,5 +1,11 @@
 ## 1.0.0
 
+## 2.0.1
+
+### Patch Changes
+
+- 0878fd9: Fix absolute paths on linux
+
 ## 2.0.0
 
 ### Minor Changes

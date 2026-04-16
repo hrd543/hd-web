@@ -24,7 +24,7 @@
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.19.17"
   },
   "sideEffects": false,
   "type": "module",

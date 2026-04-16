@@ -17,14 +17,14 @@
     "/dist"
   ],
   "peerDependencies": {
-    "hd-web": "^0.3.0",
-    "esbuild": "^0.25.10"
+    "esbuild": "^0.25.12",
+    "hd-web": "^0.3.0"
   },
   "dependencies": {
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.19.17"
   },
   "sideEffects": false,
   "type": "module",
